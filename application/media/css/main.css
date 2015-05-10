@@ -1,0 +1,314 @@
+.cl{clear:left}
+.cr{clear:right}
+.cb{clear:both}
+
+a{cursor: pointer;}
+a:hover { text-decoration: none}
+
+/*================== STRUCTURE ====================== */
+
+#wrapper {padding-left: 225px;}
+	#wrapper-container {width: 100%;padding-top: 0px;}
+	#wrapper-container .container {margin-left: inherit;}
+	#wrapper.wrapper-full {padding-left: 110px;}
+h1.navbar-brand{font-size:37px}
+
+
+#loading {display: block; height: 32px; width: 32px;margin: 10px auto;}
+.container { padding: 0 20px 30px; width: 100% !important;}
+
+#desenvolvedor{ margin-top: 18px;}
+#desenvolvedor p{color: #555555; font-size: 11px;  text-align: center;}
+
+.cb{clear: both;}
+.jumbotron { box-shadow: 0 1px 3px -2px #333333;}
+
+/*================== HOME LOGIN ====================== */
+
+body.login .navbar,body.cadastro .navbar,body.esqueci_senha .navbar {display: none;}
+body.login #wrapper, body.esqueci_senha #wrapper { margin: 0 auto; width: 100%; max-width: 512px;padding: 0}
+body.cadastro #wrapper { margin: 0 auto; width: 100%; max-width: 712px;padding: 0}
+h1#welcome { color: #428BCA; font-weight: 900; margin: 0 0 20px; text-align: center; text-shadow: 0 1px 1px #333333; width: 100%;font-size:63px}
+#password_login {margin-bottom: 10px;}
+#sem_cadastro{ display: block;  margin-top: 10px;text-align: right;}
+#voltar_esqueci_senha{float: right;}
+body.login #wrapper-container,body.cadastro #wrapper-container,body.esqueci_senha #wrapper-container{padding-top: 20px}
+/*================== LISTAGEM E EDIÇÃO ====================== */
+
+.Content{border-top: 1px solid #F1F1F1; display: block;  margin-top: -1px; padding-top: 20px;clear: both;}
+
+#list{}
+#edit{display: none;}
+.alert {margin-top: 20px}
+
+.btn_remove{background: url("../images/remove.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 38px;  width: 38px;  border: none;cursor: pointer; display: inline-block;float: none !important;}
+.btn_edit{background: url("../images/edit.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 38px;  width: 38px;  border: none;cursor: pointer; display: inline-block;float: none !important;}
+
+table td {font-size: 16px;text-align: center; vertical-align: middle !important;}
+tfoot td {text-align: center;width: auto;}
+tbody tr:hover{background: none repeat scroll 0 0 #F1F1F1;}
+.confirm_hidden{display: none;}
+
+#componentes_relacionados{width:30%;float: left;}
+#anomalias_relacionados{width:30%;float: left;}
+#recomendacoes_relacionados{width:30%;float: left;}
+.panel_tecnologia+.panel_tecnologia{margin-left: 5%}
+
+.table > thead > tr > th {vertical-align: top;}
+th { text-align: center;}
+.tabela_vazia{text-align: center;font-size: 20px; background: none repeat scroll 0 0 #F7F7F7; color: #737373;}
+.btn_area{background: none repeat scroll 0 0 #5CB85C;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: bold;padding: 0 20px;
+    margin-top: 0 !important;
+    vertical-align: middle;}
+.btn_alterar{background: none repeat scroll 0 0 #F0AD4E}
+.btn_area:hover{background:#3C983C;color: #FFFFFF;}
+#btn_adicionar{margin: 5px 0 20px;}
+  #btn_adicionar a+a{margin-left: 10px}
+  #btn_adicionar .label-danger+.label-primary{margin: 0}
+#btn_adicionar.disabled{display: none}
+
+#box_error{display:none; font-size: 14px;}
+
+#list_areas{width:48%;float: left;}
+#list_areas .col-lg-6{width: 100%;}
+#lista_areas .list-group-item.selected {background: none repeat scroll 0 0 #5BC0DE; color: #FFFFFF;}
+#list_areas .list-group-item .delete{float: right; margin: 0;  padding: 0 5px;display: none;}
+#lista_areas {margin-top: 10px;}
+
+#list_setores{width:48%;float: right;}
+#list_setores .col-lg-6{width: 100%;}
+#list_setores .list-group-item .delete{float: right; margin: 0;  padding: 0 5px;}
+#lista_setores {margin-top: 10px;}
+
+th#col_id{width: 90px;}
+th#col_actions{ width: 235px;}
+
+.input-group .preencher{ border: 1px solid #FF8080;}
+
+.btn_ativada{padding: 22px !important;border: medium none;}
+.ativada{background: none repeat scroll 0 0 #6CC86C !important;}
+.ativada:hover{background: none repeat scroll 0 0 #5CB85C !important;}
+
+#select_areas{}
+#select_areas > div{}
+#select_areas > div.first{  float: left; margin-bottom: 5px; margin-right: 20px;width: 1%;}
+#select_areas > div.second{}
+
+#btn_sim,#btn_sim_limpar{ display: none;}
+#btn_nao,#btn_nao_limpar{ display: none;}
+
+.grandezas{}
+.temperaturas{}
+#buscar_recomendacoes{  margin-bottom: 5px;}
+#lista_recomendacoes{display: none;}
+#lista_recomendacoes a{font-size: 16px;}
+#btn_voltar_rec{ margin-bottom: 10px;}
+
+.drop_condicao{ margin: 0 auto;}
+.naotemrisco,.naoprossegue{display: none;}
+
+#select_data {}
+#select_data > div{float: left;  margin: 0; width:1%;}
+#select_data > div.first{margin-right: 20px;margin-bottom: 5px}
+#select_data input{ width: 200px;}
+#select_data select{width: auto}
+#select_data > .drop{ clear: left;}
+#select_data > .drop2{ margin-left: 20px;}
+.div_filtrar{float: none !important;}
+#btn_filtrar{margin: 2px 0 0 20px;}
+
+.chk_equip{background: none repeat scroll 0 0 #F2F2F2;  border: 1px solid #E4E4E4;  padding: 20px;margin-right: 20px !important;}
+.check_privileges input{display: inline-block;margin-right: 20px}
+.check_privileges h4{ display: inline-block; font-weight: bold; margin-right: 20px; text-transform: uppercase;}
+.check_privileges p{display: inline-block;font-style: italic;}
+
+#left_grauderisco{float: left; width: 48%;}
+#right_grauderisco{float: right;  width: 48%;}
+#grandezas > div{ display: inline-flex;  width: 50%;}
+#temperaturas > div{display: inline-table;  width: 50%;}
+
+#block_historico{display: table-cell;  width: auto;padding: 0 2px;}
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+.pagination > li {
+  display: inline;
+}
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: 11px 20px;
+  line-height: 1.428571429;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  margin-left: -1px;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  background-color: #eeeeee;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 2;
+  color: #ffffff;
+  background-color: #428bca;
+  border-color: #428bca;
+  cursor: default;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #999999;
+  background-color: #ffffff;
+  border-color: #dddddd;
+  cursor: not-allowed;
+}
+.pagination-lg > li > a,
+.pagination-lg > li > span {
+  padding: 10px 16px;
+  font-size: 18px;
+}
+.pagination-lg > li:first-child > a,
+.pagination-lg > li:first-child > span {
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+}
+.pagination-lg > li:last-child > a,
+.pagination-lg > li:last-child > span {
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.pagination-sm > li > a,
+.pagination-sm > li > span {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.pagination-sm > li:first-child > a,
+.pagination-sm > li:first-child > span {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.pagination-sm > li:last-child > a,
+.pagination-sm > li:last-child > span {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.pagination-centered{}
+
+
+/*================= AREA E SETORES da ROTA ==============================*/
+
+.item_area h4 {padding-left: 10px}
+.item_area{display: none;padding-left: 10px}
+.item_setor{display: none;}
+
+
+/*================= MENU LATERAL ==============================*/
+
+.submenu { background: none repeat scroll 0 0 #363636; padding-left: 30px;}
+#logout{background: none repeat scroll 0 0 #991310;margin-top: 12px;}
+#logout a{color: #F7F7F7; font-size: 16px; font-weight: bold; padding: 15px 10px; text-align: center; text-shadow: 0 1px 0 #333333; text-transform: uppercase;}
+
+#home{  margin-bottom: 12px;background: none repeat scroll 0 0 #428BCA;margin-top: 30px;}
+#home a{color: #F7F7F7; font-size: 16px; font-weight: bold; padding: 15px 10px; text-align: center; text-shadow: 0 1px 0 #333333; text-transform: uppercase;}
+
+.nav .menu_dropdown li a.active{ background: none repeat scroll 0 0 #FFFFFF; color: #555555;}
+.nav .menu_dropdown li a:hover{ background: none repeat scroll 0 0 #FFFFFF; color: #666666;}
+
+#collapse_container{position: absolute;
+    right: 5%;display: none;
+    top: 25px;}
+.navbar-nav { background: none repeat scroll 0 0 #222222;}
+#logado_como{color: #a5a5a5; font-size: 11px; padding: 0 8px; text-align: center;}
+
+.menu_dropdown{border-left: 10px solid #FFFFFF;}
+.menu_dropdown:hover,.menu_dropdown.active, .link_empresa:hover, .link_empresa.active{background: none repeat scroll 0 0 #FFFFFF !important; color: #333333 !important;}
+.menu_dropdown.active + ul {display: block;}
+.menu_dropdown + ul {display: none;}
+
+.block_info_empresa{ width: 90%; margin: 0 auto; background: #333333; color: #f7f7f7; padding: 10px; font-size: 11px;}
+.block_info_empresa span{display: block;}
+.block_info_empresa+.block_info_empresa{ margin-top: 5px;}
+
+/*================= FORMS ==============================*/
+
+.input-group+.input-group {margin-top: 5px}
+.btn {margin-top: 10px; padding: 12px 32px;}
+.input-group-lg select{color: #555555;  font-size: 18px; padding: 12px; height: 52px;}
+
+#form_login .input-group-addon{width: 100px; font-size: 16px;}
+#form_login input[type='text'],#form_login input[type='password']{height: 52px;}
+#esqueci_senha{ margin-left: 7px;}
+.navbar-nav a{  font-size: 16px;}
+.navbar-nav ul{background: none repeat scroll 0 0 #373737;list-style: none outside none;padding:0;}
+.navbar-nav ul li{}
+.navbar-nav ul li a{   color: #FFFFFF; display: inline-block; padding: 15px 0 15px 40px; width: 100%;}
+.navbar-nav ul li a:hover,.navbar-nav ul li a.active{  background: none repeat scroll 0 0 #545454; color:#FFFFFF}
+
+.radio + .radio, .checkbox + .checkbox {margin-top: 10px !important}
+.checkbox .checkbox-label {text-transform: uppercase;}
+/*.jumbotron .input-group-addon{font-size:14px}*/
+.upload{font-size: 16px !important;
+    padding: 0 !important;}
+.input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {height: 52px}
+
+.addon_textarea{vertical-align: top !important;}
+textarea.form-control {height: 170px !important;}
+
+#form_altera_area,#form_altera_setor{display: none;}
+#btn_voltar_cadastro{ font-size: 45px; margin-bottom: 40px;}
+
+/*================= MEDIA QUERIES ==============================*/
+@media only screen and (max-width: 1280px) {
+  #temperaturas > div{display: inline-block;}
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar-collapse{max-height: 540px}
+  #wrapper { padding: 0;}
+  #wrapper-container { padding-top: 80px;}
+  #collapse_container {display: block}
+  #logado_como{position: absolute; top: 48px; left: 200px;}
+  .datepicker td, .datepicker th { height: 60px !important; width: 60px !important;}
+
+}
+
+@media only screen and (max-width: 530px) {
+  #logado_como {
+    left: 10px;
+    position: absolute;
+    top: 56px;
+  }
+  .navbar-brand {padding: 0 15px 30px;}
+}
+

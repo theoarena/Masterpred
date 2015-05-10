@@ -1,5 +1,8 @@
 application/cache/*
+application/media/uploads/*
 application/logs/*
+modules/*
+system/*
 
 # =========================
 # Operating System Files

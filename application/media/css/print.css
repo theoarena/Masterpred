@@ -1,0 +1,99 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+  text-decoration:none;
+}
+body {line-height: 1;}
+:focus {outline: 0;}
+table { border-collapse: collapse;  border-spacing: 0;}
+
+html{padding:0;margin:0;font-size:13px; color:#333333;width: 100%; height: 100%;}
+
+body{margin:0;font-family:'verdana', tahoma,verdana, sans-serif;width: 100%;letter-spacing: -1px ; height: 100%;}
+
+a{text-decoration:none;color:#91040b;}
+a:hover{text-decoration:none; color: #91040b}
+
+p{line-height:1.5em;letter-spacing: -0.5px;}
+
+ul,li {list-style:none}
+
+h1,h2,h3{ font-weight: normal;text-transform: uppercase;margin-bottom: 5px}
+h1{font-size: 44px;}
+h2{font-size: 22px;}
+h3{font-size: 17px;}
+
+.cl{clear:left}
+.cr{clear:right}
+.cb{clear:both}
+
+header{border-bottom: 2px solid #D3D3D3; margin: 0 auto; padding: 20px; width: calc(100% - 40px);position: relative;}
+section{margin: 0 auto; width: calc(100% - 40px);padding: 20px;position: relative;}
+footer{margin: 0 auto; width: calc(100% - 40px);padding: 20px;position: relative; border-top: 2px solid #D3D3D3;}
+footer p {font-size: 13px; text-align: center;}
+#bar_print{ background: none repeat scroll 0 0 #E7E7E7;  padding: 30px 20px; position: fixed;  right: 0;  width: auto; z-index: 1000000;}
+#bar_print a#voltar{   background: none repeat scroll 0 0 #F0AD4E;
+    color: #FFFFFF;
+    font-family: Segoe Ui,Verdana;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 20px;}
+#bar_print a#imprimir{   background: none repeat scroll 0 0 #428BCA;
+    color: #FFFFFF;
+    font-family: Segoe Ui,Verdana;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 20px;}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }   
+}
+
+/* RELATORIO DO RESULTADO DA EMPRESA */
+
+#empresa_resultado header h3 { bottom: 10px; color: #CC0000;  font-size: 20px; position: absolute; right: 30px;}
+#empresa_resultado #Info p+p{margin-bottom: 5px}
+#empresa_resultado #Info #tipo_gr{position: absolute; right: 40px; top: 90px;}
+#empresa_resultado #Info #tipo_gr h1{ font-size: 90px;  font-weight: bold;}
+#empresa_resultado #Info #tipo_gr p{ font-size: 20px;   text-align: center;}
+#empresa_resultado #Info #tipo_gr p#numero_gr{ color: #7070BF; margin-bottom: 30px; margin-top: -70px;}
+#empresa_resultado #tabela_resultados{ display: table;  width: 100%;margin-top: 50px}
+#empresa_resultado #tabela_resultados tr{}
+#empresa_resultado #tabela_resultados td.coluna_esquerda{width: 35%; text-align: left;}
+#empresa_resultado #tabela_resultados td.coluna_centro{width: 30%; text-align: center; border-left: 1px solid #D3D3D3; border-right: 1px solid #D3D3D3;}
+#empresa_resultado #tabela_resultados td.coluna_direita{width:35%;padding-left: 60px;}
+#empresa_resultado #tabela_resultados td{width: 40%;padding-bottom: 10px;}
+
+#empresa_resultado #Avaliacao{ margin-top: 20px; padding: 0;}
+#empresa_resultado #Avaliacao > h2{ margin: 0;background: none repeat scroll 0 0 #84CB34;  color: #333333;  font-size: 16px;  padding: 10px;  text-align: center; text-transform: none;}
+#empresa_resultado #Avaliacao table{width: 100%;}
+#empresa_resultado #Avaliacao table tr{}
+#empresa_resultado #Avaliacao table td{border: 1px solid #D3D3D3; padding: 10px 15px;}
+#empresa_resultado #Avaliacao table td.primeira{width: 15%;}
+#empresa_resultado #Avaliacao thead td.title{text-align: center;}
+#empresa_resultado #Final table{margin-top:15px }
+#empresa_resultado #Final table td{margin:5px 0 }
+#empresa_resultado #Final .col_data{padding: 7px 60px;text-align: center;}
+#empresa_resultado #Final .col_resp{text-align: center;}
+
+#empresa_resultado #Fotos table{width: 100%}
+#empresa_resultado #Fotos td{text-align: center;width: 50%;}

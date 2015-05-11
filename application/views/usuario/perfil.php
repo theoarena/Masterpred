@@ -12,7 +12,7 @@
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Senha</span>". form::password('password',"senhapadrao",array('class' => 'form-control', 'maxlength' => '16' ,'placeholder' => 'Senha')) ."</div>";   
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Confirmação de senha</span>". form::password('password_confirm',"senhapadrao",array('class' => 'form-control', 'maxlength' => '16' ,'placeholder' => 'Confirmação de senha')) ."</div>";   
   
-    echo form::submit('submit', "Salvar",array('class' => 'btn btn-default btn-lg'));       
+    echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn-lg'));       
 	echo form::close();
   
 ?>

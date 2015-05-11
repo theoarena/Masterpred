@@ -17,6 +17,7 @@
 		<link href='<?php echo site::mediaUrl(); ?>css/footable.core.css' rel='stylesheet' type='text/css' />
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.js'></script>	
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.sort.js'></script>
+		<script src='<?php echo site::mediaUrl(); ?>js/footable.filter.js'></script>
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.paginate.js'></script>		
 	<?php } ?>
 

@@ -49,7 +49,7 @@ body.login #wrapper-container,body.cadastro #wrapper-container,body.esqueci_senh
 table td {font-size: 16px;text-align: center; vertical-align: middle !important;}
 tfoot td {text-align: center;width: auto;}
 tbody tr:hover{background: none repeat scroll 0 0 #F1F1F1;}
-.confirm_hidden{display: none;}
+.confirm_hidden{display: none;padding: 10px 22px !important;}
 
 #componentes_relacionados{width:30%;float: left;}
 #anomalias_relacionados{width:30%;float: left;}

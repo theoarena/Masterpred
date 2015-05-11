@@ -34,7 +34,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_condicoes() //salvar novo e editar
 	{	
-		$obj = ORM::factory('Condicao',$this->request->post('CodCondicao',null ));		
+		$obj = ORM::factory('Condicao',$this->request->post('CodCondicao' ));		
 		
 	
 		if(isset($_FILES['Imagem']) and $_FILES['Imagem']["name"] != "")
@@ -50,7 +50,7 @@ class Controller_Sistema extends Controller_Welcome {
 		$obj->Condicao = $this->request->post('Condicao');
 		
 		$obj->Descricao = $this->request->post('Descricao');
-		$obj->Emergencia = $this->request->post('Emergencia',0);				
+		$obj->Emergencia = $this->request->post('Emergencia');				
 		$obj->Tecnologia = $this->request->post('Tecnologia');				
 		$obj->Cor = $this->request->post('Cor');				
 		
@@ -64,7 +64,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_condicoes()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('Condicao',$this->request->post('id',null));	
+		$obj = ORM::factory('Condicao',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -157,7 +157,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_privileges() //salvar novo e editar
 	{	
-		$obj = ORM::factory('Privilege',$this->request->post('id',null));		
+		$obj = ORM::factory('Privilege',$this->request->post('id'));		
 	  
 		$obj->name = URL::title($this->request->post('name'),'_');				
 		$obj->description = $this->request->post('description');				
@@ -202,11 +202,11 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_analistas() //salvar novo e editar
 	{			
-		$obj = ORM::factory('Analista',$this->request->post('CodAnalista',null ));		
+		$obj = ORM::factory('Analista',$this->request->post('CodAnalista' ));		
 
 		$obj->Analista = $this->request->post('Analista');
 		$obj->Funcao = $this->request->post('Funcao');				
-		$obj->Obs = $this->request->post('Obs',null);				
+		$obj->Obs = $this->request->post('Obs');				
 		
 		if ($obj->save()) 
 			HTTP::redirect("sistema/analistas?sucesso=1");
@@ -218,7 +218,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_analistas()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('analista',$this->request->post('id',null));	
+		$obj = ORM::factory('analista',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -248,7 +248,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_componentes() //salvar novo e editar
 	{			
-		$obj = ORM::factory('componente',$this->request->post('CodComponente', null));		
+		$obj = ORM::factory('componente',$this->request->post('CodComponente'));		
 
 		$obj->Componente = $this->request->post('Componente');
 		$obj->Tecnologia = $this->request->post('Tecnologia');				
@@ -263,7 +263,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_componentes()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('componente',$this->request->post('id',null));	
+		$obj = ORM::factory('componente',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -296,7 +296,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_anomalias() //salvar novo e editar
 	{			
-		$obj = ORM::factory('anomalia',$this->request->post('CodAnomalia',null));		
+		$obj = ORM::factory('anomalia',$this->request->post('CodAnomalia'));		
 
 		$obj->Anomalia = $this->request->post('Anomalia');
 		$obj->Tecnologia = $this->request->post('Tecnologia');				
@@ -311,7 +311,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_anomalias()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('anomalia',$this->request->post('id',null));	
+		$obj = ORM::factory('anomalia',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -346,7 +346,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_recomendacoes() //salvar novo e editar
 	{			
-		$obj = ORM::factory('recomendacao',$this->request->post('CodRecomendacao',null));		
+		$obj = ORM::factory('recomendacao',$this->request->post('CodRecomendacao'));		
 
 		$obj->Recomendacao = $this->request->post('Recomendacao');
 		$obj->Tecnologia = $this->request->post('Tecnologia');				
@@ -361,7 +361,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_recomendacoes()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('recomendacao',$this->request->post('id',null));	
+		$obj = ORM::factory('recomendacao',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -392,7 +392,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_tipoinspecao() //salvar novo e editar
 	{			
-		$obj = ORM::factory('tipoinspecao',$this->request->post('CodTipoInspecao',null));		
+		$obj = ORM::factory('tipoinspecao',$this->request->post('CodTipoInspecao'));		
 
 		$obj->TipoInspecao = $this->request->post('TipoInspecao');
 								
@@ -406,7 +406,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_tipoinspecao()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('tipoinspecao',$this->request->post('id',null));	
+		$obj = ORM::factory('tipoinspecao',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -438,7 +438,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_tipoequipamento() //salvar novo e editar
 	{			
-		$obj = ORM::factory('tipoequipamento',$this->request->post('CodTipoEquipamento', null ));		
+		$obj = ORM::factory('tipoequipamento',$this->request->post('CodTipoEquipamento' ));		
 		$obj->TipoEquipamento = $this->request->post('TipoEquipamento');				
 		
 		if ($obj->save()) 
@@ -451,7 +451,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_tipoequipamento()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('tipoequipamento',$this->request->post('id',null));	
+		$obj = ORM::factory('tipoequipamento',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else
@@ -482,7 +482,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_tecnologias() //salvar novo e editar
 	{	
-		$obj = ORM::factory('tecnologia',$this->request->post('CodTecnologia',null));		
+		$obj = ORM::factory('tecnologia',$this->request->post('CodTecnologia'));		
 
 		$obj->Id = $this->request->post('Id');
 		$obj->Tecnologia = $this->request->post('Tecnologia');				
@@ -497,7 +497,7 @@ class Controller_Sistema extends Controller_Welcome {
 	public function action_delete_tecnologias()
 	{		
 		$this->template = "";
-		$obj = ORM::factory('tecnologia',$this->request->post('id',null));	
+		$obj = ORM::factory('tecnologia',$this->request->post('id'));	
 		if($obj->delete())
 			print 1;
 		else

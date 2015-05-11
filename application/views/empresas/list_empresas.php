@@ -1,6 +1,10 @@
-<?php if(count($objs) > 0) { ?>
+<?php if(count($objs) > 0) { 
 
-<table class="footable table" data-page-navigation=".pagination">
+echo "<div id='select_data'>";
+	echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+	echo '</div>';	
+?>
+<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca data-filter-minimum="3">
 	<thead>
 		<tr>
 			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>
@@ -47,6 +51,12 @@
 <script type="text/javascript">
 	$(function () {
 	    $('.footable').footable();
+
+	    $('#campobusca').change(function(){
+	    		var footableFilter = $('.footable').data('footable-filter');			  
+			    footableFilter.filter($(this).val());
+	    });
+
 	});
 
 	function deleteRow(id)

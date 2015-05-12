@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
 class Model_TipoInspecao extends ORM {
-	protected $_has_many = array('grs' => array ('model' => 'gr' , 'foreign_key' => 'CodGr') );
+	protected $_has_many = array('grs' => array ('model' => 'gr' , 'foreign_key' => 'TipoInspecao') );
 	protected $_primary_key = 'CodTipoInspecao';
   	protected $_table_name = 'tipoinspecao';
 //	protected $table_names_plural = false;

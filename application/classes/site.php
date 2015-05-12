@@ -239,17 +239,17 @@ class site {
 		return Session::instance()->get('qtd_usuarios');
 	}
 
-	public static function data_BR($d)
+	public static function data_BR($d,$return="00/00/0000")
 	{		
-		if($d=="") return "00/00/0000";
+		if($d=="") return $return;
 
 		$d = explode("-",$d);
 		return $d[2]."/".$d[1]."/".$d[0];
 	}
 
-	public static function data_EN($d="00/00/0000")
+	public static function data_EN($d="00/00/0000",$return="0000-00-00")
 	{
-		if($d=="") return "0000-00-00";
+		if($d=="") return $return;
 		$d = explode("/",$d);
 		return $d[2]."-".$d[1]."-".$d[0];
 	}

@@ -9,7 +9,7 @@ class Model_EquipamentoInspecionado extends ORM {
 	);
 	
 	protected $_has_one = array(
-		'gr' => array('model' => 'gr', 'foreign_key' => 'CodGr')	
+		'gr' => array('model' => 'gr', 'foreign_key' => 'EquipamentoInspecionado')	
 	);
 
   	protected $_table_name = 'equipamentoinspecionado';

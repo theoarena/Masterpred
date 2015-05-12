@@ -2,7 +2,7 @@
  
 class Model_Empresa extends ORM {
 	protected $_has_many = array(
-		'areas' => array ('model' => 'area', 'foreign_key' => 'CodArea' ) ,
+		'areas' => array ('model' => 'area', 'foreign_key' => 'Empresa' ) ,
 		'rotas' => array ('model' => 'rota', 'foreign_key' => 'CodRota' ) ,
 	    'users' => array ( 'model' => 'user' , 'through' => 'empresa_users','far_key' => 'user_id' , 'foreign_key' => 'empresa_CodEmpresa')
 	);

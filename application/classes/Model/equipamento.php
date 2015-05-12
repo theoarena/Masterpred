@@ -13,8 +13,8 @@ class Model_Equipamento extends ORM {
 			'far_key' => 'rota_CodRota' , 
 			'through' => 'equipamento_rota'
 		),
-		'analiseequipamentoinspecionados' => array('model' => 'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise'),
-		'equipamentoinspecionados' => array('model' => 'equipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspecionado')
+		'analiseequipamentoinspecionados' => array('model' => 'analiseequipamentoinspecionado', 'foreign_key' => 'Equipamento'),
+		'equipamentoinspecionados' => array('model' => 'equipamentoinspecionado', 'foreign_key' => 'Equipamento')
 	);		
 
   	protected $_table_name = 'equipamento';

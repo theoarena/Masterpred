@@ -2,7 +2,7 @@
  
 class Model_Setor extends ORM {
 	protected $_belongs_to = array('area' => array ('model' => 'area', 'foreign_key' => 'Area') );	
-	protected $_has_many = array('equipamentos' => array ('model' => 'equipamento', 'foreign_key' => 'CodEquipamento' ) );
+	protected $_has_many = array('equipamentos' => array ('model' => 'equipamento', 'foreign_key' => 'Setor' ) );
 
   	protected $_table_name = 'setor';
 	protected $_primary_key = 'CodSetor';

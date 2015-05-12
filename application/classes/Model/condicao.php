@@ -5,7 +5,7 @@ class Model_Condicao extends ORM {
 		"analiseequipamentoinspecionados" => array('model' => 'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise'), 
 		"tecnologia" => array('model' => 'tecnologia', 'foreign_key' => 'Tecnologia')
 	);		
-	protected $_has_many = array("equipamentoinspecionado" => array ( 'model' => 'equipamentoinspecionado' , 'foreign_key' => 'CodEquipamentoInspecionado'));
+	protected $_has_many = array("equipamentoinspecionado" => array ( 'model' => 'equipamentoinspecionado' , 'foreign_key' => 'Condicao'));
 
   	protected $_table_name = 'condicao';
 	protected $_primary_key = "CodCondicao";

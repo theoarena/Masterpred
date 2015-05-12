@@ -112,7 +112,8 @@ th#col_actions{ width: 235px;}
 .drop_condicao{ margin: 0 auto;}
 .naotemrisco,.naoprossegue{display: none;}
 
-#select_data {}
+#select_data { display: inline-block;}
+#select_data input#btn_buscar{margin: 0 0 0 20px}
 #select_data > div{float: left;  margin: 0; width:1%;}
 #select_data > div.first{margin-right: 20px;margin-bottom: 5px}
 #select_data input{ width: 200px;}
@@ -260,6 +261,7 @@ th#col_actions{ width: 235px;}
 .block_info_empresa span{display: block;}
 .block_info_empresa+.block_info_empresa{ margin-top: 5px;}
 
+.hide_menu{display: none !important}
 /*================= FORMS ==============================*/
 
 .input-group+.input-group {margin-top: 5px}

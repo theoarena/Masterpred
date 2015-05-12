@@ -2,7 +2,7 @@
  
 class Model_Area extends ORM {
 	protected $_belongs_to = array('empresa' => array('model' => 'empresa', 'foreign_key' => 'Empresa') );	
-	protected $_has_many = array("setores" => array('model' => 'setor', 'foreign_key' => 'CodSetor') );
+	protected $_has_many = array("setores" => array('model' => 'setor', 'foreign_key' => 'Area') );
 
   	protected $_table_name = 'area';
 	protected $_primary_key = "CodArea";

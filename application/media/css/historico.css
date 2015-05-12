@@ -2,7 +2,7 @@
 .fancytree-title .vermelho{  background: url("../images/vermelho.png") no-repeat scroll 10px 11px #cc0000; color: #f7f7f7; padding: 6px 14px 6px 34px;}
 .fancytree-title .laranja{ background: url("../images/laranja.png") no-repeat scroll 10px 11px #ffb700;color: #f7f7f7;padding: 6px 14px 6px 34px;}
 .fancytree-title .verde{  background: url("../images/verde.png") no-repeat scroll 10px 11px #00ff00;color: #f7f7f7; padding: 6px 14px 6px 34px;}
-
+.fancytree-title a {display: block;}
 #graficos {background: none repeat scroll 0 0 #FFFFFF;  border: 1px solid #CCCCCC;   height: 100%;   position: absolute;  right: 0;  top: -1px;}
 #finalizada,#pendente,#sem_planejamento{width: 200px;height: 160px;display:block;}
 #graficos > div svg+a{display: none !important;}

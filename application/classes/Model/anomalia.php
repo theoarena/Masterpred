@@ -5,7 +5,7 @@ class Model_Anomalia extends ORM {
 		'tecnologia' => array('model' => 'tecnologia', 'foreign_key' => 'Tecnologia'),
 		'analiseequipamentoinspecionados' => array('model' =>'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise')
 	);	
-	protected $_has_many = array('gr' => array('model' => 'gr', 'foreign_key' => 'CodGr') );
+	protected $_has_many = array('grs' => array('model' => 'gr', 'foreign_key' => 'TipoAnomalia') );
 	protected $_primary_key = 'CodAnomalia';
   	protected $_table_name = 'anomalia';
 	

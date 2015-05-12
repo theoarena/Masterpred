@@ -65,17 +65,19 @@
     echo "</div>";
     echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Condição</span>". form::input('Condicao',$equip->condicao->Condicao,array('class' => 'form-control', 'disabled' => 'disabled')) ."</div>";        
 
+     $base = URL::base().Kohana::$config->load('config')->get('upload_directory_gr');
+
     echo "<br/>";
     echo "<h3><span class='label label-info'>Imagem Real</span></h3>";
     echo '<div class="well well-sm" id="temperaturas">';       
          if($obj->ImagemReal!=null)
-            echo '<img src="'.str_replace('\\', '/', $obj->ImagemReal).'" />';
+            echo '<img src="'.$base.$obj->ImagemReal.'" width="50%"/>';
     echo "</div>";
 
     echo "<h3><span class='label label-info'>Imagem Térmica</span></h3>";
     echo '<div class="well well-sm" id="temperaturas">';
          if($obj->ImagemTermica!=null)
-            echo '<img src="'.str_replace('\\', '/', $obj->ImagemTermica).'" />';
+            echo '<img src="'.$base.$obj->ImagemTermica.'" width="50%" />';
     echo "</div>";
 
     echo "</div>";  

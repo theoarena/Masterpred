@@ -1,5 +1,5 @@
-<?php echo $graficos; ?>
 
+<?php echo $graficos; ?>
 <h1 class="pull-left">
 	Empresas <span class="label label-default"><?php echo site::getTituloInterna(2); ?></span>	
 </h1>

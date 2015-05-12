@@ -4,7 +4,7 @@ echo "<div id='select_data'>";
 	echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
 	echo '</div>';	
 ?>
-<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca data-filter-minimum="3">
+<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca data-filter-minimum="1">
 	<thead>
 		<tr>
 			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>
@@ -80,13 +80,14 @@ echo "<div id='select_data'>";
 	function toggle_empresas(e,nome)
 	{
 		$(".btn_ativada").removeClass("ativada");
-		$("*").css("cursor", "progress");
+		//$("*").css("cursor", "progress");
 		$.ajax({
 			url : "<?php echo site::baseUrl() ?>empresas/toggle_empresas",
 			type: "POST",  
   			data: { id: e,nome:nome},
 			success : function(data) {				
 				$("#ativarempresa_"+e).addClass("ativada");
+				$(".hide_menu").removeClass("hide_menu");
 				//$("*").css("cursor", "default");
 			}
 		});

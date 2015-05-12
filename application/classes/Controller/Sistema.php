@@ -10,7 +10,9 @@ class Controller_Sistema extends Controller_Welcome {
 		if(!site::checkPermissaoPagina($this->privileges_needed)) //se pode acessar a url
 			HTTP::redirect('welcome/denied');
 		
-		$this->template->content = View::factory("main_content");				
+		$this->template->content = View::factory("main_content");	
+		$this->template->content->plus_add_link = "";				
+		$this->template->content->show_add_link = true;			
 	}
 	//======================================================//
 	//==================CONDICOES=========================//

@@ -67,7 +67,7 @@
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Delta</span>". form::input('x',"x", array ('class' => 'form-control', 'disabled' => 'disabled') ) ."<span class='input-group-addon'>°C</span></div>"; 
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Carga(%)</span>". form::input('x',"x", array ('class' => 'form-control', 'disabled' => 'disabled') ) ."</div>"; 
     echo "</div>";
-    echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Condição</span>". form::select('Condicao',$condicoes,$equip->Condicao, array('class' => 'form-control')) ."</div>";        
+    echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Condição</span>". form::select('Condicao', array($condicao->CodCondicao => $condicao->Condicao ) ,$equip->Condicao, array('class' => 'form-control', 'disabled' => 'disabled')) ."</div>";        
 
     echo "<br/>";
 

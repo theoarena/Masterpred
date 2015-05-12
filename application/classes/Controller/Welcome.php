@@ -5,7 +5,6 @@ class Controller_Welcome extends Controller {
 	function before(){
 			
 		$auth = Auth::instance();
-		
 
 		$this->template = View::factory('index');
 			
@@ -43,13 +42,13 @@ class Controller_Welcome extends Controller {
 		}	
 		else //se nao está logado
 			site::verifica_login();//verifica se esta logado ou nao, manda pra pagina de login;
-				
+
 		$this->template->footer = View::factory('estrutura/footer');	
 										
 	}	
 
 	function after()
-	{
+	{			
 		$this->response->body($this->template);	
 	}
 	

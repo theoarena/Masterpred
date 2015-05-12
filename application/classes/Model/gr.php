@@ -5,8 +5,8 @@ class Model_Gr extends ORM {
   	protected $_table_name = 'gr';
 	protected $_belongs_to = array(
 		'equipamentoinspecionado' => array('model' => 'equipamentoinspecionado', 'foreign_key' => 'EquipamentoInspecionado'), 
-		'anomalia' => array('model' => 'anomalia', 'foreign_key' => 'Anomalia'), 
-		'componente' => array('model' => 'componente', 'foreign_key' => 'Componente'), 
+		'anomalia' => array('model' => 'anomalia', 'foreign_key' => 'TipoAnomalia'), 
+		'componente' => array('model' => 'componente', 'foreign_key' => 'TipoComponente'), 
 		'tipoinspecao' => array('model' => 'tipoinspecao', 'foreign_key' => 'TipoInspecao'), 
 	);
 	

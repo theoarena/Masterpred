@@ -10,7 +10,9 @@ class Controller_Empresas extends Controller_Welcome {
 		if(!site::checkPermissaoPagina($this->privileges_needed)) //se pode acessar a url
 			HTTP::redirect('welcome/denied');
 
-		$this->template->content = View::factory("main_content");							
+		$this->template->content = View::factory("main_content");
+		$this->template->content->plus_add_link = "";				
+		$this->template->content->show_add_link = true;						
 	}
 	
 	//======================================================//
@@ -26,6 +28,7 @@ class Controller_Empresas extends Controller_Welcome {
 
 		$this->template->content->conteudo->tecnologias = $list;
 		$this->template->content->conteudo->query = ( isset($_GET["tec"]) )?(true):(false);
+		$this->template->content->show_add_link = false;	
 						
 		//$this->template->content->conteudo->objs = $rotas;
 	}
@@ -34,12 +37,15 @@ class Controller_Empresas extends Controller_Welcome {
 	{
 		
 		$obj = ORM::factory('Gr', site::segment('edit_grauderisco',null) );
+
 		$this->template->content->conteudo = View::factory("empresas/edit_grauderisco");						
 		$this->template->content->conteudo->obj = $obj;						
 		$this->template->content->conteudo->componentes = ORM::factory('Componente')->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()->as_array("CodComponente","Componente");						
 		$this->template->content->conteudo->anomalias = ORM::factory('Anomalia')->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()->as_array("CodAnomalia","Anomalia");						
-		$this->template->content->conteudo->condicoes = ORM::factory('Condicao')->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()->as_array("CodCondicao","Condicao");						
-		$this->template->content->conteudo->inspecoes = ORM::factory('TipoInspecao', site::segment('edit_grauderisco',null) )->find_all()->as_array("CodTipoInspecao","TipoInspecao");						
+		$this->template->content->conteudo->condicao = ORM::factory('Condicao',$obj->equipamentoinspecionado->Condicao);	//->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()
+		//$this->template->content->conteudo->condicoes = ORM::factory('Condicao',$obj->equipamentoinspecionado->Condicao);	//->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()
+		//$this->template->content->conteudo->inspecoes = ORM::factory('TipoInspecao', site::segment('edit_grauderisco',null) )->as_array("CodTipoInspecao","TipoInspecao");						
+		$this->template->content->conteudo->inspecoes = ORM::factory('TipoInspecao')->find_all()->as_array("CodTipoInspecao","TipoInspecao");						
 
 		$query = parse_url(URL::query());
 		$this->template->content->conteudo->query = ( isset($query["query"]) )?($query["query"]):("1=1");
@@ -49,6 +55,10 @@ class Controller_Empresas extends Controller_Welcome {
 	{
 		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda	
 
+		$de = site::data_EN($this->request->post('de'));
+		$ate = site::data_EN($this->request->post('ate'));
+
+		/*
 		$de = false;
 		$ate = false;
 
@@ -57,23 +67,21 @@ class Controller_Empresas extends Controller_Welcome {
 		if($this->request->post('ate')!=0)
 			$ate = site::data_EN($this->request->post('ate'));
 
-		$grs = array();
-		$objs = ORM::factory('EquipamentoInspecionado');
-
 		if($de!=false)
 			$objs->where('Data','>=',$de);
 		if($ate!=false)
 			$objs->where('Data','<=',$ate);
-
+		*/
+		$grs = array();
+		$objs = ORM::factory('EquipamentoInspecionado');
+		
+		$objs->where('Data', 'BETWEEN', array($de, $ate));
 		// fazer select pra escolher só as que estao em emergencia
 		$objs->where("EquipamentoInspecionado.Tecnologia",'=',$this->request->post('tecnologia'));	
 		$objs->where("EquipamentoInspecionado.Empresa",'=',site::get_empresaatual());	
 		$objs->join('Condicao','LEFT')->on('Condicao.CodCondicao','=','EquipamentoInspecionado.Condicao');
 		$objs->where("Condicao.Emergencia",'=',1);
 			
-
-
-
 		$equip = $objs->find_all();
 		foreach ($equip as $equipamento) { //peguei os equip inspecionado
 
@@ -152,12 +160,11 @@ class Controller_Empresas extends Controller_Welcome {
 		    $obj->ImagemTermica = "termica_".$this->request->post('CodGR')."_".basename($filename);
 		}	
 
+		//nao tem pq mexer nisso se esta bloqueado
+		//$obj = $obj->equipamentoinspecionado;
 
-		$equip = $obj->equipamentoinspecionado;
-
-		$equip->Condicao = $this->request->post('Condicao',null);
-		$equip->save();
-
+		//$obj->Condicao = $this->request->post('Condicao');
+		
 		if($obj->save())	
 			HTTP::redirect("empresas/grauderisco?".$this->request->post('query')."&sucesso=1");	
 		else
@@ -175,6 +182,7 @@ class Controller_Empresas extends Controller_Welcome {
 
 		$this->template->content->conteudo = View::factory('empresas/list_analiseinspecao');						
 		$this->template->content->conteudo->objs = $rotas;
+		$this->template->content->show_add_link = false;	
 	}
 
 	public function action_edit_analiseinspecao_novo() //adicionar um nova AnaliseEquipamentoInspecionado, essa tabela é só temporária
@@ -261,6 +269,7 @@ class Controller_Empresas extends Controller_Welcome {
 		HTTP::redirect('empresas/analiseinspecao?sucesso=1');	
 	}
 
+	//teste
 	public function action_teste() //transfere tudo pra cada tabela
 	{
 		$empresa = 39;
@@ -273,7 +282,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$result = $db->execute();
 		print_r( intval($result[0]) -1	);
 	}
-
+	//=====
 
 	public function action_transferir_analiseinspecao() //transfere tudo pra cada tabela
 	{		
@@ -508,11 +517,11 @@ class Controller_Empresas extends Controller_Welcome {
 	//======================================================//	
 
 	public function action_equipamentos() //página principal dos equipamentos
-	{			
+	{					
 		$this->template->content->conteudo = View::factory('empresas/list_equipamentos');					
 		$this->template->content->conteudo->objs = ORM::factory('Area')->where('Empresa','=',site::get_empresaatual())->find_all()->as_array('CodArea', 'Area');	//pega as areas		
 		$this->template->content->conteudo->area =  site::segment(3,null);	
-		$this->template->content->conteudo->setor =  site::segment(4,null);		
+		$this->template->content->conteudo->setor =  site::segment(4,null);							
 	}
 
 	public function action_edit_equipamentos() //edit dos equipamentos
@@ -589,6 +598,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo = View::factory('empresas/list_areas_setores');					
 		$this->template->content->conteudo->objs = $objs;		
 		$this->template->content->conteudo->empresa = site::get_empresaatual(); //id da empresa atual	
+		$this->template->content->show_add_link = false;
 	}
 
 

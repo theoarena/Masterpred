@@ -13,21 +13,34 @@ class Controller_Clientes extends Controller_Welcome {
 	//======================================================//	
 
 	public function action_historico() //página principal do historico
-	{			
+	{
 		$user = Auth::instance()->get_user();	
-		
+						
 		$this->template->content->conteudo = View::factory('clientes/list_historico');					
-		$this->template->content->conteudo->objs = $user->empresas->find_all();	//todas as empresas do usuario	
-		$this->template->content->conteudo->user = $user;	//todas as empresas do usuario	
-			
-		$this->template->content->graficos = View::factory('clientes/list_historico_graficos');
-		$this->template->content->graficos->valores_grafico = $this->getGraficosOSP_gauge($user);
+	    $this->template->content->conteudo->objs = $user->empresas->find_all();	//todas as empresas do usuario	
+	    $this->template->content->conteudo->user = $user;	//todas as empresas do usuario	
+ 
+	    $de = Arr::get($_GET, 'de',"01/".date('m')."/".date('Y')) ;
+	    $ate = Arr::get($_GET, 'ate',date('d/m/Y')) ;
+	    $sp =  Arr::get($_GET, 'sem_planejamento',0);
+	    $pe = Arr::get($_GET, 'pendentes',0);
+	    $fi = Arr::get($_GET, 'finalizadas',0);
+
+	    $this->template->content->conteudo->de = $de;	
+	    $this->template->content->conteudo->ate = $ate;		
+	    $this->template->content->conteudo->sp = $sp;		
+	    $this->template->content->conteudo->pe = $pe;
+	    $this->template->content->conteudo->fi = $fi; 
+
+	    $this->template->content->graficos = View::factory('clientes/list_historico_graficos');
+		$this->template->content->graficos->valores_grafico = $this->action_getGraficosOSP_gauge($user,$de,$ate,$sp,$pe,$fi);
 	}
 
 	public function action_load_historico() //edit dos rotas
 	{			
 		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
 		$tipo = explode('_',Arr::get($_GET, 'id',null)); //separa o id do tipo
+	
 
 		switch ($tipo[0]) {
 			case 'empresa': //pegar as áreas da empresa
@@ -55,11 +68,36 @@ class Controller_Clientes extends Controller_Welcome {
 				$ret = array();
 //				$obj = ORM::factory('Equipamento', $tipo[1]);			
 
-				$equipinsp = ORM::factory('EquipamentoInspecionado')->where('Equipamento','=',$tipo[1])->order_by('Data','desc')->find_all();	
+				$de = site::data_EN(Arr::get($_GET, 'de',null)); 
+				$ate = site::data_EN(Arr::get($_GET, 'ate',null)); 
+				$sp = Arr::get($_GET, 'sp',0); 
+				$pe = Arr::get($_GET, 'pe',0); 
+				$fi = Arr::get($_GET, 'fi',0); 
 
-				foreach ($equipinsp as $a)
-				{	$estado = 'vermelho'; 	
+				$equipinsp = ORM::factory('EquipamentoInspecionado')
+				->where('EquipamentoInspecionado.Equipamento','=',$tipo[1])
+				->where('EquipamentoInspecionado.Data', 'BETWEEN', array($de, $ate))
+				->join('gr','LEFT')->on('gr.EquipamentoInspecionado','=','EquipamentoInspecionado.CodEquipamentoInspecionado')
+				->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR')
+				->and_where_open();
+				if( ($sp != 0) || ($pe != 0) || ($fi != 0) )
+				{				
+					if($sp!=0)
+						$equipinsp->where("resultados.DataPlanejamento",'IS',NULL);					
+					if($pe!=0)
+						$equipinsp->or_where("resultados.DataPlanejamento",'IS NOT',NULL);
+					if($fi!=0)
+						$equipinsp->or_where("resultados.DataFinalizacao",'IS NOT',NULL);
+				}
+				$equipinsp->and_where_close();
+				$equipinsp->where('gr.Confirmado','=',1)->order_by('Data','desc');
 
+				$result = $equipinsp->find_all();
+				//print_r($equipinsp);exit();
+				foreach ($result as $a)
+				{
+					$estado = 'vermelho'; 	
+					
 					if( !in_array( site::datahora_BR($a->gr->resultado->DataCorretiva), array(null,'00/00/0000') ) )
 					{	
 						$estado = 'verde_pendente'; 
@@ -72,9 +110,9 @@ class Controller_Clientes extends Controller_Welcome {
 					elseif( !in_array( site::datahora_BR($a->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
 						$estado = 'laranja'; 								
 
-
+					
 					$ret[] =  array('key' => 'equipamentoinspecionado_'.$a->CodEquipamentoInspecionado , 
-									'title' => "<a class='".$estado."' href='".url::base().Kohana::$config->load('config')->get('index_page')."/clientes/edit_historico/".$a->gr->CodGR."'>".site::datahora_BR($a->Data)." | TE | OSP #".$a->gr->NumeroGR."/".$a->gr->CodGR." | ".$a->condicao->Condicao." | ".$a->gr->componente->Componente.": ".$a->gr->Componente."</a>"									
+									'title' => "<a class='".$estado."' target='parent' href='".site::baseUrl()."clientes/edit_historico/".$a->gr->CodGR."'>".site::datahora_BR($a->Data)." | TE | OSP #".$a->gr->NumeroGR."/".$a->gr->CodGR." | ".$a->condicao->Condicao." | ".$a->gr->componente->Componente.": ".$a->gr->Componente."</a>"									
 									);
 				}
 				print json_encode($ret);
@@ -91,7 +129,7 @@ class Controller_Clientes extends Controller_Welcome {
 
 	public function action_edit_historico()
 	{		
-		//$this->template->content = View::factory('clientes/home_clientes');	
+		$this->template->content->graficos = "";	
 		$obj = ORM::factory('Gr', site::segment('edit_historico',null) );
 		$this->template->content->conteudo = View::factory('clientes/edit_historico');						
 		$this->template->content->conteudo->obj = $obj;								
@@ -100,7 +138,7 @@ class Controller_Clientes extends Controller_Welcome {
 	public function action_resultado_historico()
 	{		
 		//$this->template->content = View::factory('clientes/home_clientes');	
-
+		$this->template->content->graficos = "";	
 		$id = (site::segment('resultado_historico',null) != 0)?(site::segment('resultado_historico',null) ):(null);		
 		$obj = ORM::factory('Resultados', $id);
 		$this->template->content->conteudo = View::factory('clientes/resultado_historico');						
@@ -134,6 +172,7 @@ class Controller_Clientes extends Controller_Welcome {
 
 	public function action_save_resultado()
 	{
+
 		$obj = ORM::factory('Resultados',$this->request->post('CodResultado') );				
 		$obj->GR = $this->request->post('GR');					
 		$obj->CodCliente = $this->request->post('CodCliente');					
@@ -154,16 +193,15 @@ class Controller_Clientes extends Controller_Welcome {
 		$obj->ConvMatPreco = site::formata_moeda($this->request->post('ConvMatPreco'));					
 		$obj->ConvOutrPreco = site::formata_moeda($this->request->post('ConvOutrPreco'));	
 
-		$obj->Total = ( site::formata_moeda($this->request->post('PreMOPreco',0))+site::formata_moeda($this->request->post('PreProdPreco',0))+
-				  site::formata_moeda($this->request->post('PredTercPreco',0))+site::formata_moeda($this->request->post('PredMatPreco',0))+
-				  site::formata_moeda($this->request->post('PredOutrPreco',0))+site::formata_moeda($this->request->post('ConvMOPreco',0))+
-				  site::formata_moeda($this->request->post('ConvProdPreco',0))+site::formata_moeda($this->request->post('ConvTercPreco',0))+
-				  site::formata_moeda($this->request->post('ConvMatPreco',0))+site::formata_moeda($this->request->post('ConvOutrPreco',0))
-				   	);
-
-		$obj->DataPlanejamento = site::data_EN($this->request->post('DataPlanejamento'));					
-		$obj->DataCorretiva = site::data_EN($this->request->post('DataCorretiva'));					
-		$obj->DataFinalizacao = site::data_EN($this->request->post('DataFinalizacao'));		
+		$obj->Total = ( site::formata_moeda($this->request->post('PreMOPreco'))+site::formata_moeda($this->request->post('PreProdPreco'))+
+				  site::formata_moeda($this->request->post('PredTercPreco'))+site::formata_moeda($this->request->post('PredMatPreco'))+
+				  site::formata_moeda($this->request->post('PredOutrPreco'))+site::formata_moeda($this->request->post('ConvMOPreco'))+
+				  site::formata_moeda($this->request->post('ConvProdPreco'))+site::formata_moeda($this->request->post('ConvTercPreco'))+
+				  site::formata_moeda($this->request->post('ConvMatPreco'))+site::formata_moeda($this->request->post('ConvOutrPreco'))
+				   	);		
+		$obj->DataPlanejamento = site::data_EN( $this->request->post('DataPlanejamento') ,null );					
+		$obj->DataCorretiva = site::data_EN( $this->request->post('DataCorretiva'), null );					
+		$obj->DataFinalizacao = site::data_EN( $this->request->post('DataFinalizacao'), null );		
 
 		/*if( ( $this->request->post('DataFinalizacao') != null) && $obj->Total != 0) //significa que a OS foi finalizada
 			enviaEmail::aviso_ospFinalizada($this->request->post('GR'));			*/
@@ -180,20 +218,47 @@ class Controller_Clientes extends Controller_Welcome {
 
 	}	
 	
-	public function action_getGraficosOSP_gauge()
+	public function action_getGraficosOSP_gauge($user=null,$de=null,$ate=null,$sp=null,$pe=null,$fi=null)
 	{		
+		if($user==null)
+			$user = $this->input->post("user");
 
-		$user = $this->input->post("user");
-		$this->template = "";
+		if($this->request->is_ajax())
+			$this->template = "";
 
+		$de = site::data_EN($de);
+		$ate = site::data_EN($ate);
 		$total = 0;
 		$finalizadas = 0;
 		$pendentes = 0;
 		$sem_planejamento = 0;
 
-		foreach ($user->empresas->find_all() as $empresa) {			
-			$equipamentos = ORM::factory('EquipamentoInspecionado')->where('Empresa','=',$empresa->CodEmpresa)->find_all();
-			foreach ($equipamentos as $e) {				
+		foreach ($user->empresas->find_all() as $empresa) {	
+
+			$equipamentos = ORM::factory('EquipamentoInspecionado')
+			->where('EquipamentoInspecionado.Empresa','=',$empresa->CodEmpresa)
+			->and_where('EquipamentoInspecionado.Data', 'BETWEEN', array($de, $ate))
+			->join('gr','LEFT')->on('gr.EquipamentoInspecionado','=','EquipamentoInspecionado.CodEquipamentoInspecionado')
+			->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR')
+			->and_where_open();
+
+			if( ($sp != 0) || ($pe != 0) || ($fi != 0) )
+			{				
+				if($sp!=0)
+					$equipamentos->where("resultados.DataPlanejamento",'IS',NULL);					
+				if($pe!=0)
+					$equipamentos->or_where("resultados.DataPlanejamento",'IS NOT',NULL);
+				if($fi!=0)
+					$equipamentos->or_where("resultados.DataFinalizacao",'IS NOT',NULL);
+			}
+
+			$equipamentos->and_where_close();
+
+			$equipamentos->where('gr.Confirmado','=',1)->order_by('EquipamentoInspecionado.Data','desc');
+
+			$result = $equipamentos->find_all();
+			
+			foreach ($result as $e) {				
 				$total++;
 				if( ($e->gr->resultado->Total != null) && ($e->gr->resultado->Total != 0) )
 				{
@@ -214,7 +279,8 @@ class Controller_Clientes extends Controller_Welcome {
 			$pendentes = round(($pendentes/$total)*100,2);		
 			$sem_planejamento = round(100 - ($pendentes+$finalizadas),2);
 		}	
-		return array('finalizadas' => $finalizadas, 'pendentes' => $pendentes , 'sem_planejamento' => $sem_planejamento );
+		$array = array('finalizadas' => $finalizadas, 'pendentes' => $pendentes , 'sem_planejamento' => $sem_planejamento );
+		return $array;
 	}
 
 } // End Welcome Controller

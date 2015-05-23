@@ -9,14 +9,15 @@
 		var de = "<?php echo $de ?>"; 
 		var ate =  "<?php echo $ate ?>"; 
 		var sp = "<?php echo $sp ?>"; 
-		var pe = "<?php echo $pe ?>"; 
+		var pe = "<?php echo $pe ?>";   
+		var ex = "<?php echo $ex ?>";   
 		var fi = "<?php echo $fi ?>"; 
 
 		$("#tree").fancytree({ autoCollapse: true,icons: false,				 
 			 lazyload: function(e, data){						 	
 		        data.result = $.ajax({
 		          url:"<?php echo site::baseUrl() ?>clientes/load_historico?id="+data.node.key
-		          +"&de="+de+"&ate="+ate+"&sp="+sp+"&pe="+pe+"&fi="+fi,
+		          +"&de="+de+"&ate="+ate+"&sp="+sp+"&pe="+pe+"&ex="+ex+"&fi="+fi,
 		          dataType: "json"			                  	         
 		        });
 		      }/*,
@@ -55,6 +56,7 @@
 	echo "<div id='historico_check'>";
 		echo "<label class='control checkbox chk_equip'> ".form::checkbox('sem_planejamento',1,($sp==1)?true:false)." <span class='checkbox-label'>Sem Planejamento</span></label>";   
 		echo "<label class='control checkbox chk_equip'> ".form::checkbox('pendentes',1,($pe==1)?true:false)." <span class='checkbox-label'>Pendentes</span></label>";   
+		echo "<label class='control checkbox chk_equip'> ".form::checkbox('executadas',1,($ex==1)?true:false)." <span class='checkbox-label'>Executadas</span></label>";   
 		echo "<label class='control checkbox chk_equip'> ".form::checkbox('finalizadas',1,($fi==1)?true:false)." <span class='checkbox-label'>Finalizadas</span></label>";   
 	echo '</div>';	 	
 

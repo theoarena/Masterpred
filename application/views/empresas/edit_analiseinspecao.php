@@ -11,11 +11,11 @@
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
 	echo form::hidden("CodEquipamentoInspAnalise",$obj->CodEquipamentoInspAnalise);	
 
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo do Componente</span>". form::select('TipoComponente',$componentes,$obj->TipoComponente, array('class' => 'form-control') ) ."</div>"; 
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo do Componente</span>". form::select('TipoComponente',$componentes,($obj->TipoComponente!=null)?($obj->TipoComponente):0, array('class' => 'form-control') ) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Componente',$obj->Componente, array('class' => 'form-control', 'maxlength' => '255', 'placeholder' => 'Componente')) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Detalhe',$obj->Detalhe, array('class' => 'form-control', 'maxlength' => '255', 'placeholder' => 'Detalhes')) ."</div>"; 
     echo "<br/>";    
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo da Anomalia</span>". form::select('TipoAnomalia',$anomalias,$obj->TipoAnomalia, array('class' => 'form-control')) ."</div>"; 
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo da Anomalia</span>". form::select('TipoAnomalia',$anomalias,($obj->TipoAnomalia!=null)?$obj->TipoAnomalia:0, array('class' => 'form-control')) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Anomalia</span>". form::textarea('Anomalia',$obj->Anomalia, array('class' => 'form-control', 'placeholder' => 'Detalhes da anomalia' )) ."</div>"; 
     echo "<br/>";
     echo '<div class="btn-group btn-group-lg"><button type="button" class="btn btn-primary btn_switch" id="buscar_recomendacoes">Buscar recomendações</button></div>';
@@ -50,7 +50,7 @@
     echo "</section>";
 	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));       
 	echo form::close();
-  
+    echo site::generateValidator(array('Data'=>'Data'));
 ?>
 
 
@@ -69,31 +69,6 @@
     </aside>
 
 <script>
-var validator = new FormValidator('form_edit', [{
-    name: 'Data',
-    display: 'Data',    
-    rules: 'required'
-}], function(errors, event) {
-   
-    var SELECTOR_ERRORS = $('#box_error');        
-       
-    if (errors.length > 0) {
-        SELECTOR_ERRORS.empty();
-        
-        for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
-            SELECTOR_ERRORS.append(errors[i].message + '<br />');
-        }        
-     
-        SELECTOR_ERRORS.fadeIn(200);
-        return false;
-    }
-
-    return true;
-      
-    event.preventDefault()
-});
-
-validator.setMessage('required', 'O campo "%s" é obrigatório.');
 
 $(".btn_switch").click(function(){
    muda();

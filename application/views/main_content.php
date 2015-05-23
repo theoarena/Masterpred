@@ -19,9 +19,11 @@
 			echo 'Ocorreu algum erro! <strong>verifique os dados e tente novamente!</strong>  </div>';
 		}
 
-		echo '<div class="alert alert-danger" id="box_error"></div>';
+		echo '<div class="alert alert-danger" id="box_error">';
+		echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+		echo '</div>';
 
-	if( site::segment(3,'sub') == 'sub' && $show_add_link) { 
+	if( !site::segment_has(2,'edit') && $show_add_link) { 
 	?>
 		<h1 id="btn_adicionar">		
 			<?php echo html::anchor(site::segment(1)."/edit_".site::segment(2)."".$plus_add_link,"Adicionar +", array("class" => "label label-success" )); ?>

@@ -21,7 +21,7 @@
 	echo form::open( site::segment(1)."/save_pedidos_usuario",array("id" => "form_edit") );			
 	
     echo form::hidden("id",$obj->id); 
-    echo "<label class='control checkbox chk_equip'>".form::checkbox('ativar',1, false )." <span class='checkbox-label'>Ativar este perfil</span></label>";   
+    echo "<label class='control checkbox chk_equip'>".form::checkbox('ativar',1, false )." <span class='checkbox-label'>Perfil ativado</span></label>";   
     echo "<label class='control checkbox chk_equip'> ".form::checkbox('notificar',1, false )." <span class='checkbox-label'>Notificar automaticamente o usuário que seu perfil foi ativado.</span></label>";   
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo de Usuário</span>". form::select('role',$roles,$roles_selecionadas, array('class' => 'form-control', 'id' => 'roles' )) ."</div>";      
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nome',$obj->nome, array('class' => 'form-control', 'maxlength' => '200', 'placeholder' => 'Nome completo')) ."</div>"; 
@@ -41,53 +41,17 @@
 	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));       
 	
 	echo "</form>";
+    echo site::generateValidator(array(
+        'nome'=>'Nome completo',
+        'email' => array('Email','required|valid_email'),
+        'nascimento' => 'Data de nascimento',
+        'username' => array('Nome de usuário','required|alpha_numeric')
+    ));
 	
 ?>
 
 
 <script>
-
-var validator = new FormValidator('form_edit', [{
-    name: 'nome',
-    display: 'Nome completo',    
-    rules: 'required'
-},
-{
-    name: 'email',
-    display: 'Email',    
-    rules: 'required|valid_email'
-},
-{
-    name: 'nascimento',
-    display: 'Data de nascimento',    
-    rules: 'required'
-},
-{
-    name: 'username',
-    display: 'Nome de usuário',    
-    rules: 'required|alpha_numeric'
-}
-], function(errors, event) {
-   
-    var SELECTOR_ERRORS = $('#box_error');        
-       
-    if (errors.length > 0) {
-        SELECTOR_ERRORS.empty();
-        
-        for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
-            SELECTOR_ERRORS.append(errors[i].message + '<br />');
-        }        
-     
-        SELECTOR_ERRORS.fadeIn(200);
-        return false;
-    }
-
-    return true;
-      
-    event.preventDefault()
-});
-
-validator.setMessage('required', 'O campo "%s" é obrigatório.');
 
 $(document).ready(function(){
     $("select#empresas").chosen({width: "100%"});

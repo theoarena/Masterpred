@@ -14,7 +14,7 @@
 		
     echo form::hidden("id",$obj->id);  
 	echo form::hidden("empresa",site::get_empresaatual());	
-        echo "<label class='control checkbox chk_equip'>".form::checkbox('ativar',1, ($obj->ativo == 1)?(true):(false) )." <span class='checkbox-label'>Ativar este perfil</span></label>";   
+        echo "<label class='control checkbox chk_equip'>".form::checkbox('ativar',1, ($obj->ativo == 1)?(true):(false) )." <span class='checkbox-label'>Perfil ativado</span></label>";   
     
      echo form::hidden("role[]",1);  
    
@@ -35,7 +35,12 @@
 	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg' ));
 	
 	echo "</form>";
-	
+	   echo site::generateValidator(array(
+        'nome'=>'Nome completo',
+        'email' => array('Email','required|valid_email'),
+        'nascimento' => 'Data de nascimento',
+        'username' => array('Nome de usuário','required|alpha_numeric')
+    ));
 ?>
 
 
@@ -43,53 +48,8 @@
 
  $(document).ready(function () {
         //$('.footable').footable();
-        $('input[name="nascimento"]').datepicker({format:'dd/mm/yyyy'});       
-});
-
-
-var validator = new FormValidator('form_edit', [{
-    name: 'nome',
-    display: 'Nome completo',    
-    rules: 'required'
-},
-{
-    name: 'email',
-    display: 'Email',    
-    rules: 'required|valid_email'
-},
-{
-    name: 'nascimento',
-    display: 'Data de nascimento',    
-    rules: 'required'
-},
-{
-    name: 'username',
-    display: 'Nome de usuário',    
-    rules: 'required|alpha_numeric'
-}
-], function(errors, event) {
-   
-    var SELECTOR_ERRORS = $('#box_error');        
-       
-    if (errors.length > 0) {
-        SELECTOR_ERRORS.empty();
-        
-        for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
-            SELECTOR_ERRORS.append(errors[i].message + '<br />');
-        }        
-     
-        SELECTOR_ERRORS.fadeIn(200);
-        return false;
-    }
-
-    return true;
-      
-    event.preventDefault()
-});
-
-validator.setMessage('required', 'O campo "%s" é obrigatório.');
-$(document).ready(function(){
-    $("select#empresas").chosen({width: "100%"});
+        $('input[name="nascimento"]').datepicker({format:'dd/mm/yyyy'});  
+        $("select#empresas").chosen({width: "100%"});     
 });
 
 </script>

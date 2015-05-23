@@ -15,6 +15,7 @@
 	echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn-lg'));
 	
 	echo "</form>";
+	echo site::generateValidator(array('Tecnologia'=>'Tecnologia','Id'=>'Id'));
 
 ?>
 
@@ -70,44 +71,3 @@
 	</div>
   </div>
 </div>
-
-
-<script>
-
-var validator = new FormValidator('form_edit', [{
-    name: 'Tecnologia',
-    display: 'Tecnologia',    
-    rules: 'required'
-},
-{
-    name: 'Id',
-    display: 'Id',    
-    rules: 'required'
-}
-], function(errors, event) {
-   
-    var SELECTOR_ERRORS = $('#box_error');        
-       
-    if (errors.length > 0) {
-        SELECTOR_ERRORS.empty();
-        
-        for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
-            SELECTOR_ERRORS.append(errors[i].message + '<br />');
-        }        
-     
-        SELECTOR_ERRORS.fadeIn(200);
-        return false;
-    }
-
-    return true;
-      
-    event.preventDefault()
-});
-
-validator.setMessage('required', 'O campo "%s" é obrigatório.');
-
-</script>
-
-
-
-

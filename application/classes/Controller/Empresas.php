@@ -42,10 +42,11 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo->obj = $obj;						
 		$this->template->content->conteudo->componentes = ORM::factory('Componente')->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()->as_array("CodComponente","Componente");						
 		$this->template->content->conteudo->anomalias = ORM::factory('Anomalia')->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()->as_array("CodAnomalia","Anomalia");						
-		$this->template->content->conteudo->condicao = ORM::factory('Condicao',$obj->equipamentoinspecionado->Condicao);	//->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()
+		$this->template->content->conteudo->condicoes = ORM::factory('Condicao')->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->and_where('Emergencia','=',1)->find_all()->as_array('CodCondicao','Condicao');
+		$this->template->content->conteudo->inspecoes = ORM::factory('TipoInspecao')->find_all()->as_array("CodTipoInspecao","TipoInspecao");						
+		
 		//$this->template->content->conteudo->condicoes = ORM::factory('Condicao',$obj->equipamentoinspecionado->Condicao);	//->where("Tecnologia",'=',$obj->equipamentoinspecionado->Tecnologia)->find_all()
 		//$this->template->content->conteudo->inspecoes = ORM::factory('TipoInspecao', site::segment('edit_grauderisco',null) )->as_array("CodTipoInspecao","TipoInspecao");						
-		$this->template->content->conteudo->inspecoes = ORM::factory('TipoInspecao')->find_all()->as_array("CodTipoInspecao","TipoInspecao");						
 
 		$query = parse_url(URL::query());
 		$this->template->content->conteudo->query = ( isset($query["query"]) )?($query["query"]):("1=1");
@@ -126,8 +127,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj->Obs = $this->request->post('Obs');
 		$obj->GRReferencia = $this->request->post('GRReferencia');
 		$obj->TipoInspecao = $this->request->post('TipoInspecao');
-		$obj->TipoInspecao = $this->request->post('TipoInspecao');
-
+		
 		$obj->Ir = $this->request->post('Ir');
 		$obj->Is = $this->request->post('Is');
 		$obj->It = $this->request->post('It');
@@ -160,12 +160,11 @@ class Controller_Empresas extends Controller_Welcome {
 		    $obj->ImagemTermica = "termica_".$this->request->post('CodGR')."_".basename($filename);
 		}	
 
-		//nao tem pq mexer nisso se esta bloqueado
-		//$obj = $obj->equipamentoinspecionado;
-
-		//$obj->Condicao = $this->request->post('Condicao');
 		
-		if($obj->save())	
+		$equip = $obj->equipamentoinspecionado;
+		$equip->Condicao = $this->request->post('Condicao');
+		
+		if($obj->save() && $equip->save())	
 			HTTP::redirect("empresas/grauderisco?".$this->request->post('query')."&sucesso=1");	
 		else
 			HTTP::redirect("empresas/grauderisco?".$this->request->post('query')."&erro=1");
@@ -214,6 +213,9 @@ class Controller_Empresas extends Controller_Welcome {
 		$recomendacoes = $tecnologia->recomendacoes->find_all()->as_array('CodRecomendacao','Recomendacao');
 		
 		$this->template->content->conteudo = View::factory('empresas/edit_analiseinspecao');							
+		
+		$componentes[0] = Kohana::$config->load('config')->get('select_default'); 
+		$anomalias[0] = Kohana::$config->load('config')->get('select_default');
 		
 		$this->template->content->conteudo->obj = $obj;					
 		$this->template->content->conteudo->recomendacoes = $recomendacoes;			
@@ -474,7 +476,8 @@ class Controller_Empresas extends Controller_Welcome {
 	}
 
 	public function action_edit_rotas() //edit dos rotas
-	{			
+	{		
+
 		$obj = ORM::factory('Rota', site::segment('edit_rotas',null) );
 		$equipamentos_selecionados = $obj->equipamentos->find_all()->as_array('CodEquipamento','Equipamento');
 		//print_r($equipamentos_selecionados);exit;

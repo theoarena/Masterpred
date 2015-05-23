@@ -64,10 +64,10 @@
     echo '<div class="well well-sm" id="temperaturas">';
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Temp.Ref</span>". form::input('TemperaturaRef',$obj->TemperaturaRef, array('class' => 'form-control temperaturas', 'maxlength' => '10')) ."<span class='input-group-addon'>°C</span></div>"; 
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Temp.Med</span>". form::input('TemperaturaMed',$obj->TemperaturaMed, array('class' => 'form-control temperaturas', 'maxlength' => '10')) ."<span class='input-group-addon'>°C</span></div>";         
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Delta</span>". form::input('x',"x", array ('class' => 'form-control', 'disabled' => 'disabled') ) ."<span class='input-group-addon'>°C</span></div>"; 
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Carga(%)</span>". form::input('x',"x", array ('class' => 'form-control', 'disabled' => 'disabled') ) ."</div>"; 
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Delta</span>". form::input('delta',null, array ('class' => 'form-control', 'disabled' => 'disabled') ) ."<span class='input-group-addon'>°C</span></div>"; 
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Carga(%)</span>". form::input('carga',null, array ('class' => 'form-control', 'disabled' => 'disabled') ) ."</div>"; 
     echo "</div>";
-    echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Condição</span>". form::select('Condicao', array($condicao->CodCondicao => $condicao->Condicao ) ,$equip->Condicao, array('class' => 'form-control', 'disabled' => 'disabled')) ."</div>";        
+    echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Condição</span>". form::select('Condicao', $condicoes ,$equip->Condicao, array('class' => 'form-control')) ."</div>";        
 
     echo "<br/>";
 
@@ -89,39 +89,26 @@
 
     echo "</div>";
 
-
-
 	echo form::close();
-  
+    echo site::generateValidator(array('Rota'=>'Rota'));
 ?>
 
+<script type="text/javascript">
+    
+    $(document).ready(function(){
+        changeValores();
+        $('div#grandezas input').change(function(){ changeValores() });
+        $('input[name=TemperaturaRef],input[name=TemperaturaMed]').change(function(){ changeValores() });
+    });
 
-<script>
+    function changeValores()
+    {
 
-var validator = new FormValidator('form_edit', [{
-    name: 'Rota',
-    display: 'Rota',    
-    rules: 'required'
-}], function(errors, event) {
-   
-    var SELECTOR_ERRORS = $('#box_error');        
-       
-    if (errors.length > 0) {
-        SELECTOR_ERRORS.empty();
-        
-        for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
-            SELECTOR_ERRORS.append(errors[i].message + '<br />');
-        }        
-     
-        SELECTOR_ERRORS.fadeIn(200);
-        return false;
+        var carga  = ( ( ( Number($('input[name=Ir]').val()) + Number($('input[name=Is]').val()) + Number($('input[name=It]').val()) ) / 3 ) * 100 ) / Number($('input[name=In]').val()) ;
+        var delta = ( ( Number($('input[name=TemperaturaRef]').val()) - Number($('input[name=TemperaturaMed]').val()) )* 100 ) / ( ( Number(carga)*(100) ) /Number(carga) ) ;
+
+        $('input[name=carga]').val(carga.toPrecision(10));
+        $('input[name=delta]').val(delta.toPrecision(10));
     }
-
-    return true;
-      
-    event.preventDefault()
-});
-
-validator.setMessage('required', 'O campo "%s" é obrigatório.');
 
 </script>

@@ -10,62 +10,26 @@
 	echo form::hidden("CodCondicao",$obj->CodCondicao);	
 
     echo "<label class='control checkbox chk_equip'>";
-    echo form::checkbox('Emergencia', 1, false);
+    echo form::checkbox('Emergencia', 1, ($obj->Emergencia)?true:false );
     echo '<span class="checkbox-label">Emergência</span></label>';
 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Condicao',$obj->Condicao,array('class'=>'form-control', 'maxlength' => '10', 'placeholder' => 'Nome da Condição')) ."</div>";  
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Descricao',$obj->Descricao,array('class'=>'form-control', 'maxlength' => '50', 'placeholder' => 'Descrição')) ."</div>";  
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::select('Cor',site::getListaCores(),$obj->Cor, array('class' => 'form-control' , 'placeholder' => 'Cor')) ."</div>";    
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::select('Cor',$cores,$obj->Cor, array('class' => 'form-control' , 'placeholder' => 'Cor')) ."</div>";    
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::select('Tecnologia',$tecnologias,$obj->Tecnologia,array('class' => 'form-control' , 'placeholder' => 'Tecnologia')) ."</div>";	
 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>";
   
     echo form::file('imagem',array('class' => 'form-control upload'));
 
-    $base = url::base().Kohana::$config->load('config')->get('upload_directory');
+    $base = url::base().Kohana::$config->load('config')->get('upload_directory_condicoes');
     if($obj->Imagem!=null)
-        echo '<img src="'.$base.$obj->Imagem.'" width="50%" />';
+        echo '<img src="'.$base.$obj->Imagem.'" width="30%" />';
 
 	echo "</div>";
 
 	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));
 	
 	echo "</form>";
-	
+	echo site::generateValidator(array('Condicao'=>'Nome da Condição','Funcao'=>"Função"));
 ?>
-
-<script>
-
-var validator = new FormValidator('form_edit', [{
-    name: 'Condicao',
-    display: 'Nome',    
-    rules: 'required'
-},
-{
-    name: 'Funcao',
-    display: 'Função',    
-    rules: 'required'
-}
-], function(errors, event) {
-   
-    var SELECTOR_ERRORS = $('#box_error');        
-       
-    if (errors.length > 0) {
-        SELECTOR_ERRORS.empty();
-        
-        for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
-            SELECTOR_ERRORS.append(errors[i].message + '<br />');
-        }        
-     
-        SELECTOR_ERRORS.fadeIn(200);
-        return false;
-    }
-
-    return true;
-      
-    event.preventDefault()
-});
-
-validator.setMessage('required', 'O campo "%s" é obrigatório.');
-
-</script>

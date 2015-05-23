@@ -49,6 +49,11 @@ class site {
 		return $associative;
 	}
 
+	public static function segment_has($index,$search)
+	{	
+		return ( strpos(site::segment($index), $search ) !== false);			
+	}
+
 	public static function baseUrl($index=true) //return the base system URL
 	{
 		return URL::site("",null,$index);
@@ -266,12 +271,7 @@ class site {
 		if($d == null) return null;
 		$d = explode(" ", $d);
 		return $d[0];
-	}
-
-	public static function getListaCores() //lista de cores
-	{
-		return array("red"=>"Vermelho","orange"=>"Laranja","yellow"=>"Amarelo","green"=>"Verde");
-	}
+	}	
 
 	public static function inspecaoGraudeRisco($c,$a,$gerar=false) //verifica se a condicao está dentro de algum grau de risco
 	{
@@ -321,5 +321,47 @@ class site {
 	    return $password;
 	}
 
+	function generateValidator($fields,$form_name = 'form_edit') //gera o script de validação dos campos
+	{		
+		$return = '<script>';
+
+		$return .= "var validator = new FormValidator('".$form_name."', [{";
+		$msg = 'O campo "%s" é obrigatório.';
+
+		foreach ($fields as $key => $value) {
+			$return .=  "name: '".$key."',";
+			if(is_array($value))
+			{
+				$return .= "display: '".$value[0]."',";
+				$return .= "rules: '".$value[1]."'";
+			}
+			else
+			{
+				$return .= "display: '".$value."',";
+				$return .= "rules: 'required'";
+			}				
+			
+				$return .= '},{';
+		}	
+			   
+		$return .= "}], function(errors, event) {
+			    var SELECTOR_ERRORS = $('#box_error'); 
+			    if (errors.length > 0) {
+			        SELECTOR_ERRORS.empty();
+			           for (var i = 0, errorLength = errors.length; i < errorLength; i++) {
+			            SELECTOR_ERRORS.append(errors[i].message + '<br />');
+			        }        
+			        SELECTOR_ERRORS.fadeIn(200);
+			        SELECTOR_ERRORS.delay(7000).fadeOut('slow');			        
+			        return false;
+			    }
+			    return true;			      
+			    event.preventDefault()
+			});		
+			validator.setMessage('required','".$msg."');		
+			</script>
+		";
+		return $return;
+	}
 }
 ?>

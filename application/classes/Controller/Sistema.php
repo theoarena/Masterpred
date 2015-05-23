@@ -31,6 +31,7 @@ class Controller_Sistema extends Controller_Welcome {
 		$tecnologias = ORM::factory("Tecnologia")->find_all()->as_array("CodTecnologia","Tecnologia");
 		$this->template->content->conteudo = View::factory("sistema/edit_condicoes");					
 		$this->template->content->conteudo->obj = $obj;				
+		$this->template->content->conteudo->cores = Kohana::$config->load('config')->get('cores_condicao');				
 		$this->template->content->conteudo->tecnologias = $tecnologias;				
 	}
 	
@@ -38,24 +39,24 @@ class Controller_Sistema extends Controller_Welcome {
 	{	
 		$obj = ORM::factory('Condicao',$this->request->post('CodCondicao' ));		
 		
-	
-		if(isset($_FILES['Imagem']) and $_FILES['Imagem']["name"] != "")
+		$dir = Kohana::$config->load('config')->get('upload_directory_condicoes');
+		if(isset($_FILES['imagem']) and $_FILES['imagem']["name"] != "")
 		{
-			$file = $_FILES['Imagem'];
-			$filename = upload::save($file);				
-			Image::factory($filename)				
-				->save( Kohana::$config->load('config')->get('upload')."condicao_".$this->request->post('Tecnologia')."_".basename($filename) );	
+			
+			$file = $_FILES['imagem'];
+			$filename = Upload::save($file,null,$dir);	
+			$foto = $dir."/condicao_".$this->request->post('Tecnologia')."_".basename($filename);
+			Image::factory($filename)->save($foto);	
 		    unlink($filename);
 		    $obj->Imagem ="condicao_".$this->request->post('Tecnologia')."_".basename($filename);	
-		}		   
+		}	
 
-		$obj->Condicao = $this->request->post('Condicao');
-		
+		$obj->Condicao = $this->request->post('Condicao');		
 		$obj->Descricao = $this->request->post('Descricao');
 		$obj->Emergencia = $this->request->post('Emergencia');				
 		$obj->Tecnologia = $this->request->post('Tecnologia');				
-		$obj->Cor = $this->request->post('Cor');				
-		
+		$obj->Cor = $this->request->post('Cor');	
+							
 		if ($obj->save()) 
 			HTTP::redirect("sistema/condicoes?sucesso=1");
 		else

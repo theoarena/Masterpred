@@ -4,7 +4,7 @@
 	$equipamento = $equipamentoinspecionado->equipamento;
 	$empresa = $equipamento->setor->area->empresa;
 	$cor = $equipamentoinspecionado->condicao->Cor;
-	$cor = ($cor!=null)?("style='color:".$cor."'"):("");
+	$cor = ($cor!=null)?("class='".$cor."'"):("");
 	$base = Kohana::$config->load('config')->get('upload_directory');
 ?>
 

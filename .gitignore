@@ -3,6 +3,7 @@ application/media/uploads/*
 application/logs/*
 modules/*
 system/*
+material/*
 
 # =========================
 # Operating System Files

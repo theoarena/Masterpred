@@ -15,8 +15,11 @@
 			foreach ($objs as $o) {				
 				echo "<tr>";
 					echo "<td>".$o->CodCondicao."</td>";
-					echo "<td>".$o->Condicao."</td>";					
-					echo "<td>".$o->Cor."</td>";
+					echo "<td>".$o->Condicao."</td>";	
+
+					$config = Kohana::$config->load('config')->get('cores_condicao');
+					
+					echo "<td>". $config[$o->Cor]."</td>";
 					echo "<td>".$o->tecnologia->Tecnologia."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
 						echo html::anchor("sistema/edit_condicoes/".$o->CodCondicao,"EDITAR", array("class"=>"btn btn-info"));						

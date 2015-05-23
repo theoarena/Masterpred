@@ -74,6 +74,17 @@ footer p {font-size: 13px; text-align: center;}
 #empresa_resultado #Info p+p{margin-bottom: 5px}
 #empresa_resultado #Info #tipo_gr{position: absolute; right: 40px; top: 90px;}
 #empresa_resultado #Info #tipo_gr h1{ font-size: 90px;  font-weight: bold;}
+/* cores definidas em config.php */
+  #empresa_resultado #Info #tipo_gr h1.green{color: #008703}
+  #empresa_resultado #Info #tipo_gr h1.bordeaux{color: #860000}
+  #empresa_resultado #Info #tipo_gr h1.orange{color: #fe640a}
+  #empresa_resultado #Info #tipo_gr h1.yellow{color: #ffff00}
+  #empresa_resultado #Info #tipo_gr h1.dark_orange{color: #993100}
+  #empresa_resultado #Info #tipo_gr h1.grey{color: #323232}
+  #empresa_resultado #Info #tipo_gr h1.black{color: #000000}
+  #empresa_resultado #Info #tipo_gr h1.light_green{color: #01ff02}
+  #empresa_resultado #Info #tipo_gr h1.light_blue{color: #0064ff}    
+/* ========= */
 #empresa_resultado #Info #tipo_gr p{ font-size: 20px;   text-align: center;}
 #empresa_resultado #Info #tipo_gr p#numero_gr{ color: #7070BF; margin-bottom: 30px; margin-top: -70px;}
 #empresa_resultado #tabela_resultados{ display: table;  width: 100%;margin-top: 50px}

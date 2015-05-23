@@ -24,16 +24,26 @@ class Controller_Clientes extends Controller_Welcome {
 	    $ate = Arr::get($_GET, 'ate',date('d/m/Y')) ;
 	    $sp =  Arr::get($_GET, 'sem_planejamento',0);
 	    $pe = Arr::get($_GET, 'pendentes',0);
+	    $ex = Arr::get($_GET, 'executadas',0);
 	    $fi = Arr::get($_GET, 'finalizadas',0);
+
+	    if( ($sp+$pe+$ex+$fi) == 0 ) //se desseleciona todos, seleciona todos
+	    {
+	    	$sp = 1;
+		    $pe = 1;
+		    $ex = 1;
+		    $fi = 1;
+	    }
 
 	    $this->template->content->conteudo->de = $de;	
 	    $this->template->content->conteudo->ate = $ate;		
 	    $this->template->content->conteudo->sp = $sp;		
 	    $this->template->content->conteudo->pe = $pe;
+	    $this->template->content->conteudo->ex = $ex;
 	    $this->template->content->conteudo->fi = $fi; 
 
 	    $this->template->content->graficos = View::factory('clientes/list_historico_graficos');
-		$this->template->content->graficos->valores_grafico = $this->action_getGraficosOSP_gauge($user,$de,$ate,$sp,$pe,$fi);
+		$this->template->content->graficos->valores_grafico = $this->action_getGraficosOSP_gauge($user,$de,$ate,$sp,$pe,$ex,$fi);
 	}
 
 	public function action_load_historico() //edit dos rotas
@@ -59,7 +69,8 @@ class Controller_Clientes extends Controller_Welcome {
 			break;
 			case 'setor': //pegar os equipamentos do setor
 				$ret = array();
-				$obj = ORM::factory('Setor', $tipo[1]);						
+				$obj = ORM::factory('Setor', $tipo[1]);	
+				//$equips = ORM::factory('Setor', $tipo[1])		
 				foreach ($obj->equipamentos->find_all() as $a)
 					$ret[] =  array('key' => 'equipamento_'.$a->CodEquipamento , 'title' => 'Equipamento # '.$a->Equipamento , 'lazy' => true);
 				print json_encode($ret);
@@ -71,6 +82,7 @@ class Controller_Clientes extends Controller_Welcome {
 				$de = site::data_EN(Arr::get($_GET, 'de',null)); 
 				$ate = site::data_EN(Arr::get($_GET, 'ate',null)); 
 				$sp = Arr::get($_GET, 'sp',0); 
+				$ex = Arr::get($_GET, 'ex',0); 
 				$pe = Arr::get($_GET, 'pe',0); 
 				$fi = Arr::get($_GET, 'fi',0); 
 
@@ -78,18 +90,38 @@ class Controller_Clientes extends Controller_Welcome {
 				->where('EquipamentoInspecionado.Equipamento','=',$tipo[1])
 				->where('EquipamentoInspecionado.Data', 'BETWEEN', array($de, $ate))
 				->join('gr','LEFT')->on('gr.EquipamentoInspecionado','=','EquipamentoInspecionado.CodEquipamentoInspecionado')
-				->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR')
-				->and_where_open();
-				if( ($sp != 0) || ($pe != 0) || ($fi != 0) )
-				{				
+				->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR');
+				
+				//weheres para cada estado das osp
+				if( ($sp != 0) || ($pe != 0) || ($fi != 0) || ($ex != 0) )
+				{			
+					$equipinsp->where_open();
+
 					if($sp!=0)
-						$equipinsp->where("resultados.DataPlanejamento",'IS',NULL);					
+						$equipinsp->where("resultados.DataPlanejamento",'IS',NULL);
 					if($pe!=0)
-						$equipinsp->or_where("resultados.DataPlanejamento",'IS NOT',NULL);
+					{
+						$equipinsp->or_where_open();
+							$equipinsp->and_where("resultados.DataPlanejamento",'IS NOT',NULL);
+							$equipinsp->and_where("resultados.DataCorretiva",'IS',NULL);	
+							$equipinsp->and_where("resultados.DataFinalizacao",'IS',NULL);				
+						$equipinsp->or_where_close();
+					}
+					
+					if($ex!=0)				
+					{
+						$equipinsp->or_where_open();
+							$equipinsp->and_where("resultados.DataCorretiva",'IS NOT',NULL);						
+							$equipinsp->and_where("resultados.DataFinalizacao",'IS',NULL);				
+						$equipinsp->or_where_close();
+					}						
+					
 					if($fi!=0)
 						$equipinsp->or_where("resultados.DataFinalizacao",'IS NOT',NULL);
+					
+					$equipinsp->where_close();
 				}
-				$equipinsp->and_where_close();
+
 				$equipinsp->where('gr.Confirmado','=',1)->order_by('Data','desc');
 
 				$result = $equipinsp->find_all();
@@ -218,7 +250,7 @@ class Controller_Clientes extends Controller_Welcome {
 
 	}	
 	
-	public function action_getGraficosOSP_gauge($user=null,$de=null,$ate=null,$sp=null,$pe=null,$fi=null)
+	public function action_getGraficosOSP_gauge($user=null,$de=null,$ate=null,$sp=null,$pe=null,$ex=null,$fi=null)
 	{		
 		if($user==null)
 			$user = $this->input->post("user");
@@ -230,6 +262,7 @@ class Controller_Clientes extends Controller_Welcome {
 		$ate = site::data_EN($ate);
 		$total = 0;
 		$finalizadas = 0;
+		$executadas = 0;
 		$pendentes = 0;
 		$sem_planejamento = 0;
 
@@ -239,23 +272,42 @@ class Controller_Clientes extends Controller_Welcome {
 			->where('EquipamentoInspecionado.Empresa','=',$empresa->CodEmpresa)
 			->and_where('EquipamentoInspecionado.Data', 'BETWEEN', array($de, $ate))
 			->join('gr','LEFT')->on('gr.EquipamentoInspecionado','=','EquipamentoInspecionado.CodEquipamentoInspecionado')
-			->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR')
-			->and_where_open();
+			->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR');
+			
 
-			if( ($sp != 0) || ($pe != 0) || ($fi != 0) )
-			{				
+			//weheres para cada estado das osp
+			if( ($sp != 0) || ($pe != 0) || ($fi != 0) || ($ex != 0) )
+			{			
+				$equipamentos->where_open();
+
 				if($sp!=0)
-					$equipamentos->where("resultados.DataPlanejamento",'IS',NULL);					
+					$equipamentos->where("resultados.DataPlanejamento",'IS',NULL);
 				if($pe!=0)
-					$equipamentos->or_where("resultados.DataPlanejamento",'IS NOT',NULL);
+				{
+					$equipamentos->or_where_open();
+						$equipamentos->and_where("resultados.DataPlanejamento",'IS NOT',NULL);
+						$equipamentos->and_where("resultados.DataCorretiva",'IS',NULL);	
+						$equipamentos->and_where("resultados.DataFinalizacao",'IS',NULL);				
+					$equipamentos->or_where_close();
+				}
+				
+				if($ex!=0)				
+				{
+					$equipamentos->or_where_open();
+						$equipamentos->and_where("resultados.DataCorretiva",'IS NOT',NULL);						
+						$equipamentos->and_where("resultados.DataFinalizacao",'IS',NULL);				
+					$equipamentos->or_where_close();
+				}						
+				
 				if($fi!=0)
 					$equipamentos->or_where("resultados.DataFinalizacao",'IS NOT',NULL);
+				
+				$equipamentos->where_close();
 			}
-
-			$equipamentos->and_where_close();
+		
 
 			$equipamentos->where('gr.Confirmado','=',1)->order_by('EquipamentoInspecionado.Data','desc');
-
+		//	print_r($equipamentos->find_all());exit;
 			$result = $equipamentos->find_all();
 			
 			foreach ($result as $e) {				
@@ -265,6 +317,12 @@ class Controller_Clientes extends Controller_Welcome {
 					$finalizadas++;
 					continue;
 				}
+
+				if( !in_array( site::datahora_BR($e->gr->resultado->DataCorretiva), array(null,'00/00/0000')) )
+				{
+					$executadas++;
+					continue;
+				}	
 
 				if( !in_array( site::datahora_BR($e->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
 				{
@@ -276,11 +334,13 @@ class Controller_Clientes extends Controller_Welcome {
 		//pegar as porcentagens
 		if($total != 0){			
 			$finalizadas = round(($finalizadas/$total)*100,2);
+			$executadas = round(($executadas/$total)*100,2);
 			$pendentes = round(($pendentes/$total)*100,2);		
-			$sem_planejamento = round(100 - ($pendentes+$finalizadas),2);
+			$sem_planejamento = round(100 - ($pendentes+$finalizadas+$executadas),2);
 		}	
-		$array = array('finalizadas' => $finalizadas, 'pendentes' => $pendentes , 'sem_planejamento' => $sem_planejamento );
+		$array = array('finalizadas' => $finalizadas, 'executadas' => $executadas, 'pendentes' => $pendentes , 'sem_planejamento' => $sem_planejamento );
 		return $array;
 	}
+
 
 } // End Welcome Controller

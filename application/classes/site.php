@@ -134,6 +134,8 @@ class site {
 			case 'edit_equipamentos':$tit = "Equipamentos"; break;
 			case 'usuarios':		
 			case 'edit_usuarios':$tit = "Usuários"; break;
+			case 'usuarios_sistema':		
+			case 'edit_usuarios_sistema':$tit = "Usuários de Sistema"; break;
 			case 'pedidos_usuario':		
 			case 'edit_pedidos_usuario':$tit = "Pedidos de Usuário"; break;
 			case 'analiseinspecao':		

@@ -6,6 +6,9 @@ class Controller_Welcome extends Controller {
 			
 		$auth = Auth::instance();
 
+		//echo "<pre>";
+		//print_r($_SESSION);exit;
+
 		$this->template = View::factory('index');
 			
 		if(site::logado())
@@ -13,7 +16,7 @@ class Controller_Welcome extends Controller {
 			$user = $auth->get_user();
 			$this->template->menu_lateral = View::factory('estrutura/menu_lateral');
 			$this->template->menu_lateral->nome_usuario = $user->username;
-			
+			//$this->template->content = View::factory('home_clientes');	
 			//melhorar isso aqui talvez, para nao ficar sempre buscando do BD
 			$roles = $auth->get_user()->roles->find_all();
 			$this->template->menu_lateral->tipo_usuario = $roles[1]->nickname;

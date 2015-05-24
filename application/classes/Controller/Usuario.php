@@ -63,6 +63,7 @@ class Controller_Usuario extends Controller_Welcome {
 			$user->password = "df5e0aba"; 
 			$user->email = $email;					
 			$user->nome = "admin";					
+			$user->system = 1;					
 			$user->nascimento = site::data_EN("07/10/1990");			
 
 			$user->ativo = 1;

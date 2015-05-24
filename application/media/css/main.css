@@ -60,7 +60,7 @@ tbody tr:hover{background: none repeat scroll 0 0 #F1F1F1;}
 
 .table > thead > tr > th {vertical-align: top;}
 th { text-align: center;}
-.tabela_vazia{text-align: center;font-size: 20px; background: none repeat scroll 0 0 #F7F7F7; color: #737373;}
+.tabela_vazia{text-align: center;font-size: 20px; background: none repeat scroll 0 0 #f1f1f1; color: #737373;}
 .btn_area{background: none repeat scroll 0 0 #5CB85C;
     color: #FFFFFF;
     font-size: 20px;

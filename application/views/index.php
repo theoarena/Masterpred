@@ -61,7 +61,6 @@
 	  {		
 		$('.navbar-collapse').slideToggle('fast');			
 	  });
-
 	</script>
 
 </body>

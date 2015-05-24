@@ -9,6 +9,7 @@
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
     echo form::hidden("id",$obj->id);   	
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('name',$obj->name, array('class'=>'form-control', 'maxlength' => '150', 'placeholder' => 'Nome')) ."</div>";  	
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('apelido',$obj->apelido, array('class'=>'form-control', 'maxlength' => '150', 'placeholder' => 'Apelido')) ."</div>";  	
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Descrição</span>". form::textarea('description',$obj->description,array('class' => 'form-control')) ."</div>"; 	
 	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));
 	

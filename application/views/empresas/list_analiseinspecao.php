@@ -55,7 +55,7 @@
 						
 						//$grHabilitada = (site::inspecaoGraudeRisco($o->Condicao,$condicoes))?(""):("hide");
 
-						echo "<tr id='inspecao_".$o->CodEquipamentoInspAnalise."'>";
+						echo "<tr class='item_insp' id='inspecao_".$o->CodEquipamentoInspAnalise."'>";
 							echo "<td>".$o->CodEquipamentoInspAnalise."</td>";
 							echo "<td>".$equipamento->setor->area->Area."</td>";					
 							echo "<td>".$equipamento->setor->Setor."</td>";
@@ -106,6 +106,15 @@
 
 	$(function () {
 	    $('.footable').footable();
+
+	    var qtd = $('.item_insp').length;
+	    if(qtd == 0)	
+	    {
+	    	$('#btn_transferir').hide();
+	    	$('#btn_limpar').hide();
+	    	$('.footable ').remove();
+	    	$('section#list').append("<div class='alert alert-warning tabela_vazia'>Nenhum equipamento em inspeção.</div>");
+	    }
 	});
 
 	function mudacondicao(id)

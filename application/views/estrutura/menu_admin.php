@@ -21,6 +21,7 @@
 
 	echo "<li>".html::anchor('#', 'Sistema' , array("class" => site::active("sistema",2,false).' menu_dropdown' , 'id' => 'menu_sistema'  ) );
 		echo "<ul>";
+			echo "<li>".html::anchor('sistema/usuarios', 'Usuários de sistema' , array("class" => site::active("usuarios_sistema",3,false) ) ). "</li>";
 			echo "<li>".html::anchor('sistema/tecnologias', 'Tecnologias' , array("class" => site::active("tecnologias",3,false) ) ). "</li>";
 			echo "<li>".html::anchor('sistema/componentes', 'Componentes' , array("class" => site::active("componentes",3,false) ) ). "</li>";
 			echo "<li>".html::anchor('sistema/anomalias', 'Anomalias' , array("class" => site::active("anomalias",3,false) ) ). "</li>";
@@ -30,7 +31,7 @@
 			echo "<li>".html::anchor('sistema/tipoinspecao', 'Tipos de Inspeção' , array("class" => site::active("tipoinspecao",3,false) ) ). "</li>";
 			echo "<li>".html::anchor('sistema/analistas', 'Analistas' , array("class" => site::active("analistas",3,false) ) ). "</li>";	
 			echo "<li>".html::anchor('sistema/roles', 'Grupos de Acesso' , array("class" => site::active("roles",3,false) ) ). "</li>";	
-			echo "<li>".html::anchor('sistema/privileges', 'Privilégios' , array("class" => site::active("privileges",3,false) ) ). "</li>";	
+			//echo "<li>".html::anchor('sistema/privileges', 'Privilégios' , array("class" => site::active("privileges",3,false) ) ). "</li>";	
 		echo "</ul>";	
 	echo "</li>";	
 ?>

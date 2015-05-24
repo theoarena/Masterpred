@@ -86,10 +86,10 @@ class Controller_Clientes extends Controller_Welcome {
 				$pe = Arr::get($_GET, 'pe',0); 
 				$fi = Arr::get($_GET, 'fi',0); 
 
-				$equipinsp = ORM::factory('EquipamentoInspecionado')
-				->where('EquipamentoInspecionado.Equipamento','=',$tipo[1])
-				->where('EquipamentoInspecionado.Data', 'BETWEEN', array($de, $ate))
-				->join('gr','LEFT')->on('gr.EquipamentoInspecionado','=','EquipamentoInspecionado.CodEquipamentoInspecionado')
+				$equipinsp = ORM::factory('equipamentoinspecionado')
+				->where('equipamentoinspecionado.Equipamento','=',$tipo[1])
+				->where('equipamentoinspecionado.Data', 'BETWEEN', array($de, $ate))
+				->join('gr','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado')
 				->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR');
 				
 				//weheres para cada estado das osp
@@ -268,10 +268,10 @@ class Controller_Clientes extends Controller_Welcome {
 
 		foreach ($user->empresas->find_all() as $empresa) {	
 
-			$equipamentos = ORM::factory('EquipamentoInspecionado')
-			->where('EquipamentoInspecionado.Empresa','=',$empresa->CodEmpresa)
-			->and_where('EquipamentoInspecionado.Data', 'BETWEEN', array($de, $ate))
-			->join('gr','LEFT')->on('gr.EquipamentoInspecionado','=','EquipamentoInspecionado.CodEquipamentoInspecionado')
+			$equipamentos = ORM::factory('equipamentoinspecionado')
+			->where('equipamentoinspecionado.Empresa','=',$empresa->CodEmpresa)
+			->and_where('equipamentoinspecionado.Data', 'BETWEEN', array($de, $ate))
+			->join('gr','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado')
 			->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR');
 			
 
@@ -306,7 +306,7 @@ class Controller_Clientes extends Controller_Welcome {
 			}
 		
 
-			$equipamentos->where('gr.Confirmado','=',1)->order_by('EquipamentoInspecionado.Data','desc');
+			$equipamentos->where('gr.Confirmado','=',1)->order_by('equipamentoinspecionado.Data','desc');
 		//	print_r($equipamentos->find_all());exit;
 			$result = $equipamentos->find_all();
 			

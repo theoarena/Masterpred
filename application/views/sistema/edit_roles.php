@@ -26,7 +26,7 @@
                   
                   echo '<li class="list-group-item check_privileges">';
                     echo form::checkbox('privileges[]', $p->id, array_key_exists($p->id,$privileges_selecionados));
-                    echo '<h4>'.$p->name.'</h4><p>'.$p->description.'</p>';                     
+                    echo '<h4>'.$p->apelido.'</h4><p>'.$p->description.'</p>';                     
                   echo '</li>';
            }
            echo '</ul>';

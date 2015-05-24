@@ -76,6 +76,91 @@ class Controller_Sistema extends Controller_Welcome {
 
 
 	//======================================================//
+	//==================USUARIOS=========================//
+	//=====================================================
+
+	public function action_usuarios() //página principal dos usuarios
+	{			
+		$user = Auth::instance()->get_user();
+		$objs = ORM::factory('User')->where('system','=',1)->and_where('ativo','=',1)->and_where('id','!=',$user->id)->find_all();		
+		$this->template->content->conteudo = View::factory('sistema/list_usuarios');					
+		$this->template->content->conteudo->objs = $objs;			
+	}
+
+	public function action_edit_usuarios() //edit dos usuarios
+	{			
+		$obj = ORM::factory('User', site::segment('edit_usuarios',null) );
+		
+		$roles = ORM::factory('Role')->find_all()->as_array('id','name');		
+		unset($roles[1]);//tira a role LOGIN, já que ela é padrão
+
+		$roles_selecionadas = 1;
+		foreach ($obj->roles->find_all() as $r) 
+			$roles_selecionadas = $r->id;
+
+		$this->template->content->conteudo = View::factory('sistema/edit_usuarios');					
+		$this->template->content->conteudo->obj = $obj;	
+		$this->template->content->conteudo->roles = $roles;				
+		$this->template->content->conteudo->roles_selecionadas = $roles_selecionadas;				
+		
+		$list = array();
+				
+	}
+	
+	public function action_save_usuarios() //salvar novo e editar
+	{			
+
+		$obj = ORM::factory('User',$this->request->post('id'));
+				
+		$obj->username = $this->request->post('username');					
+		$obj->ativo = $this->request->post('ativar');					
+		$obj->email = $this->request->post('email');					
+		$obj->nome = $this->request->post('nome');					
+		$obj->telefone = $this->request->post('telefone');
+		
+		$obj->nascimento = site::data_EN( $this->request->post('nascimento') );	
+
+		$password = null;
+		$password_email = '';
+
+		if($this->request->post('gerar_senha')==1) //se é pra alterar a senha	
+		{	
+			if($this->request->post('senha_aleatoria')==0)	
+				$password_email = $this->request->post('password');								
+			else			
+				$password_email = site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
+				
+			$obj->password = $password_email; 
+		}		
+			
+			
+		if ($obj->save()) 
+		{	
+			//roles 			
+			$user_roles = array();
+
+			foreach ($obj->roles->find_all() as $o)
+				$user_roles[] = $o->id;	
+			
+			if( is_array( $this->request->post('role') ) ) 
+			{	
+				$ids_remove = array_diff( $user_roles, $this->request->post('role') );
+				$ids_add = array_diff( $this->request->post('role') , $user_roles );
+			
+				if(count($ids_remove) > 0)
+					$obj->remove('roles',$ids_remove) ;
+				if(count($ids_add) > 0)
+					$obj->add('roles',$ids_add);
+			}
+						
+			HTTP::redirect('sistema/usuarios?sucesso=1');
+		}
+		else
+			HTTP::redirect('sistema/edit_usuarios?erro=1&Usuario='.$this->request->post('Usuario'));
+		
+	}
+
+	//======================================================//
 	//==================ROLES=========================//
 	//======================================================//	
 
@@ -164,6 +249,7 @@ class Controller_Sistema extends Controller_Welcome {
 	  
 		$obj->name = URL::title($this->request->post('name'),'_');				
 		$obj->description = $this->request->post('description');				
+		$obj->apelido = $this->request->post('apelido');				
 		//$obj->add("role",$this->request->post('role'));
 
 		if ($obj->save()) 

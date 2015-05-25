@@ -27,6 +27,6 @@
 
 	<div id='desenvolvedor'>	
 		<p>Copyright © Masterpred <?php echo date("Y"); ?> - Todos os Direitos Reservados.</p>		
-		<p>Versão 1.0</p>
+		<p>Versão <?php echo Kohana::$config->load('config')->get('system_version'); ?></p>
 	</div>
 </div>

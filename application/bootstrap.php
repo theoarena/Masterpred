@@ -121,13 +121,14 @@ Kohana::$config->attach(new Config_File);
  */
 Kohana::modules(array(
 	 'auth'       => MODPATH.'auth',       // Basic authentication
-	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
-	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
+	 'phpmailer'  => MODPATH.'phpmailer',       // mailer
 	 'database'   => MODPATH.'database',   // Database access
-	 'mysqli'   => MODPATH.'mysqli',   // Database access
+	 'mysqli'     => MODPATH.'mysqli',   // Database access
 	 'image'      => MODPATH.'image',      // Image manipulation
-	// 'minion'     => MODPATH.'minion',     // CLI Tasks
 	 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
+	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
+	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
+	// 'minion'     => MODPATH.'minion',     // CLI Tasks
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));

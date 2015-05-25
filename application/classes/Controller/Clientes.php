@@ -67,17 +67,25 @@ class Controller_Clientes extends Controller_Welcome {
 					$ret[] =  array('key' => 'setor_'.$a->CodSetor , 'title' => 'Setor # '.$a->Setor , 'lazy' => true);
 				print json_encode($ret);
 			break;
-			case 'setor': //pegar os equipamentos do setor
+
+			/* //quando o load era feito somente a cada item e todos os equips eram mostrados, tendo equiinsp ou nao
+			case 'setors': //pegar os equipamentos do setor
 				$ret = array();
 				$obj = ORM::factory('Setor', $tipo[1]);	
 				//$equips = ORM::factory('Setor', $tipo[1])		
 				foreach ($obj->equipamentos->find_all() as $a)
+				{
+
 					$ret[] =  array('key' => 'equipamento_'.$a->CodEquipamento , 'title' => 'Equipamento # '.$a->Equipamento , 'lazy' => true);
+				}
 				print json_encode($ret);
 			break;
-			case 'equipamento': //pegar os equipamentos inspecionados do equipamento
+			*/
+
+			//case 'equipamento': //pegar os equipamentos inspecionados do equipamento
+			case 'setor': 
 				$ret = array();
-//				$obj = ORM::factory('Equipamento', $tipo[1]);			
+				$setor = ORM::factory('Setor', $tipo[1]);	
 
 				$de = site::data_EN(Arr::get($_GET, 'de',null)); 
 				$ate = site::data_EN(Arr::get($_GET, 'ate',null)); 
@@ -86,66 +94,74 @@ class Controller_Clientes extends Controller_Welcome {
 				$pe = Arr::get($_GET, 'pe',0); 
 				$fi = Arr::get($_GET, 'fi',0); 
 
-				$equipinsp = ORM::factory('equipamentoinspecionado')
-				->where('equipamentoinspecionado.Equipamento','=',$tipo[1])
-				->where('equipamentoinspecionado.Data', 'BETWEEN', array($de, $ate))
-				->join('gr','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado')
-				->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR');
-				
-				//weheres para cada estado das osp
-				if( ($sp != 0) || ($pe != 0) || ($fi != 0) || ($ex != 0) )
-				{			
-					$equipinsp->where_open();
-
-					if($sp!=0)
-						$equipinsp->where("resultados.DataPlanejamento",'IS',NULL);
-					if($pe!=0)
-					{
-						$equipinsp->or_where_open();
-							$equipinsp->and_where("resultados.DataPlanejamento",'IS NOT',NULL);
-							$equipinsp->and_where("resultados.DataCorretiva",'IS',NULL);	
-							$equipinsp->and_where("resultados.DataFinalizacao",'IS',NULL);				
-						$equipinsp->or_where_close();
-					}
-					
-					if($ex!=0)				
-					{
-						$equipinsp->or_where_open();
-							$equipinsp->and_where("resultados.DataCorretiva",'IS NOT',NULL);						
-							$equipinsp->and_where("resultados.DataFinalizacao",'IS',NULL);				
-						$equipinsp->or_where_close();
-					}						
-					
-					if($fi!=0)
-						$equipinsp->or_where("resultados.DataFinalizacao",'IS NOT',NULL);
-					
-					$equipinsp->where_close();
-				}
-
-				$equipinsp->where('gr.Confirmado','=',1)->order_by('Data','desc');
-
-				$result = $equipinsp->find_all();
-				//print_r($equipinsp);exit();
-				foreach ($result as $a)
+				foreach ($setor->equipamentos->find_all() as $a)
 				{
-					$estado = 'vermelho'; 	
+					$children = array();					
+
+					$equipinsp = ORM::factory('equipamentoinspecionado')
+					->where('equipamentoinspecionado.Equipamento','=', $a->CodEquipamento)//$tipo[1])
+					->where('equipamentoinspecionado.Data', 'BETWEEN', array($de, $ate))
+					->join('gr','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado')
+					->join('resultados','LEFT')->on('resultados.GR','=','gr.CodGR');
 					
-					if( !in_array( site::datahora_BR($a->gr->resultado->DataCorretiva), array(null,'00/00/0000') ) )
-					{	
-						$estado = 'verde_pendente'; 
+					//weheres para cada estado das osp
+					if( ($sp != 0) || ($pe != 0) || ($fi != 0) || ($ex != 0) )
+					{			
+						$equipinsp->where_open();
 
-						if( ($a->gr->resultado->Total != null) && ($a->gr->resultado->Total != 0) &&
-							!in_array( site::datahora_BR($a->gr->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
-							$estado = 'verde';
-
+						if($sp!=0)
+							$equipinsp->where("resultados.DataPlanejamento",'IS',NULL);
+						if($pe!=0)
+						{
+							$equipinsp->or_where_open();
+								$equipinsp->and_where("resultados.DataPlanejamento",'IS NOT',NULL);
+								$equipinsp->and_where("resultados.DataCorretiva",'IS',NULL);	
+								$equipinsp->and_where("resultados.DataFinalizacao",'IS',NULL);				
+							$equipinsp->or_where_close();
+						}
+						
+						if($ex!=0)				
+						{
+							$equipinsp->or_where_open();
+								$equipinsp->and_where("resultados.DataCorretiva",'IS NOT',NULL);						
+								$equipinsp->and_where("resultados.DataFinalizacao",'IS',NULL);				
+							$equipinsp->or_where_close();
+						}						
+						
+						if($fi!=0)
+							$equipinsp->or_where("resultados.DataFinalizacao",'IS NOT',NULL);
+						
+						$equipinsp->where_close();
 					}
-					elseif( !in_array( site::datahora_BR($a->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
-						$estado = 'laranja'; 								
 
-					
-					$ret[] =  array('key' => 'equipamentoinspecionado_'.$a->CodEquipamentoInspecionado , 
-									'title' => "<a class='".$estado."' target='parent' href='".site::baseUrl()."clientes/edit_historico/".$a->gr->CodGR."'>".site::datahora_BR($a->Data)." | TE | OSP #".$a->gr->NumeroGR."/".$a->gr->CodGR." | ".$a->condicao->Condicao." | ".$a->gr->componente->Componente.": ".$a->gr->Componente."</a>"									
-									);
+					$equipinsp->where('gr.Confirmado','=',1)->order_by('Data','desc');
+
+					$result = $equipinsp->find_all();
+					//print_r($equipinsp);exit();
+					foreach ($result as $r)
+					{
+						$estado = 'vermelho'; 	
+						
+						if( !in_array( site::datahora_BR($r->gr->resultado->DataCorretiva), array(null,'00/00/0000') ) )
+						{	
+							$estado = 'verde_pendente'; 
+
+							if( ($r->gr->resultado->Total != null) && ($r->gr->resultado->Total != 0) &&
+								!in_array( site::datahora_BR($r->gr->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
+								$estado = 'verde';
+
+						}
+						elseif( !in_array( site::datahora_BR($r->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
+							$estado = 'laranja'; 								
+
+						
+						$children[] =  array('key' => 'equipamentoinspecionado_'.$r->CodEquipamentoInspecionado , 
+										'title' => "<a class='".$estado."' target='parent' href='".site::baseUrl()."clientes/edit_historico/".$r->gr->CodGR."'>".site::datahora_BR($r->Data)." | TE | OSP #".$r->gr->NumeroGR."/".$r->gr->CodGR." | ".$r->condicao->Condicao." | ".$r->gr->componente->Componente.": ".$r->gr->Componente."</a>"									
+										);
+					}
+
+					if(count($children) > 0)
+						$ret[] =  array('key' => 'equipamento_'.$a->CodEquipamento , 'title' => 'Equipamento # '.$a->Equipamento , 'lazy' => false, 'children'=> $children );
 				}
 				print json_encode($ret);
 			break;
@@ -235,8 +251,8 @@ class Controller_Clientes extends Controller_Welcome {
 		$obj->DataCorretiva = site::data_EN( $this->request->post('DataCorretiva'), null );					
 		$obj->DataFinalizacao = site::data_EN( $this->request->post('DataFinalizacao'), null );		
 
-		/*if( ( $this->request->post('DataFinalizacao') != null) && $obj->Total != 0) //significa que a OS foi finalizada
-			enviaEmail::aviso_ospFinalizada($this->request->post('GR'));			*/
+		if( ( $this->request->post('DataFinalizacao') != null) && $obj->Total != 0) //significa que a OS foi finalizada
+			enviaEmail::aviso_ospFinalizada($this->request->post('GR'));			
 
 		$obj->RespPlanejamento = $this->request->post('RespPlanejamento');		
 		$obj->RespCorretiva = $this->request->post('RespCorretiva');		

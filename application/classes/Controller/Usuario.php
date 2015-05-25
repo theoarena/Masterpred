@@ -129,6 +129,13 @@ class Controller_Usuario extends Controller_Welcome {
 
 	}
 
+	//para teste de email
+	public function action_email()
+	{
+		enviaEmail::teste();
+		//exit;
+	}
+
 	public function action_alterar_perfil()
 	{		
 		$user = ORM::factory('user', $this->request->post("id")); //tenta achar o usuário

@@ -32,11 +32,11 @@ class Controller_Welcome extends Controller {
 					$this->template->menu_lateral->tipo_menu->qtd_usuarios = site::qtd_pedidosusuario();
 					$this->template->content = View::factory('home_admin');					
 					break;
-				case 'cliente': //dono da empresa					
+				case 'cliente':				
 					$this->template->menu_lateral->tipo_menu = View::factory('estrutura/menu_cliente');
 					$this->template->content = View::factory('home_clientes');	
 					break;
-				case 'funcionario': //funcionario da empresa
+				case 'funcionario': 
 					$this->template->content = View::factory('home_clientes');	
 					break;
 			}		

@@ -117,6 +117,7 @@ class Controller_Sistema extends Controller_Welcome {
 		$obj->email = $this->request->post('email');					
 		$obj->nome = $this->request->post('nome');					
 		$obj->telefone = $this->request->post('telefone');
+		$obj->system = 1;
 		
 		$obj->nascimento = site::data_EN( $this->request->post('nascimento') );	
 

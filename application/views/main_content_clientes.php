@@ -11,14 +11,14 @@
 		{
 			echo '<div class="alert alert-success alert-dismissable">';
  			echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-			echo 'Item salvo <strong>com sucesso!</strong>  </div>';
+			echo Kohana::message('admin', 'item_salvo').'</div>';
 		}
 
 		if(isset($_GET['erro']))
 		{
 			echo '<div class="alert alert-danger alert-dismissable">';
  			echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-			echo 'Ocorreu algum erro! <strong>verifique os dados e tente novamente!</strong>  </div>';
+			echo Kohana::message('admin', 'ocorreu_erro').'</div>';
 		}
 
 		echo '<div class="alert alert-danger" id="box_error"></div>';

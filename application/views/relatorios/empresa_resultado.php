@@ -191,6 +191,6 @@
 </section>
 
 <footer>
-	<p><?php echo Kohana::$config->load('config')->get('endereco'); ?></p>
+	<p><?php echo Kohana::$config->load('config')->get('endereco_site'); ?></p>
 	<p><?php echo Kohana::$config->load('config')->get('telefone'); ?></p>
 </footer>

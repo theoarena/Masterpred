@@ -1,6 +1,3 @@
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/rotas","< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h3>Cadastro <small>de rotas</small></h3>
 
 <?php 
@@ -42,17 +39,17 @@
                                                 }
                                             }
                                             else
-                                                echo "<h4>Não há equipamentos neste setor.</h4>";  
+                                                echo "<h4>".Kohana::message('admin', 'nenhum_equipamento_setor')."</h4>";  
                                         echo '</div>';                            
                                 }
                             }
                             else
-                                echo "<h4>Não há setores nesta área.</h4>";  
+                                echo "<h4>".Kohana::message('admin', 'nenhum_equipamento_setor')."</h4>";  
                         echo '</div>';                   
                     }
                 }
                 else
-                    echo "<h4>Insira áreas e setores nesta empresa para continuar.</h4>";
+                    echo "<h4>".Kohana::message('admin', 'insira_setor_area')."</h4>";
             echo "</div>";
         echo '</div></div>';
    

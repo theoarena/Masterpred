@@ -94,9 +94,9 @@
 		echo '</table>';
 	} 
 	elseif(!site::selected_empresaatual())		
-		echo "<div class='alert alert-warning tabela_vazia'>Nenhuma empresa selecionada.</div>"; 
+		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
 	else
-		echo "<div class='alert alert-warning tabela_vazia'>Nenhuma rota encontrada.</div>"; 
+		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhuma_rota')."</div>"; 
 ?>
 
 <script type="text/javascript">
@@ -113,7 +113,7 @@
 	    	$('#btn_transferir').hide();
 	    	$('#btn_limpar').hide();
 	    	$('.footable ').remove();
-	    	$('section#list').append("<div class='alert alert-warning tabela_vazia'>Nenhum equipamento em inspeção.</div>");
+	    	$('section#list').append("<div class='alert alert-warning tabela_vazia'><?php echo Kohana::message('admin', 'nenhum_equipinsp'); ?></div>");
 	    }
 	});
 
@@ -162,7 +162,7 @@
 					hidebtn();
 
 					$(".footable thead").hide();
-					$(".footable tbody").html("<tr><td colspan='9'><div class='alert alert-sucess tabela_vazia'>Todas as análises foram <strong>removidas.</strong></div></td></tr>");
+					$(".footable tbody").html("<tr><td colspan='9'><div class='alert alert-sucess tabela_vazia'><?php echo Kohana::message('admin', 'analises_removidas'); ?></div></td></tr>");
 					$(".footable tfoot").hide();	
 				}
 			}
@@ -214,7 +214,7 @@
 						hidebtn();
 
 						$(".footable thead").hide();
-						$(".footable tbody").html("<tr><td colspan='9'><div class='alert alert-sucess tabela_vazia'>Todas as análises foram transferidas <strong>com sucesso!</strong></div></td></tr>");
+						$(".footable tbody").html("<tr><td colspan='9'><div class='alert alert-sucess tabela_vazia'><?php echo Kohana::message('admin', 'analises_removidas_sucesso'); ?></div></td></tr>");
 						$(".footable tfoot").hide();	
 					}
 				}
@@ -253,8 +253,8 @@
   			data: { id: id},
 			success : function(data) {
 				if(data == 1)	
-				{		
-					$("*").css("cursor", "default");				    
+				{					
+					$("*").css("cursor", "default");	    
 				    var footable = $('table').data('footable');			    
 				    var row = $("#confirm_"+id).parents('tr:first');
 				    footable.removeRow(row);
@@ -262,5 +262,5 @@
 			}
 		});
 	}
-
+	
 </script>

@@ -2,7 +2,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
-	<title>.:: Masterpred ::.</title>
+	<title><?php Kohana::$config->load('config')->get('site_name'); ?></title>
 
 	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
 	<meta charset='utf-8'>
@@ -13,7 +13,7 @@
 	<link href='<?php echo site::mediaUrl(); ?>css/main.css' rel='stylesheet' type='text/css' />	
 	<script src='<?php echo site::mediaUrl(); ?>js/jquery.js'></script>
 	
-	<?php if(site::getTipoUsuario('admin')) { ?>
+	<?php if(site::getInfoUsuario('usuario_system') == 1) { ?>
 		<link href='<?php echo site::mediaUrl(); ?>css/footable.core.css' rel='stylesheet' type='text/css' />
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.js'></script>	
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.sort.js'></script>
@@ -21,7 +21,7 @@
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.paginate.js'></script>		
 	<?php } ?>
 
-	<?php if(site::getTipoUsuario('cliente')) { ?>
+	<?php if(site::getInfoUsuario('usuario_system') == 0) { ?>
 		<link href='<?php echo site::mediaUrl(); ?>css/historico.css' rel='stylesheet' type='text/css' />	
 		<script src='<?php echo site::mediaUrl(); ?>js/amcharts.js'></script>	
 		<script src='<?php echo site::mediaUrl(); ?>js/gauge.js'></script>	
@@ -45,7 +45,7 @@
 		    	<?php // if(site::logado()) echo $menu_topo; //se está logado,mostra o menu lateral ?>		
 		      <div class='starter-template'>
 		      	<?php 
-		      		if(site::logado() and site::getTipoUsuario('admin')) //se estiver logado e o tipo de usuario for admin
+		      		if(site::getInfoUsuario('usuario_system') == 1) //se o tipo de usuario for de sistema
 		      			echo site::avatar_empresaatual(); //mostra se alguma empresa está ativa
 		      		echo $content;
 		      	 ?>	

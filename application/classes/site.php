@@ -54,6 +54,12 @@ class site {
 		return ( strpos(site::segment($index), $search ) !== false);			
 	}
 
+	public static function segment_get($segment,$index)
+	{	
+		$s = explode('_',site::segment($segment));
+		return $s[$index];			
+	}
+
 	public static function baseUrl($index=true) //return the base system URL
 	{
 		return URL::site("",null,$index);
@@ -69,18 +75,18 @@ class site {
 		return (Auth::instance()->logged_in());
 	}		
 	
-	public static function getTipoUsuario($t=null)
+	public static function getInfoUsuario($t=null)
 	{		
-		if($t!=null)
+		/*if($t!=null)
 			return (Session::instance()->get("tipo_usuario") == $t);
-
-		return Session::instance()->get("tipo_usuario","naologado");
+		return Session::instance()->get("tipo_usuario","naologado"); */
+		return Session::instance()->get($t,false);
 	}	
 	
 	public static function checkPermissaoPagina($privileges_needed) //===========FAZER
 	{
-		if(site::getTipoUsuario('admin'))
-			return true; //se for admin pode ver tudo;
+		if(site::getInfoUsuario('usuario_system') == 1)
+			return true; //se for de sistema pode ver tudo;
 
 		$qtd = count($privileges_needed);		
 		$user = Auth::instance()->get_user();
@@ -88,29 +94,35 @@ class site {
 		return ( count(array_intersect($privileges_needed,$privileges)) == $qtd );
 	}
 
-	public static function verifica_login() // se estiver indo pra uma página pra logar...
-	{		
-		$urls = array("login","logar","cadastro","cadastrar_novo","esqueci_senha","recuperar_senha","cadastrar_novo_get");
-		if(!Auth::instance()->logged_in()) //se nao estiver estiver logado
-			if( !in_array( site::segment(2),$urls ) ) //se nao estiver na página de login ou indo logar, cadastrar, etc
-				HTTP::redirect('usuario/login');	
-	}	
-
 	public static function active($a,$i,$t) //active do menu
 	{				
 		$return = "";
 		$v = site::segment_array();			
-		if(count($v) > 0)
-			if( strpos($v[$i],$a) !== false  )
+		//print_r($v);
+		if( (count($v) > 0) )
+			if( isset($v[$i]) && (strpos($v[$i],$a) !== false ) )
 				$return = ( ($t)?("class='active'"):("active") );
 		return $return;
+	}
+
+	public static function getTituloMae($i)
+	{
+		$tit = "";
+		switch (site::segment($i)) {
+			
+			case 'sistema':	$tit = "Sistema"; break;
+			case 'empresas':	$tit = "Empresa"; break;
+			default: break;
+
+		}
+		return $tit;
 	}
 
 	public static function getTituloInterna($i)
 	{
 		$tit = "";
-		switch (site::segment($i)) {
-			
+		switch (site::segment($i)) {			
+
 			case 'componentes':	
 			case 'edit_componentes':	$tit = "Componentes"; break;
 			case 'anomalias':	
@@ -118,7 +130,7 @@ class site {
 			case 'tecnologias':	
 			case 'edit_tecnologias':	$tit = "Tecnologias"; break;
 			case 'empresas':	
-			case 'edit_empresas':	$tit = "Empresas"; break;
+			case 'edit_empresas':	$tit = "Lista de Empresas"; break;
 			case 'recomendacoes':	
 			case 'edit_recomendacoes':	$tit = "Recomendações"; break;
 			case 'condicoes':	
@@ -304,7 +316,7 @@ class site {
 			return $p.$v[0].$s.$v[1];
 		}
 	}
-	function formata_moeda( $v) {
+	public function formata_moeda( $v) {
 		$money = (string)$v;
 		$cleanString = preg_replace('/([^0-9\.,])/i', '', $money);
 	    $onlyNumbersString = preg_replace('/([^0-9])/i', '', $money);
@@ -317,13 +329,13 @@ class site {
 	    return (float) str_replace(',', '.', $removedThousendSeparator);
 	}
 	
-	function random_password( $length = 8 ) {
+	public function random_password( $length = 8 ) {
 	    $chars = "aNAZrsklIuefgv8hiDESQVwx3FGOTPBCR45UHqcdo6WXyzmnj012Y7btpJKLM9";
 	    $password = substr( str_shuffle( $chars ), 0, $length );
 	    return $password;
 	}
 
-	function generateValidator($fields,$form_name = 'form_edit') //gera o script de validação dos campos
+	public function generateValidator($fields,$form_name = 'form_edit') //gera o script de validação dos campos
 	{		
 		$return = '<script>';
 
@@ -365,5 +377,32 @@ class site {
 		";
 		return $return;
 	}
+
+	public function generateDelete($class)
+	{
+		$return = '<script type="text/javascript">';
+
+		$return .= "
+			function deleteRow(id)
+			{
+				$.ajax({
+					url : '".site::baseUrl()."welcome/delete',
+					type: 'POST',  
+		  			data: { id: id,class:'".$class."',cache:'".site::segment(2)."'},
+					success : function(data) {
+						if(data == 1)	
+						{						    
+						    var footable = $('table').data('footable');			    
+						    var row = $('#confirm_'+id).parents('tr:first');
+						    footable.removeRow(row);
+						}
+					}
+				});
+			}";
+
+		$return .= '</script>';
+		return $return;
+	}
+
 }
 ?>

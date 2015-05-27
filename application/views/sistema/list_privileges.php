@@ -1,5 +1,5 @@
 <?php if( count($obj) > 0) { ?>
-<div class="alert alert-danger"><p>Os itens abaixo dizem respeito ao funcionamento interno do sistema e não devem ser modificados a menos que você saiba o que está fazendo</p></div>
+<div class="alert alert-danger"><p><?php echo Kohana::message('admin', 'privileges_aviso'); ?></p></div>
 <table class="footable table" data-page-navigation=".pagination">
 	<thead>
 		<tr>
@@ -37,29 +37,13 @@
 
 </table>
 
-<?php } else echo "<div class='alert alert-warning tabela_vazia'>Nenhum privilégio encontrado.</div>"; ?>
+<?php } else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; ?>
 
 <script type="text/javascript">
 	$(function () {
 	    $('.footable').footable();
 	});
-
 	
-	function deleteRow(id)
-	{
-		$.ajax({
-			url : "<?php echo site::baseUrl() ?>sistema/delete_privileges",
-			type: "POST",  
-  			data: { id: id},
-			success : function(data) {
-				if(data == 1)	
-				{						    
-				    var footable = $('table').data('footable');			    
-				    var row = $("#confirm_"+id).parents('tr:first');
-				    footable.removeRow(row);
-				}
-			}
-		});
-	}
-
 </script>
+
+<?php echo site::generateDelete('Privilege'); ?>

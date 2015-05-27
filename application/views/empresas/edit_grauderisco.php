@@ -1,6 +1,3 @@
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/grauderisco?".$query,"< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h1>Grau de risco</h1>
 
 <?php 

@@ -2,17 +2,20 @@
 
 return array(
 
+	//general
+	'system_active' => TRUE,
 	'system_version' => '1.0',
 	'site_domain' => '/masterpred',
+	'site_name' => 'Masterpred',
 	
-	'endereco_site' => 'httpp://www.masterpred.com.br/sistema',
-	'endereco' => 'www.masterpred.com.br',
+	'endereco_sistema' => 'http://www.masterpred.com.br/sistema',
+	'endereco_site' => 'www.masterpred.com.br',
 	'telefone' => '(19) 9844-5510',
 	'select_default' => '-- Selecione --',
 	'index_page' => 'index.php/',
 	
 	//uploads
-	'upload_directory' => 'application/media/uploads/',
+	'upload_directory' => 'application/media/uploads/analises/',
 	'upload_directory_gr' => 'application/media/uploads/gr/',
 	'upload_directory_condicoes' => 'application/media/uploads/condicoes/',
 

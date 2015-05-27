@@ -22,7 +22,7 @@ h1.navbar-brand{font-size:37px}
 
 .cb{clear: both;}
 .jumbotron { box-shadow: 0 1px 3px -2px #333333;}
-
+.jumbotron p.center{text-align: center;}
 /*================== HOME LOGIN ====================== */
 
 body.login .navbar,body.cadastro .navbar,body.esqueci_senha .navbar {display: none;}
@@ -36,7 +36,7 @@ body.login #wrapper-container,body.cadastro #wrapper-container,body.esqueci_senh
 /*================== LISTAGEM E EDIÇÃO ====================== */
 
 .Content{border-top: 1px solid #F1F1F1; display: block;  margin-top: -1px; padding-top: 20px;clear: both;}
-
+.inline{display: inline-block;vertical-align: top;margin-top: 0}
 #list{}
 #edit{display: none;}
 .alert {margin-top: 20px}
@@ -69,7 +69,7 @@ th { text-align: center;}
     vertical-align: middle;}
 .btn_alterar{background: none repeat scroll 0 0 #F0AD4E}
 .btn_area:hover{background:#3C983C;color: #FFFFFF;}
-#btn_adicionar{margin: 5px 0 20px;}
+#btn_adicionar{margin: 1px 0 20px;}
   #btn_adicionar a+a{margin-left: 10px}
   #btn_adicionar .label-danger+.label-primary{margin: 0}
 #btn_adicionar.disabled{display: none}
@@ -284,7 +284,7 @@ th#col_actions{ width: 235px;}
 /*.jumbotron .input-group-addon{font-size:14px}*/
 .upload{font-size: 16px !important;
     padding: 0 !important;}
-.input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {height: 52px}
+.input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {height: 50px}
 
 .addon_textarea{vertical-align: top !important;}
 textarea.form-control {height: 170px !important;}

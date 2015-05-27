@@ -3,9 +3,6 @@
 <link href="<?php echo site::mediaUrl(); ?>css/chosen.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo site::mediaUrl(); ?>js/chosen.js"></script>
 
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/usuarios","< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h3>Cadastro <small>de usuários</small></h3>
 
 <?php 

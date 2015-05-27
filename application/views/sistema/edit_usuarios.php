@@ -3,14 +3,11 @@
 <link href="<?php echo site::mediaUrl(); ?>css/chosen.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo site::mediaUrl(); ?>js/chosen.js"></script>
 
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/usuarios","< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h3>Cadastro <small>de usuários</small></h3>
 
 <?php 
 	
-	echo form::open( site::segment(1)."/save_usuarios",array("id" => "form_edit") );			
+	echo form::open( site::segment(1)."/save_usuarios_sistema",array("id" => "form_edit") );			
 		
     echo form::hidden("id",$obj->id);  	
         echo "<label class='control checkbox chk_equip'>".form::checkbox('ativar',1, ($obj->ativo == 1)?(true):(false) )." <span class='checkbox-label'>Perfil ativado</span></label>";   

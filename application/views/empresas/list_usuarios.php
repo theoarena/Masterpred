@@ -43,8 +43,8 @@
 </table>
 
 <?php
-	 } 	else echo "<div class='alert alert-warning tabela_vazia'>Nenhum usuário encontrado.</div>"; 
-	} else echo "<div class='alert alert-warning tabela_vazia'>Ative uma empresa para visualizar seus usuários.</div>"; 
+	 } 	else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; 
+	} else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
 ?>
 
 <script type="text/javascript">

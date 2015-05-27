@@ -1,7 +1,4 @@
 <script src="<?php echo site::mediaUrl(); ?>js/slide.js"></script>
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/analiseinspecao","< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h3>Análise <small>de um item de inspeção</small></h3>
 
 <?php 

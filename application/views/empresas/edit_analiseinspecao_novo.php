@@ -1,7 +1,4 @@
 <script src="<?php echo site::mediaUrl(); ?>js/datepicker.js"></script>
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/analiseinspecao","< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h3>Inserir <small>novos registros de inpeção</small></h3>
 
 <?php 

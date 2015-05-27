@@ -37,28 +37,14 @@
 
 </table>
 
-<?php } else echo "<div class='alert alert-warning tabela_vazia'>Nenhum item encontrado.</div>"; ?>
+<?php } else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; ?>
 
 <script type="text/javascript">
 	$(function () {
 	    $('.footable').footable();
 	});	
 
-	function deleteRow(id)
-	{
-		$.ajax({
-			url : "<?php echo site::baseUrl() ?>sistema/delete_tecnologias",
-			type: "POST",  
-  			data: { id: id},
-			success : function(data) {
-				if(data == 1)	
-				{						    
-				    var footable = $('table').data('footable');			    
-				    var row = $("#confirm_"+id).parents('tr:first');
-				    footable.removeRow(row);
-				}
-			}
-		});
-	}
-
 </script>
+
+
+<?php echo site::generateDelete('Tecnologia'); ?>

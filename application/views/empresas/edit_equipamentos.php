@@ -1,6 +1,3 @@
-<h1>		
-	<?php echo html::anchor(site::segment(1)."/equipamentos/".$area."/".$setor,"< Voltar", array("class" => "label label-warning" )); ?>
-</h1>
 <h3>Cadastro <small>de equipamentos</small></h3>
 
 <?php 

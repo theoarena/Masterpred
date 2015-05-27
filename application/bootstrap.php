@@ -104,6 +104,8 @@ if (isset($_SERVER['KOHANA_ENV']))
  */
 Kohana::init(array(
 	'base_url'   => '/masterpred',
+	'cache_life' => 86400,
+	'caching' => FALSE
 ));
 
 /**
@@ -126,8 +128,8 @@ Kohana::modules(array(
 	 'mysqli'     => MODPATH.'mysqli',   // Database access
 	 'image'      => MODPATH.'image',      // Image manipulation
 	 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
+	 'cache'      => MODPATH.'cache',      // Caching with multiple backends
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
 	// 'minion'     => MODPATH.'minion',     // CLI Tasks
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
@@ -140,7 +142,10 @@ Kohana::modules(array(
  * If you have not defined a cookie salt in your Cookie class then
  * uncomment the line below and define a preferrably long salt.
  */
- Cookie::$salt = "df5e0aba";
+ Cookie::$salt = "@df5e0aba0c33834570e81d2e@";
+//cache
+ Cache::$default = 'file';
+ $cache = Cache::instance();
 
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
@@ -153,4 +158,3 @@ Route::set('default', '(<controller>(/<action>(/<id>(/<id2>(/<id3>)))))')
  	));
 
 error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED);
- 

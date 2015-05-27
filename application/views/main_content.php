@@ -1,5 +1,5 @@
 <h1 class="pull-left">
-	Sistema <span class="label label-default"><?php echo site::getTituloInterna(2); ?></span>	
+	<?php echo site::getTituloMae(1); ?> <span class="label label-default"><?php echo site::getTituloInterna(2); ?></span>	
 </h1>
 
 <section id='list' class='Content'>			
@@ -9,14 +9,14 @@
 		{
 			echo '<div class="alert alert-success alert-dismissable">';
  			echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-			echo 'Item salvo <strong>com sucesso!</strong>  </div>';
+			echo Kohana::message('admin', 'item_salvo').'</div>';
 		}
 
 		if(isset($_GET['erro']))
 		{
 			echo '<div class="alert alert-danger alert-dismissable">';
  			echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-			echo 'Ocorreu algum erro! <strong>verifique os dados e tente novamente!</strong>  </div>';
+			echo Kohana::message('admin', 'ocorreu_erro').'</div>';
 		}
 
 		echo '<div class="alert alert-danger" id="box_error">';
@@ -25,12 +25,15 @@
 
 	if( !site::segment_has(2,'edit') && $show_add_link) { 
 	?>
-		<h1 id="btn_adicionar">		
+		<h1 id="btn_adicionar" class="inline">		
 			<?php echo html::anchor(site::segment(1)."/edit_".site::segment(2)."".$plus_add_link,"Adicionar +", array("class" => "label label-success" )); ?>
 		</h1>
 	<?php
-
-		}
+	}
+	
+	if(site::segment_has(2,'edit') && $show_back_link)
+		echo '<h1>'.html::anchor(site::segment(1)."/".site::segment_get(2,1)."".$plus_back_link,"Voltar", array("class" => "label label-warning" )).'</h1>';
+	
 	 echo $conteudo; //conteudo da página interna ?> 
 </section>
 

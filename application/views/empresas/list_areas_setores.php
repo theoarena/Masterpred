@@ -51,7 +51,7 @@
             foreach($objs as $c)       
                 echo '<a href="javascript:void(0)" class="list-group-item" id="area_'.$c->CodArea.'" onclick="load_setores('.$c->CodArea.')" name="'.$c->Area.'" >'.$c->Area.'  <button type="button" class="delete btn btn-danger">X</button> </a>';
         else
-            echo "<h4>Nenhuma Área.</h4>";
+            echo "<h4>".Kohana::message('admin', 'nenhum_item')."</h4>";
 
     ?>
     </div>
@@ -98,13 +98,13 @@
 
    ?>
    <div class="list-group" id='lista_setores'> 
-        <h4>Nenhuma Área selecionada.</h4>
+        <h4><?php echo Kohana::message('admin', 'nenhuma_area_selecionada'); ?></h4>
     </div>
   </div>
 </div>
 
 <?php
-} else echo "<div class='alert alert-warning tabela_vazia'>Ative uma empresa para visualizar seus dados.</div>";
+} else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>";
 ?>
 
 
@@ -134,7 +134,7 @@
                 //reinicia o quadro de setores
                 $("#form_save_setor input[name='Setor']").prop("disabled",true);
                 $("#form_save_setor input[type='submit']").prop("disabled",true);
-                 $( "#lista_setores" ).html( "<h4>Nenhuma Área selecionada.</h4>" );
+                 $( "#lista_setores" ).html( "<h4><?php echo Kohana::message('admin', 'nenhuma_area_selecionada'); ?></h4>" );
 
               });
         }
@@ -168,7 +168,7 @@
                 //reinicia o quadro de setores
                 $("#form_save_setor input[name='Setor']").prop("disabled",true);
                 $("#form_save_setor input[type='submit']").prop("disabled",true);
-                 $( "#lista_setores" ).html( "<h4>Nenhuma Área selecionada.</h4>" );
+                $( "#lista_setores" ).html( "<h4><?php echo Kohana::message('admin', 'nenhuma_area_selecionada'); ?></h4>" );
 
               });
         }

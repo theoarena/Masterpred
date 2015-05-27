@@ -46,31 +46,15 @@
 </table>
 
 <?php
-	 } 	else echo "<div class='alert alert-warning tabela_vazia'>Nenhum usuário encontrado.</div>"; 	
+	 } 	else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; 	
 ?>
 
 <script type="text/javascript">
 	$(function () {
 	    $('.footable').footable();
-	});
-
-	function deleteRow(id)
-	{
-		$("*").css("cursor", "progress");
-		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/delete_pedidos_usuario",
-			type: "POST",  
-  			data: { id: id},
-			success : function(data) {
-				if(data == 1)	
-				{		
-					$("*").css("cursor", "default");				    
-				    var footable = $('table').data('footable');			    
-				    var row = $("#confirm_"+id).parents('tr:first');
-				    footable.removeRow(row);
-				}
-			}
-		});
-	}
+	});	
 
 </script>
+
+
+<?php echo site::generateDelete('User'); ?>

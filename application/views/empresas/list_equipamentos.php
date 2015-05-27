@@ -36,32 +36,11 @@
 </table>
 
 <?php
-	 } 	else echo "<div class='alert alert-warning tabela_vazia'>Nenhuma área disponível.</div>"; 
-	} else echo "<div class='alert alert-warning tabela_vazia'>Ative uma empresa para visualizar seus dados.</div>"; 
+	 } 	else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; 
+	} else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
 ?>
 
 <script type="text/javascript">
-	
-	function deleteRow(id)
-	{
-		$("*").css("cursor", "progress");
-		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/delete_equipamentos",
-			type: "POST",  
-  			data: { id: id},
-			success : function(data) {
-				if(data == 1)	
-				{				
-					$("*").css("cursor", "default");		    
-				    var footable = $('table').data('footable');			    
-				    var row = $("#confirm_"+id).parents('tr:first');
-				    footable.removeRow(row);
-				}
-			}
-		});
-
-	}
-
 
 	$( "select#area" ).change(function () {
 		$(".footable tbody").html("");
@@ -98,7 +77,7 @@
 
 
 	$( "select#setor" ).change(function () {
-		$(".footable tbody").html("<span id='loading'><img src='<?php echo site::baseUrl() ?>images/loading.gif'></span>");
+		$(".footable tbody").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
 
 		var selected = $( "select#setor option:selected" ).val(); //pega o setor selecionado
 		var area = $( "select#area option:selected" ).val(); //pega a area selecionado
@@ -139,7 +118,7 @@
 				}
 				else
 				{					
-					$(".footable tbody").append("<tr><td colspan='5'><div class='alert alert-warning tabela_vazia'>Nenhum item encontrado.</div></td></tr>");	
+					$(".footable tbody").append("<tr><td colspan='5'><div class='alert alert-warning tabela_vazia'><?php echo Kohana::message('admin', 'nenhum_item'); ?></div></td></tr>");	
 					$(".footable thead").hide();
 				}
 
@@ -154,3 +133,6 @@
 	
 
 </script>
+
+
+<?php echo site::generateDelete('Equipamento'); ?>

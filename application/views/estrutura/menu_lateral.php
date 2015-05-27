@@ -1,5 +1,5 @@
 <div class="navbar-header">	          
-	<h1 class="navbar-brand">MasterPred</h1>
+	<h1 class="navbar-brand"><?php echo Kohana::$config->load('config')->get('site_name'); ?></h1>
 	<p id='logado_como'>Logado como <?php echo $nome_usuario; ?>: <strong><?php echo $tipo_usuario; ?></strong></p>
 	<div class="btn-group" id='collapse_container'> <button id="collapse-sidebar" class="btn btn-primary">MENU</button> </div>
 	
@@ -26,7 +26,7 @@
 	</ul>
 
 	<div id='desenvolvedor'>	
-		<p>Copyright © Masterpred <?php echo date("Y"); ?> - Todos os Direitos Reservados.</p>		
+		<p>Copyright © <?php echo Kohana::$config->load('config')->get('site_name'); ?> <?php echo date("Y"); ?> - Todos os Direitos Reservados.</p>		
 		<p>Versão <?php echo Kohana::$config->load('config')->get('system_version'); ?></p>
 	</div>
 </div>

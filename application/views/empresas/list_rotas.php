@@ -43,8 +43,8 @@
 </table>
 
 <?php
-	 } 	else echo "<div class='alert alert-warning tabela_vazia'>Nenhum item encontrado.</div>"; 
-	} else echo "<div class='alert alert-warning tabela_vazia'>Ative uma empresa para visualizar seus dados.</div>"; 
+	 } 	else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; 
+	} else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
 ?>
 
 <script type="text/javascript">
@@ -52,23 +52,8 @@
 	    $('.footable').footable();
 	});
 
-	function deleteRow(id)
-	{
-		$("*").css("cursor", "progress");
-		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/delete_rotas",
-			type: "POST",  
-  			data: { id: id},
-			success : function(data) {
-				if(data == 1)	
-				{					
-					$("*").css("cursor", "default");	    
-				    var footable = $('table').data('footable');			    
-				    var row = $("#confirm_"+id).parents('tr:first');
-				    footable.removeRow(row);
-				}
-			}
-		});
-	}
+	
 
 </script>
+
+<?php echo site::generateDelete('Rota'); ?>

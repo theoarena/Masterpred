@@ -8,11 +8,14 @@ class Controller_Empresas extends Controller_Welcome {
 		parent::before();
 
 		if(!site::checkPermissaoPagina($this->privileges_needed)) //se pode acessar a url
-			HTTP::redirect('welcome/denied');
+			HTTP::redirect('avisos/denied');
 
-		$this->template->content = View::factory("main_content");
-		$this->template->content->plus_add_link = "";				
-		$this->template->content->show_add_link = true;						
+		//carregamento geral do cache
+	/*	if($view = Cache::instance()->get(site::segment(2), FALSE) )		
+		{
+			$this->template->content->conteudo = $view;	
+			$this->cached = true;
+		}					*/
 	}
 	
 	//======================================================//
@@ -21,7 +24,6 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_grauderisco() //página principal dos graus de risco
 	{	
-
 		$this->template->content->conteudo = View::factory("empresas/list_grauderisco");						
 		$list = ORM::factory('Tecnologia')->find_all()->as_array("CodTecnologia","Tecnologia");
 		$list["padrao"] = "Selecione uma tecnologia";
@@ -50,6 +52,7 @@ class Controller_Empresas extends Controller_Welcome {
 
 		$query = parse_url(URL::query());
 		$this->template->content->conteudo->query = ( isset($query["query"]) )?($query["query"]):("1=1");
+		$this->template->content->plus_back_link = '?'.( isset($query["query"]) )?($query["query"]):("1=1");	
 	}
 
 	public function action_carrega_grausderisco() 
@@ -413,9 +416,14 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_empresas() //página principal dos empresas
 	{	
-		$objs =ORM::factory('Empresa')->find_all();
-		$this->template->content->conteudo = View::factory('empresas/list_empresas');					
-		$this->template->content->conteudo->objs = $objs;			
+		if(!$this->cached)// se não há cache
+		{
+			$objs =ORM::factory('Empresa')->find_all();
+			$this->template->content->conteudo = View::factory('empresas/list_empresas');					
+			$this->template->content->conteudo->objs = $objs;	
+
+			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
+		}			
 	}
 
 	public function action_edit_empresas() //edit dos empresas
@@ -433,6 +441,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj->Empresa = $this->request->post('Empresa'); //nome da empresa
 		$obj->Unidade = $this->request->post('Unidade');				
 		$obj->Fabrica = $this->request->post('Fabrica');				
+		Cache::instance()->delete('empresas');
 		
 		if ($obj->save()) 
 			HTTP::redirect('empresas/empresas?sucesso=1');
@@ -447,17 +456,6 @@ class Controller_Empresas extends Controller_Welcome {
 		site::set_empresaatual($this->request->post('id'),$this->request->post('nome'));
 		
 		print 1;
-	}
-
-	public function action_delete_empresas()
-	{		
-		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		$obj = ORM::factory('Empresa',$this->request->post('id'));	
-
-		if($obj->delete())
-			print 1;
-		else
-			print 0;
 	}
 	
 	//======================================================
@@ -499,17 +497,7 @@ class Controller_Empresas extends Controller_Welcome {
 			HTTP::redirect('empresas/rotas?sucesso=1');
 		else
 			HTTP::redirect('empresas/edit_rotas?erro=1&Rota='.$this->request->post('Rota'));		
-	}
-
-	public function action_delete_rotas()
-	{		
-		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		$obj = ORM::factory('rota',$this->request->post('id'));	
-		if($obj->delete($obj->CodRota))
-			print 1;
-		else
-			print 0;
-	}
+	}	
 	
 	//======================================================
 	//======================================================
@@ -524,7 +512,8 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo = View::factory('empresas/list_equipamentos');					
 		$this->template->content->conteudo->objs = ORM::factory('Area')->where('Empresa','=',site::get_empresaatual())->find_all()->as_array('CodArea', 'Area');	//pega as areas		
 		$this->template->content->conteudo->area =  site::segment(3,null);	
-		$this->template->content->conteudo->setor =  site::segment(4,null);							
+		$this->template->content->conteudo->setor =  site::segment(4,null);		
+
 	}
 
 	public function action_edit_equipamentos() //edit dos equipamentos
@@ -536,7 +525,8 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo->obj = $obj;				
 		$this->template->content->conteudo->tipo_equipamento = $tipo_equipamento;				
 		$this->template->content->conteudo->setor =  site::segment(4);				
-		$this->template->content->conteudo->area =  site::segment(5);				
+		$this->template->content->conteudo->area =  site::segment(5);
+		$this->template->content->plus_back_link = '/'.site::segment(5).'/'.site::segment(4) ;					
 	}
 
 	public function action_carrega_equipamentos() //carrega por ajax
@@ -574,17 +564,7 @@ class Controller_Empresas extends Controller_Welcome {
 		else
 			HTTP::redirect('empresas/edit_equipamentos?erro=1&Equipamento='.$this->request->post('Equipamento'));
 		
-	}
-
-	public function action_delete_equipamentos()
-	{		
-		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		$obj = ORM::factory('Equipamento',$this->request->post('id'));	
-		if($obj->delete())
-			print 1;
-		else
-			print 0;
-	}
+	}	
 	
 	//======================================================
 	//======================================================
@@ -785,15 +765,6 @@ class Controller_Empresas extends Controller_Welcome {
 		
 	}
 
-	public function action_delete_usuarios()
-	{		
-		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		$obj = ORM::factory('User',$this->request->post('id'));	
-		if($obj->delete())
-			print 1;
-		else
-			print 0;
-	}
 	
 	//======================================================
 	//======================================================
@@ -878,17 +849,7 @@ class Controller_Empresas extends Controller_Welcome {
 		
 	}
 
-	public function action_delete_pedidos_usuario()
-	{		
-
-		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		//Session::instance()->delete('qtd_usuarios');
-		$obj = ORM::factory('User',$this->request->post('id',null));	
-		if($obj->delete())
-			print 1;
-		else
-			print 0;
-	}
+	//ession::instance()->delete('qtd_usuarios');	
 		
 
 } // End Welcome Controller

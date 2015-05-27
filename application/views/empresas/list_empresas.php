@@ -1,6 +1,6 @@
 <?php if(count($objs) > 0) { 
 
-echo "<div id='select_data'>";
+echo "<div id='select_data' class='inline'>";
 	echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
 	echo '</div>';	
 ?>
@@ -46,7 +46,7 @@ echo "<div id='select_data'>";
 
 </table>
 
-<?php } else echo "<div class='alert alert-warning tabela_vazia'>Nenhum item encontrado.</div>"; ?>
+<?php } else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; ?>
 
 <script type="text/javascript">
 	$(function () {
@@ -58,24 +58,6 @@ echo "<div id='select_data'>";
 	    });
 
 	});
-
-	function deleteRow(id)
-	{
-		$("*").css("cursor", "progress");
-		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/delete_empresas",
-			type: "POST",  
-  			data: { id: id},
-			success : function(data) {
-				if(data == 1)	
-				{						    
-				    var footable = $('table').data('footable');			    
-				    var row = $("#confirm_"+id).parents('tr:first');
-				    footable.removeRow(row);
-				}
-			}
-		});
-	}
 
 	function toggle_empresas(e,nome)
 	{
@@ -94,3 +76,6 @@ echo "<div id='select_data'>";
 	}
 
 </script>
+
+
+<?php echo site::generateDelete('Empresa'); ?>

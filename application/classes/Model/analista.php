@@ -20,4 +20,6 @@ class Model_Analista extends ORM {
 		return parent::unique_key($id);
 	}
 
+	
+
 }

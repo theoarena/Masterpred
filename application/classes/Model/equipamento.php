@@ -32,4 +32,15 @@ class Model_Equipamento extends ORM {
 		return parent::unique_key($id);
 	}
 
+	function delete()
+	{		
+		foreach($this->analiseequipamentoinspecionados->find_all() as $entry)
+		  $entry->delete();	  
+
+		foreach($this->equipamentoinspecionados->find_all() as $entry)
+		  $entry->delete();	  
+		
+		return parent::delete();
+	}
+
 }

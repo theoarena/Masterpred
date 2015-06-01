@@ -16,6 +16,19 @@ class Controller_Avisos extends Controller {
 		//$this->template->content->nome_usuario = Auth::instance()->get_user()->nome;	
 		
 	}	
+
+	public function action_termos()
+	{
+		$this->template->content = View::factory('avisos/termos');		
+	}
+
+	public function action_aceitar()
+	{
+		$user = Auth::instance()->get_user();
+		$user->termos = 1;
+		$user->save();
+		HTTP::redirect('welcome/index');	
+	}
 	
 	public function action_denied()
 	{				
@@ -27,6 +40,13 @@ class Controller_Avisos extends Controller {
 	{		
 		$this->template->content = View::factory('avisos/manutencao');
 		
+	}	
+		
+	public function action_logout()	
+	{
+		Auth::instance()->logout(); //tira o usuario
+		Session::instance()->destroy(); //tira todas as sessions
+		HTTP::redirect('');
 	}	
 	
 	

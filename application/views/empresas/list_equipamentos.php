@@ -2,7 +2,7 @@
 
 	if(site::selected_empresaatual()) {
 		
-		if(count($objs) > 0) { 
+		
 
 		echo "<br/>";
 		echo "<div id='select_areas'>";
@@ -36,7 +36,7 @@
 </table>
 
 <?php
-	 } 	else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhum_item')."</div>"; 
+	
 	} else echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
 ?>
 

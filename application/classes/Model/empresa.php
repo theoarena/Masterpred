@@ -3,7 +3,7 @@
 class Model_Empresa extends ORM {
 	protected $_has_many = array(
 		'areas' => array ('model' => 'area', 'foreign_key' => 'Empresa' ) ,
-		'rotas' => array ('model' => 'rota', 'foreign_key' => 'CodRota' ) ,
+		'rotas' => array ('model' => 'rota', 'foreign_key' => 'Empresa' ) ,
 	    'users' => array ( 'model' => 'user' , 'through' => 'empresa_users','far_key' => 'user_id' , 'foreign_key' => 'empresa_CodEmpresa')
 	);
 	
@@ -24,9 +24,23 @@ class Model_Empresa extends ORM {
 
 	function delete()
 	{
-		foreach($this->area as $entry)
-		  $entry->delete();	   
-		parent::delete();
+		foreach($this->areas->find_all() as $entry)		
+		  $entry->delete();	 
+		
+		 // $this->remove('areas',$entry);
+
+		foreach($this->rotas->find_all() as $entry)
+		  $entry->delete();	  
+
+		foreach($this->users->find_all() as $entry)
+		{
+		  $this->remove('users',$entry);
+		  $entry->delete();	 
+		}
+
+		site::remove_empresaatual();
+
+		return parent::delete();
 	}
  
 }

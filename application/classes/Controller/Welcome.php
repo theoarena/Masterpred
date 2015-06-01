@@ -18,9 +18,14 @@ class Controller_Welcome extends Controller {
 
 		//echo "<pre>";
 		//print_r($_SESSION);exit;
+
+		$user = $auth->get_user();
+
+		if($user->termos == 0)
+			HTTP::redirect('avisos/termos');
 			
 		//===============menu lateral				
-		$user = $auth->get_user();
+
 		$this->template->menu_lateral = View::factory('estrutura/menu_lateral');
 		$this->template->menu_lateral->nome_usuario = $user->username;
 		//$this->template->content = View::factory('home_clientes');	
@@ -45,14 +50,24 @@ class Controller_Welcome extends Controller {
 		$this->template->content->plus_add_link = '';				
 		$this->template->content->show_add_link = true;								
 		$this->template->content->plus_back_link = '';								
-		$this->template->content->show_back_link = true;								
+		$this->template->content->show_back_link = true;		
+
+		if($view = Cache::instance()->get(site::segment(2), FALSE) )		
+		{
+			$this->template->content->conteudo = $view;	
+			//die();
+		}							
+
 	}	
 
 	function after()
 	{			
-		$this->response->body($this->template);			
-	}
-	
+		$this->response->body($this->template);	
+
+		if(!Cache::instance()->get(site::segment(2), FALSE) )		
+			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());				
+	}	
+
 	public function action_index()
 	{	
 		if( site::getInfoUsuario('usuario_system') == 1) //verifica se é usuario de sistema
@@ -71,7 +86,7 @@ class Controller_Welcome extends Controller {
 		$obj = ORM::factory($this->request->post('class'),$this->request->post('id'));	
 		if($obj->delete())
 		{
-			Cache::instance()->delete($this->request->post('cache')); //remove o cache
+			//Cache::instance()->delete($this->request->post('cache')); //remove o cache
 			print 1;
 		}
 		else

@@ -25,17 +25,13 @@ class Model_Rota extends ORM {
 		return parent::unique_key($id);
 	}
  
- 	public function delete($rota)
+ 	public function delete()
 	{
-		foreach($this->equipamento as $entry)
-		{
-			$entry->remove(ORM::factory('rota',$rota));	   
-			$entry->save();
-		}
+		//só remove a relaçao, os equipamentos do setor ainda persistem
+		foreach($this->equipamentos->find_all() as $entry)		
+			$this->remove('equipamentos',$entry);	   
+			//$entry->delete();		
 	
-		if(parent::delete())
-			return true;
-		else
-			return false;
+		return parent::delete();		
 	}
 }

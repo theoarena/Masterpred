@@ -22,17 +22,20 @@ h1.navbar-brand{font-size:37px}
 
 .cb{clear: both;}
 .jumbotron { box-shadow: 0 1px 3px -2px #333333;}
-.jumbotron p.center{text-align: center;}
+.jumbotron .center{text-align: center;}
 /*================== HOME LOGIN ====================== */
 
-body.login .navbar,body.cadastro .navbar,body.esqueci_senha .navbar {display: none;}
+body.login .navbar,body.cadastro .navbar,body.esqueci_senha .navbar,body.termos .navbar {display: none;}
 body.login #wrapper, body.esqueci_senha #wrapper { margin: 0 auto; width: 100%; max-width: 512px;padding: 0}
-body.cadastro #wrapper { margin: 0 auto; width: 100%; max-width: 712px;padding: 0}
+body.cadastro #wrapper , body.termos #wrapper { margin: 0 auto; width: 100%; max-width: 712px;padding: 0}
 h1#welcome { color: #428BCA; font-weight: 900; margin: 0 0 20px; text-align: center; text-shadow: 0 1px 1px #333333; width: 100%;font-size:63px}
 #password_login {margin-bottom: 10px;}
 #sem_cadastro{ display: block;  margin-top: 10px;text-align: right;}
 #voltar_esqueci_senha{float: right;}
 body.login #wrapper-container,body.cadastro #wrapper-container,body.esqueci_senha #wrapper-container{padding-top: 20px}
+
+div#termos p{ font-size: 15px; line-height: 22px;}
+div#termos {padding-top: 20px !important}
 /*================== LISTAGEM E EDIÇÃO ====================== */
 
 .Content{border-top: 1px solid #F1F1F1; display: block;  margin-top: -1px; padding-top: 20px;clear: both;}
@@ -125,7 +128,13 @@ th#col_actions{ width: 235px;}
 .div_filtrar{float: none !important;}
 #btn_filtrar{margin: 2px 0 0 20px;}
 
-.chk_equip{background: none repeat scroll 0 0 #F2F2F2;  border: 1px solid #E4E4E4;  padding: 20px;margin-right: 20px !important;}
+.list_equip{border: 1px solid #ddd;  margin: -2px -1px 0 0;}
+.item_setor .chk_equip{ padding:10px 20px;}
+.item_setor .chk_equip span{display: inline-block;display: inline-block; font-size: 20px; font-weight: lighter;text-transform: none !important;padding-left: 35px !important}
+.item_setor .chk_equip input{display: inline-block; }
+.item_setor .chk_equip .checkbox .checkbox-label::before{top: 4px !important;}
+
+.item_setor .chk_equip .checkbox {margin: 0 !important}
 .check_privileges input{display: inline-block;margin-right: 20px}
 .check_privileges h4{ display: inline-block; font-weight: bold; margin-right: 20px; text-transform: uppercase;}
 .check_privileges p{display: inline-block;font-style: italic;}
@@ -233,7 +242,7 @@ th#col_actions{ width: 235px;}
 
 .item_area h4 {padding-left: 10px}
 .item_area{display: none;padding-left: 10px}
-.item_setor{display: none;}
+.item_setor{display: none;padding-left: 10px}
 
 
 /*================= MENU LATERAL ==============================*/
@@ -277,7 +286,7 @@ th#col_actions{ width: 235px;}
 .navbar-nav ul{background: none repeat scroll 0 0 #373737;list-style: none outside none;padding:0;}
 .navbar-nav ul li{}
 .navbar-nav ul li a{   color: #FFFFFF; display: inline-block; padding: 15px 0 15px 40px; width: 100%;}
-.navbar-nav ul li a:hover,.navbar-nav ul li a.active{  background: none repeat scroll 0 0 #545454; color:#FFFFFF}
+.navbar-nav li a:hover,.navbar-nav li a.active{  background: none repeat scroll 0 0 #545454; color:#FFFFFF}
 
 .radio + .radio, .checkbox + .checkbox {margin-top: 10px !important}
 .checkbox .checkbox-label {text-transform: uppercase;}

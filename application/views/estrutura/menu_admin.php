@@ -1,6 +1,6 @@
 <?php		
 	$menu_hide = "hide_menu";
-	echo "<li>".html::anchor('#', 'Empresas' , array("class" => site::active("empresas",2,false).' menu_dropdown' , 'id' => 'menu_empresa'  ) );
+	echo "<li>".html::anchor('#', 'Empresas' , array("class" => 'menu_dropdown', 'onclick' => 'openMenu("menu_empresa")' , 'id' => 'menu_empresa'  ) );
 			echo "<ul>";
 				if($qtd_usuarios > 0)
 					echo "<li>".html::anchor('empresas/pedidos_usuario', 'Pedidos de usuário <span class="badge">'.$qtd_usuarios.'</span>', array("class" => site::active("pedidos_usuario",3,false) ) );
@@ -9,17 +9,26 @@
 				if(site::selected_empresaatual())
 					$menu_hide = "";
 
-					echo "<li>".html::anchor('empresas/analiseinspecao', "Análise de Inspeção" , array("class" => site::active("analiseinspecao",3,false).' '.$menu_hide  ) );
-					echo "<li>".html::anchor('empresas/grauderisco', "Grau de risco" , array("class" => site::active("grauderisco",3,false).' '.$menu_hide  ) );
-					echo "<li>".html::anchor('empresas/rotas', 'Rotas' , array("class" => site::active("rotas",3,false).' '.$menu_hide  ) );				
-					echo "<li>".html::anchor('empresas/usuarios', 'Usuários', array("class" => site::active("usuarios",3,false).' '.$menu_hide  ) );
 					echo "<li>".html::anchor('empresas/areas_setores', 'Áreas e Setores' , array("class" => site::active("areas_setores",3,false).' '.$menu_hide  ) );
 					echo "<li>".html::anchor('empresas/equipamentos', 'Equipamentos' , array("class" => site::active("equipamentos",3,false).' '.$menu_hide  ) );				
+					echo "<li>".html::anchor('empresas/rotas', 'Rotas' , array("class" => site::active("rotas",3,false).' '.$menu_hide  ) );				
+					echo "<li>".html::anchor('empresas/usuarios', 'Usuários', array("class" => site::active("usuarios",3,false).' '.$menu_hide  ) );
 				
 			echo "</ul>";
 		echo "</li>";		
 
-	echo "<li>".html::anchor('#', 'Sistema' , array("class" => site::active("sistema",2,false).' menu_dropdown' , 'id' => 'menu_sistema'  ) );
+	echo "<li>".html::anchor('#', 'Análise' , array("class" => 'menu_dropdown', 'onclick' => 'openMenu("menu_analise")' , 'id' => 'menu_analise'  ) );
+		echo "<ul>";
+			echo "<li>".html::anchor('empresas/analiseinspecao', "Análise de Inspeção" , array("class" => site::active("analiseinspecao",3,false).' '.$menu_hide  ) );
+			echo "<li>".html::anchor('empresas/grauderisco', "Grau de risco" , array("class" => site::active("grauderisco",3,false).' '.$menu_hide  ) );
+		echo "</ul>";
+	echo "</li>";
+
+	echo "<li>".html::anchor('#', 'Relatórios' , array("class" => 'menu_dropdown', 'onclick' => 'openMenu("menu_relatorio")' , 'id' => 'menu_relatorio'  ) );
+		
+	echo "</li>";
+
+	echo "<li>".html::anchor('#', 'Sistema' , array("class" => 'menu_dropdown', 'onclick' => 'openMenu("menu_sistema")' , 'id' => 'menu_sistema'  ) );
 		echo "<ul>";
 			echo "<li>".html::anchor('sistema/usuarios_sistema', 'Usuários de sistema' , array("class" => site::active("usuarios_sistema",3,false) ) ). "</li>";
 			echo "<li>".html::anchor('sistema/tecnologias', 'Tecnologias' , array("class" => site::active("tecnologias",3,false) ) ). "</li>";
@@ -38,18 +47,17 @@
 
 <script type='text/javascript'>
 	
-	  $('#menu_empresa').click(function(e)
-	  {		
-		$('#menu_empresa + ul').slideToggle();	
-		$('#menu_sistema + ul').slideUp();				
-		e.preventDefault();
-	  });
+	function openMenu(id) //any menu opener
+	{
+		$('#'+id+'+ ul').slideToggle();
+		$('.menu_dropdown').each(function(){
+			if( $(this).attr('id') != id )
+				$(this).parent().find('ul').slideUp();
+		})
+	}
 
-	   $('#menu_sistema').click(function(e)
-	  {		
-			$('#menu_empresa + ul').slideUp();	
-			$('#menu_sistema + ul').slideToggle();				
-		e.preventDefault();
-	  });
+     $(document).ready(function(){
+     		$('#menu_lateral').find('li a.drop.active').parent().parent().parent().find('a.menu_dropdown').addClass('active');
+     })
 
 </script>

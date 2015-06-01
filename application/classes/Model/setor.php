@@ -18,5 +18,13 @@ class Model_Setor extends ORM {
  
 		return parent::unique_key($id);
 	}
+
+	
+ 	/*function delete()
+	{
+		//foreach($this->equipamentos->find_all() as $entry)
+		//  $entry->delete();	   
+		parent::delete();
+	}*/
  
 }

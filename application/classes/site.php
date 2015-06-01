@@ -94,14 +94,14 @@ class site {
 		return ( count(array_intersect($privileges_needed,$privileges)) == $qtd );
 	}
 
-	public static function active($a,$i,$t) //active do menu
+	public static function active($a,$i,$t,$class='drop') //active do menu
 	{				
 		$return = "";
 		$v = site::segment_array();			
 		//print_r($v);
 		if( (count($v) > 0) )
-			if( isset($v[$i]) && (strpos($v[$i],$a) !== false ) )
-				$return = ( ($t)?("class='active'"):("active") );
+			if( isset($v[$i]) && ( $v[$i] == $a) )
+				$return = ( ($t)?("class='active $class'"):("active $class") );
 		return $return;
 	}
 
@@ -217,6 +217,12 @@ class site {
 	{
 		Session::instance()->set('empresa_atual', $v);// atribui a empresa selecionada		
 		Session::instance()->set('nome_empresa_atual', $nome);// atribui a empresa selecionada		
+	}
+
+	public static function remove_empresaatual()
+	{
+		Session::instance()->delete('empresa_atual');
+		Session::instance()->delete('nome_empresa_atual');
 	}
 
 	public static function get_empresaatual($i=1)
@@ -402,6 +408,34 @@ class site {
 
 		$return .= '</script>';
 		return $return;
+	}
+
+	//ORM add() extension
+	public function addORMRelation($obj,$itens,$post,$relation)
+	{
+		$array_db = array();
+
+		foreach ($itens->find_all() as $o)
+			$array_db[] = $o->pk();	
+					
+		$ids_remove = array_diff( $array_db, $post );
+		$ids_add = array_diff( $post , $array_db );
+	
+		if(count($ids_remove) > 0)
+			$obj->remove($relation,$ids_remove);
+		if(count($ids_add) > 0)
+			$obj->add($relation,$ids_add);
+		
+	}
+
+	public function handleErrors($errors) //junta os erros em uma query string
+	{
+		$return = array();
+		foreach ($errors as $key => $value) {			
+			$e = explode('/',$value);
+			$return[] = $e[1];
+		}
+		return implode(',', $return);
 	}
 
 }

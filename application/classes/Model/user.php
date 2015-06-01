@@ -69,6 +69,13 @@ class Model_User extends Model_Auth_User {
 		$privileges = $role->privileges->find_all()->as_array('id','name');		
 		return $privileges;
 	}
-	
+
+	function delete()
+	{
+		foreach($this->roles->find_all() as $entry)		
+		 $this->remove('roles',$entry);
+
+		return parent::delete();
+	}
  
 }

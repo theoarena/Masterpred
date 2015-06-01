@@ -16,17 +16,18 @@
 	?>
 </div>
 <div class="collapse navbar-collapse">	     
-	<ul class="nav navbar-nav">
+	<ul class="nav navbar-nav" id="menu_lateral">
 	<?php
 		echo "<li id='home'>".html::anchor('', 'Home')."</li>";	
 		echo $tipo_menu;
-		echo "<li>".html::anchor('usuario/perfil', 'Minha conta' , array("class" => site::active("perfil",2,false), 'id' => 'perfil'  ) );
+		echo "<li>".html::anchor('usuario/perfil', 'Minha conta' , array("class" => site::active("perfil",3,false,''), 'id' => 'perfil'  ) );
 		echo "<li id='logout'>".html::anchor('usuario/logout', 'Sair')."</li>";	
 	?>
 	</ul>
 
 	<div id='desenvolvedor'>	
 		<p>Copyright © <?php echo Kohana::$config->load('config')->get('site_name'); ?> <?php echo date("Y"); ?> - Todos os Direitos Reservados.</p>		
+		<p>Veja os <?php echo HTML::anchor('avisos/termos?show=0','Termos de uso'); ?> do sistema.</p>
 		<p>Versão <?php echo Kohana::$config->load('config')->get('system_version'); ?></p>
 	</div>
 </div>

@@ -21,8 +21,8 @@ class Model_Area extends ORM {
  
  	function delete()
 	{
-		foreach($this->setor as $entry)
+		foreach($this->setores->find_all() as $entry)
 		  $entry->delete();	   
-		parent::delete();
+		return parent::delete();
 	}
 }

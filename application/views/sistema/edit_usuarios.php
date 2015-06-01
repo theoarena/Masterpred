@@ -34,7 +34,8 @@
         'nome'=>'Nome completo',
         'email' => array('Email','required|valid_email'),
         'nascimento' => 'Data de nascimento',
-        'username' => array('Nome de usuário','required|alpha_numeric')
+        'username' => array('Nome de usuário','required|alpha_numeric'),
+        'lista_empresas[]'=>'Empresas'
     ));
 ?>
 

@@ -10,7 +10,7 @@
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Rota',$obj->Rota, array('class' => 'form-control', 'maxlength' => '100', 'placeholder' => 'Nome da rota' )) ."</div>";	
 	
         echo "<br/>";
-        echo '<div class="panel panel-primary">';
+        echo '<div class="panel-primary">';
         echo '<div class="panel-heading"><h4>Equipamentos desta rota</h4></div>';
         echo '<div class="panel-body">';
             echo '<div class="list-group">';
@@ -29,14 +29,20 @@
                                         echo '<div class="panel item_setor" id="setor_'.$s->CodSetor.'">';
                                             if(count($s->equipamentos)>0)
                                             {
+                                                echo '<ul class="list-group list_equip">';
                                                 foreach ($s->equipamentos->find_all() as $e) //para cada equipamento do setor   
                                                 {
                                                     $id = $e->CodEquipamento;
-                                                    echo '<label class="control checkbox chk_equip">';
+                                                    echo ' <li class="list-group-item chk_equip">';
+                                                    echo '<label class="checkbox">';
                                                     echo form::checkbox('equipamento[]', $id, array_key_exists($id,$equipamentos_selecionados));
                                                     echo '<span class="checkbox-label">'.$e->Equipamento.'</span>';
-                                                    echo "</label>";
+                                                    echo '</label>';
+                                                  
+                                                    echo '</li>';
+                                                    
                                                 }
+                                                 echo '</ul>';  
                                             }
                                             else
                                                 echo "<h4>".Kohana::message('admin', 'nenhum_equipamento_setor')."</h4>";  

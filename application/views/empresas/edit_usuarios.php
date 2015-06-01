@@ -25,8 +25,8 @@
     echo "<br/>";
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>@</span>". form::input('username',$obj->username, array('class' => 'form-control', 'maxlength' => '32', 'placeholder' => 'Nome de usuário' )) ."</div>";  
 
-    echo "<label class='control checkbox chk_equip'> ".form::checkbox('gerar_senha',1, false )." <span class='checkbox-label'>Atribuir nova senha (selecionando esta opção a senha atual deste usuário será substituida)</span></label> </div>";   
-    echo "<label class='control checkbox chk_equip'> ".form::checkbox('senha_aleatoria',1, false )." <span  class='checkbox-label'>Gerar senha aleatóriamente (ignorará o campo abaixo).</span></label>";   
+    echo "<label class='control checkbox chk_equip'> ".form::checkbox('gerar_senha',1, ($obj->id!=NULL)?false:true )." <span class='checkbox-label'>Atribuir nova senha (selecionando esta opção a senha atual deste usuário será substituida)</span></label> </div>";   
+    echo "<label class='control checkbox chk_equip'> ".form::checkbox('senha_aleatoria',1, ($obj->id!=NULL)?false:true )." <span  class='checkbox-label'>Gerar senha aleatóriamente (ignorará o campo abaixo).</span></label>";   
     echo "<label class='control checkbox chk_equip'> ".form::checkbox('notificar',1, false )." <span class='checkbox-label'>Notificar automaticamente o usuário que sua senha foi alterada.</span></label>";   
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>#</span>". form::input('password',null, array('class' => 'form-control', 'maxlength' => '8', 'placeholder' => 'Senha Cutomizada' )) ."</div>";      
 	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg' ));

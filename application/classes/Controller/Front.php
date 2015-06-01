@@ -21,6 +21,11 @@ class Controller_Front extends Controller {
 		$this->response->body($this->template);			
 	}
 
+	public function action_termos()
+	{
+		$this->template->content = View::factory('front/termos');
+		$this->template->menu_lateral = null;
+	}
 
 	public function action_cadastro()
 	{
@@ -84,10 +89,14 @@ class Controller_Front extends Controller {
 			$privileges_str = implode('_',$privileges);
 			
 			//mudar pra cache???	
-			Session::instance()->set('usuario_roles', implode('',$roles) ) ;
+			Session::instance()->set('usuario_roles', implode('',$roles) );
 			Session::instance()->set('usuario_system', $user->system ) ;
-			Session::instance()->set('usuario_privileges', $privileges_str) ;
-			HTTP::redirect('welcome/index'); //logou =)					
+			Session::instance()->set('usuario_privileges', $privileges_str);
+		
+			if( $user->termos != 0)
+				HTTP::redirect('welcome/index'); //logou =)					
+			else			
+				HTTP::redirect('avisos/termos');// termos de uso			
 		}
 		
 		

@@ -22,15 +22,11 @@ class Controller_Sistema extends Controller_Welcome {
 	//======================================================//	
 
 	public function action_condicoes() 
-	{			
-		if(!$this->cached)// se não há cache
-		{
-			$objs = ORM::factory("Condicao")->find_all();
-			$this->template->content->conteudo = View::factory("sistema/list_condicoes");					
-			$this->template->content->conteudo->objs = $objs;	
+	{	
 
-			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
-		}
+		$objs = ORM::factory("Condicao")->find_all();
+		$this->template->content->conteudo = View::factory("sistema/list_condicoes");					
+		$this->template->content->conteudo->objs = $objs;			
 		//print_r($objs);exit;
 	}
 
@@ -102,7 +98,7 @@ class Controller_Sistema extends Controller_Welcome {
 		$this->template->content->conteudo->obj = $obj;	
 		$this->template->content->conteudo->roles = $roles;				
 		$this->template->content->conteudo->roles_selecionadas = $roles_selecionadas;				
-		
+		$this->template->content->plus_back_link = '_sistema';	
 		$list = array();
 				
 	}
@@ -137,22 +133,7 @@ class Controller_Sistema extends Controller_Welcome {
 			
 		if ($obj->save()) 
 		{	
-			//roles 			
-			$user_roles = array();
-
-			foreach ($obj->roles->find_all() as $o)
-				$user_roles[] = $o->id;	
-			
-			if( is_array( $this->request->post('role') ) ) 
-			{	
-				$ids_remove = array_diff( $user_roles, $this->request->post('role') );
-				$ids_add = array_diff( $this->request->post('role') , $user_roles );
-			
-				if(count($ids_remove) > 0)
-					$obj->remove('roles',$ids_remove) ;
-				if(count($ids_add) > 0)
-					$obj->add('roles',$ids_add);
-			}
+			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');			
 						
 			HTTP::redirect('sistema/usuarios_sistema?sucesso=1');
 		}
@@ -191,26 +172,12 @@ class Controller_Sistema extends Controller_Welcome {
 		$obj->description = $this->request->post('description');				
 		$obj->nickname = $this->request->post('nickname');				
 
-		$obj_priv = array();
-		foreach ($obj->privileges->find_all() as $o)
-			$obj_priv[] = $o->id;		
-		 
-		if( is_array( $this->request->post('privileges') ) ) 
-		{
-			$privileges_remove = array_diff( $obj_priv, $this->request->post('privileges') );
-			$privileges_add = array_diff( $this->request->post('privileges') , $obj_priv );
-			
-			if(count($privileges_remove) > 0)
-				$obj->remove('privileges',$privileges_remove);	
-			if(count($privileges_add) > 0)
-				$obj->add('privileges',$privileges_add);				
-		}
+		site::addORMRelation($obj, $obj->privileges,$this->request->post('privileges'),'privileges');
 
 		if ($obj->save()) 
 			HTTP::redirect('sistema/roles?sucesso=1');
 		else
-			HTTP::redirect('sistema/edit_roles?erro=1');
-		
+			HTTP::redirect('sistema/edit_roles?erro=1');		
 	}
 
 	//======================================================//

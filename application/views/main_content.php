@@ -16,7 +16,20 @@
 		{
 			echo '<div class="alert alert-danger alert-dismissable">';
  			echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-			echo Kohana::message('admin', 'ocorreu_erro').'</div>';
+			
+ 			echo Kohana::message('admin', 'ocorreu_erro');
+ 			// mostra os erros de ORM_Validation_Exception
+ 			if(isset($_GET['error_info']))
+ 			{
+ 				echo '<br>';
+ 				$e = explode(',',$_GET['error_info']);
+ 				foreach ($e as $value) {
+ 					echo '<br>';
+					echo Kohana::message('errors', $value); 	
+					
+ 				}
+ 			}
+			echo '</div>';
 		}
 
 		echo '<div class="alert alert-danger" id="box_error">';
@@ -40,7 +53,11 @@
 <script type="text/javascript">
 
 $( document ).ready(function() {
-	$('.alert-dismissable').delay(4000).fadeOut('slow');  //tira quaisquer alertas depois de 4 segundos
+	$('.alert-dismissable').delay(15000).fadeOut('slow');  //tira quaisquer alertas depois de 4 segundos
+
+	$('button.close').click(function(){
+		$(this).parent().fadeOut('slow');
+	});
 });
 
 </script>

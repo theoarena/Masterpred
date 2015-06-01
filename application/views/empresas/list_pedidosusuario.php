@@ -4,7 +4,7 @@
 	
 ?>
 
-<h4>Abaixo estão os usuários que estão aguardando a ativação de seus perfis.</h4>
+<div class="alert alert-warning"><h4>Os usuários abaixo estão aguardando a ativação de seus perfis.</h4></div>
 
 <table class="footable table" data-page-navigation=".pagination">
 	<thead>

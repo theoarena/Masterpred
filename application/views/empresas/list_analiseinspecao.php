@@ -264,3 +264,5 @@
 	}
 	
 </script>
+
+<?php echo site::generateDelete('AnaliseEquipamentoInspecionado'); ?>

@@ -474,8 +474,7 @@ class Controller_Empresas extends Controller_Welcome {
 	}
 
 	public function action_edit_rotas() //edit dos rotas
-	{		
-
+	{			
 		$obj = ORM::factory('Rota', site::segment('edit_rotas',null) );
 		$equipamentos_selecionados = $obj->equipamentos->find_all()->as_array('CodEquipamento','Equipamento');
 		//print_r($equipamentos_selecionados);exit;
@@ -487,14 +486,18 @@ class Controller_Empresas extends Controller_Welcome {
 	
 	public function action_save_rotas() //salvar novo e editar
 	{	
-		$obj = ORM::factory('rota',$this->request->post('CodRota' ));		
+		$obj = ORM::factory('rota',$this->request->post('CodRota'));		
 
 		$obj->Rota = $this->request->post('Rota');					
-		$obj->equipamento = $this->request->post('equipamento');					
 		$obj->Empresa = $this->request->post('Empresa');					
 		
 		if ($obj->save()) 
-			HTTP::redirect('empresas/rotas?sucesso=1');
+		{			
+
+			site::addORMRelation($obj, $obj->equipamentos,$this->request->post('equipamento'),'equipamentos');
+
+			HTTP::redirect('empresas/rotas?sucesso=1');		
+		}
 		else
 			HTTP::redirect('empresas/edit_rotas?erro=1&Rota='.$this->request->post('Rota'));		
 	}	
@@ -717,52 +720,31 @@ class Controller_Empresas extends Controller_Welcome {
 				
 			$obj->password = $password_email; 
 		}		
-			
-			
-		if ($obj->save()) 
-		{	
-			//roles 			
-			$user_roles = array();
+				
+		/*
+			Atualmente, se o usuario desmarcar a caixa de seleção de senha aleatória
+			ou se nao marcar pra atribuir nova senha (desmarcar), vai dar problema
+			uma vez que espera-se que sempre venha a senha para ser salva no BD.
+		*/
 
-			foreach ($obj->roles->find_all() as $o)
-				$user_roles[] = $o->id;	
-			
-			if( is_array( $this->request->post('role') ) ) 
-			{	
+		try{
 
-				$ids_remove = array_diff( $user_roles, $this->request->post('role') );
-				$ids_add = array_diff( $this->request->post('role') , $user_roles );
-			
-				if(count($ids_remove) > 0)
-					$obj->remove('roles',$ids_remove) ;
-				if(count($ids_add) > 0)
-					$obj->add('roles',$ids_add);
-			}
-			//empresas
-			$user_empresas = array();
+			$obj->save();
+			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');
+			site::addORMRelation($obj, $obj->empresas,$this->request->post('lista_empresas'),'empresas');
 
-			foreach ($obj->empresas->find_all() as $o)
-				$user_empresas[] = $o->CodEmpresa;	
-			
-			if( is_array( $this->request->post('lista_empresas') ) ) 
-			{
-				$ids_remove = array_diff( $user_empresas, $this->request->post('lista_empresas') );
-				$ids_add = array_diff( $this->request->post('lista_empresas') , $user_empresas );
-			
-				if(count($ids_remove) > 0)
-					$obj->remove('empresas',$ids_remove) ;
-				if(count($ids_add) > 0)
-					$obj->add('empresas',$ids_add);		
-			}
 			$e=2; //2 é sem ação
 			if($this->request->post('notificar')==1)			
 				$e = enviaEmail::aviso_usuarioAtivado($obj,$password_email); //enviar o email de aviso 
 			
 			HTTP::redirect('empresas/usuarios?sucesso=1&enviado='.$e);
 		}
-		else
-			HTTP::redirect('empresas/edit_usuarios?erro=1&Usuario='.$this->request->post('Usuario'));
-		
+	    catch (ORM_Validation_Exception $e)
+	    {		    	
+	        $errors = site::handleErrors($e->errors('models'));				           
+	        HTTP::redirect('empresas/edit_usuarios/'.$obj->id.'?erro=1&error_info='.$errors);
+	    }
+	
 	}
 
 	
@@ -778,11 +760,14 @@ class Controller_Empresas extends Controller_Welcome {
 	{			
 		$objs = ORM::factory('User')->where('ativo','=',0)->find_all();		
 		$this->template->content->conteudo = View::factory('empresas/list_pedidosusuario');					
-		$this->template->content->conteudo->objs = $objs;			
+		$this->template->content->conteudo->objs = $objs;	
+		$this->template->content->show_add_link = false;				
 	}
 
 	public function action_edit_pedidos_usuario() //edit dos usuarios
 	{			
+		$this->template->content->plus_back_link = '_usuario';		
+
 		$obj = ORM::factory('User', site::segment('edit_pedidos_usuario',null) );
 		$array = array();
 		foreach ($obj->empresas->find_all() as $emp) 
@@ -810,8 +795,8 @@ class Controller_Empresas extends Controller_Welcome {
 	
 	public function action_save_pedidos_usuario() //salvar novo e editar
 	{	
-		$obj = ORM::factory('User',$this->request->post('id'));		
 		//print_r($this->request->post('role') );exit;
+		$obj = ORM::factory('User',$this->request->post('id'));		
 		$obj->username = $this->request->post('username');					
 		$obj->email = $this->request->post('email');					
 		$obj->nome = $this->request->post('nome');					
@@ -821,6 +806,7 @@ class Controller_Empresas extends Controller_Welcome {
 		
 		$password = null;
 		$password_email = '';
+		
 		if($this->request->post('gerar_senha')==1) //se é pra alterar a senha	
 		{	
 			if($this->request->post('senha_aleatoria')==0)	
@@ -831,25 +817,28 @@ class Controller_Empresas extends Controller_Welcome {
 			$obj->password = $password_email; 
 		}		
 
-		if ($obj->save()) 
-		{
+		try{
 
-			$obj->add('roles', $this->request->post('role') );
-			$obj->add('empresas', $this->request->post('lista_empresas') );			
+			$obj->save();
+			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');
+			site::addORMRelation($obj, $obj->empresas,$this->request->post('lista_empresas'),'empresas');
 
 			$e=2; //2 é sem ação
 			if($this->request->post('notificar')==1)			
 				$e = enviaEmail::aviso_usuarioAtivado($obj,$password_email); //enviar o email de aviso 
-
+			
 			Session::instance()->delete('qtd_usuarios'); //reinicia o contador de usuários pendentes
 			HTTP::redirect('empresas/pedidos_usuario?sucesso=1&enviado='.$e);
 		}
-		else
-			HTTP::redirect('empresas/edit_pedidos_usuario?erro=1&Usuario='.$this->request->post('Usuario'));
+	    catch (ORM_Validation_Exception $e)
+	    {		    	
+	        $errors = site::handleErrors($e->errors('models'));				           
+	        HTTP::redirect('empresas/edit_pedidos_usuario/'.$obj->id.'?erro=1&error_info='.$errors);
+	    }	
 		
 	}
 
-	//ession::instance()->delete('qtd_usuarios');	
+	//session::instance()->delete('qtd_usuarios');	
 		
 
 } // End Welcome Controller

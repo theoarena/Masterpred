@@ -4,7 +4,7 @@ return array(
 
 	//general
 	'system_active' => TRUE,
-	'system_version' => '1.0',
+	'system_version' => '1.1',
 	'site_domain' => '/masterpred',
 	'site_name' => 'Masterpred',
 	

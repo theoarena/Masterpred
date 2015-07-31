@@ -1,5 +1,3 @@
-<h3>Meus <small>dados</small></h3>
-
 <?php 
 	
 	echo form::open( site::segment(1)."/alterar_perfil",array("id" => "form_edit") );			

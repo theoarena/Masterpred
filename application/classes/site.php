@@ -50,8 +50,8 @@ class site {
 	}
 
 	public static function segment_has($index,$search)
-	{	
-		return ( strpos(site::segment($index), $search ) !== false);			
+	{			
+		return ( strpos(site::segment($index,''), $search ) !== false);			
 	}
 
 	public static function segment_get($segment,$index)
@@ -83,14 +83,26 @@ class site {
 		return Session::instance()->get($t,false);
 	}	
 	
-	public static function checkPermissaoPagina($privileges_needed) //===========FAZER
+	public static function isGrant($privileges_needed) 
 	{
-		if(site::getInfoUsuario('usuario_system') == 1)
+		if(site::getInfoUsuario('usuario_roles') == 'admin')
 			return true; //se for de sistema pode ver tudo;
+		
+		/*
+		$pass = 0;
+		$user = Auth::instance()->get_user();
+		$privileges = explode(',', $user->get_privileges() );
+		
+		foreach ($privileges as $key => $value) 
+			if(array_search($value,$privileges_needed) !== false )			
+				$pass++;				
+				
+		return ($pass == count($privileges_needed));
+		*/
 
 		$qtd = count($privileges_needed);		
 		$user = Auth::instance()->get_user();
-		$privileges = $user->get_privileges();
+		$privileges = explode(',', $user->get_privileges() );
 		return ( count(array_intersect($privileges_needed,$privileges)) == $qtd );
 	}
 
@@ -105,17 +117,9 @@ class site {
 		return $return;
 	}
 
-	public static function getTituloMae($i)
+	public static function getTituloTipo($i)
 	{
-		$tit = "";
-		switch (site::segment($i)) {
-			
-			case 'sistema':	$tit = "Sistema"; break;
-			case 'empresas':	$tit = "Empresa"; break;
-			default: break;
-
-		}
-		return $tit;
+		return ( ( site::segment_has(2,'edit') )?'Cadastro':'Listagem' );	
 	}
 
 	public static function getTituloInterna($i)
@@ -130,7 +134,7 @@ class site {
 			case 'tecnologias':	
 			case 'edit_tecnologias':	$tit = "Tecnologias"; break;
 			case 'empresas':	
-			case 'edit_empresas':	$tit = "Lista de Empresas"; break;
+			case 'edit_empresas':	$tit = "Empresas"; break;
 			case 'recomendacoes':	
 			case 'edit_recomendacoes':	$tit = "Recomendações"; break;
 			case 'condicoes':	
@@ -156,7 +160,7 @@ class site {
 			case 'analistas':		
 			case 'edit_analistas':$tit = "Analistas"; break;
 			case 'grauderisco':		
-			case 'edit_grauderisco':$tit = "Relação de Grau de Risco"; break;
+			case 'edit_grauderisco':$tit = "Graus de Risco"; break;
 			case 'historico':
 			case 'edit_historico':$tit = "Histórico de Ordens de serviço"; break;
 			case 'roles':
@@ -180,7 +184,7 @@ class site {
 			case 'inspecao': $tit = "Tipo de Inspeção"; break;			
 			case 'acoes': $tit = "Ações"; break;			
 			case 'ativada': $tit = "Ativada"; break;			
-			case 'codigo': $tit = "Código"; break;			
+			case 'codigo': $tit = "Cod"; break;			
 			case 'tecnologia': $tit = "Tecnologia"; break;			
 			case 'id': $tit = "Id"; break;			
 			case 'tag': $tit = "Tag"; break;			
@@ -191,7 +195,7 @@ class site {
 			case 'estado': $tit = "Estado"; break;			
 			case 'telefone': $tit = "Telefone"; break;			
 			case 'email': $tit = "Email"; break;			
-			case 'tipo_usuario': $tit = "Tipo do usuário"; break;			
+			case 'tipo_usuario': $tit = "Grupo de Acesso"; break;			
 			case 'numero': $tit = "Número"; break;			
 			case 'componente': $tit = "Componente"; break;			
 			case 'funcao': $tit = "Função"; break;			
@@ -264,17 +268,17 @@ class site {
 		return Session::instance()->get('qtd_usuarios');
 	}
 
-	public static function data_BR($d,$return="00/00/0000")
+	public static function data_BR($d,$return=false)
 	{		
-		if($d=="") return $return;
+		if($d=="") return ( (!$return)?(date('d/m/Y')):($return) );
 
 		$d = explode("-",$d);
 		return $d[2]."/".$d[1]."/".$d[0];
 	}
 
-	public static function data_EN($d="00/00/0000",$return="0000-00-00")
+	public static function data_EN($d=false,$return=false)
 	{
-		if($d=="") return $return;
+		if($d=="") return (!$return)?(date('Y/m/d')):($return);
 		$d = explode("/",$d);
 		return $d[2]."-".$d[1]."-".$d[0];
 	}
@@ -433,7 +437,7 @@ class site {
 		$return = array();
 		foreach ($errors as $key => $value) {			
 			$e = explode('/',$value);
-			$return[] = $e[1];
+			$return[] = ( isset($e[1]) )?($e[1]):('default');
 		}
 		return implode(',', $return);
 	}

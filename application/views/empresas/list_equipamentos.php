@@ -2,12 +2,9 @@
 
 	if(site::selected_empresaatual()) {
 		
-		
-
-		echo "<br/>";
 		echo "<div id='select_areas'>";
-		echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Área</span>". form::select('area',$objs,$area,array("id"=>"area"))."</div>";
-		echo "<div class='input-group input-group-lg second'> <span class='input-group-addon'>Setores</span>". form::select('setor',null,null,array("id"=>"setor"))."</div>";
+		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Área</span>". form::select('area',$objs,$area,array("id"=>"area"))."</div>";
+		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Setores</span>". form::select('setor',null,null,array("id"=>"setor"))."</div>";
 		echo "</div>";
 ?>
 
@@ -27,7 +24,7 @@
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>
@@ -106,10 +103,14 @@
 				    	colunas += "<td>"+equipamento["Equipamento"]+"</td>";
 				    	colunas += "<td>"+equipamento["TipoEquipamento"]+"</td>";				    	
 				    	colunas += "<td><div class='btn-group btn-group-lg'>";
-				    	colunas += "<a href='<?php echo site::baseUrl() ?>empresas/edit_equipamentos/"+equipamento["CodEquipamento"]+"/"+equipamento["codSetor"]+"/"+area+"' class='btn btn-info'>EDITAR</a>";
-						colunas += "<button type='button' class='btn btn-danger' id='ask_"+equipamento["CodEquipamento"]+"' onclick='askDelete(\""+cod+"\")'>REMOVER</button>";
-						colunas += "<button type='button' class='btn btn-success confirm_hidden' id='confirm_"+equipamento['CodEquipamento']+"' onclick='deleteRow(\""+cod+"\")'>S</button>";						
-						colunas += "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_"+equipamento['CodEquipamento']+"' onclick='askDelete(\""+cod+"\")'>N</button>";						
+				    	<?php if(site::isGrant(array('edit_equipamentos'))) { ?>			
+				    		colunas += "<a href='<?php echo site::baseUrl() ?>empresas/edit_equipamentos/"+equipamento["CodEquipamento"]+"/"+equipamento["codSetor"]+"/"+area+"' class='btn btn-info'>EDITAR</a>";
+				    	<?php } ?>
+				    	<?php if(site::isGrant(array('remove_equipamentos'))) { ?>	
+							colunas += "<button type='button' class='btn btn-danger' id='ask_"+equipamento["CodEquipamento"]+"' onclick='askDelete(\""+cod+"\")'>REMOVER</button>";
+							colunas += "<button type='button' class='btn btn-success confirm_hidden' id='confirm_"+equipamento['CodEquipamento']+"' onclick='deleteRow(\""+cod+"\")'>S</button>";						
+							colunas += "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_"+equipamento['CodEquipamento']+"' onclick='askDelete(\""+cod+"\")'>N</button>";						
+						<?php } ?>
 						colunas += "</div></td></tr>";
 				   		$(".footable tbody").append(colunas);				    	
 					}
@@ -135,4 +136,4 @@
 </script>
 
 
-<?php echo site::generateDelete('Equipamento'); ?>
+<?php if(site::isGrant(array('remove_empresas'))) echo site::generateDelete('Equipamento'); ?>

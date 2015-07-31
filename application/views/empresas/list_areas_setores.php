@@ -8,38 +8,48 @@
   <div class="panel-heading"><h3>Áreas</h3></div>
   <div class="panel-body">
    <?php 
-        echo form::open("empresas/save_areas",array('id' => "form_save_area"));
-            echo form::hidden("Empresa",$empresa);  
-            echo form::hidden("id",null);              
-            echo '<div class="row">';
-                echo '<div class="col-lg-6">';
-                    echo '<div class="input-group">';
-                        echo form::input("Area",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome' ));
-                        echo '<span class="input-group-btn">';                        
-                        echo form::submit('submit', "+",array('class' => 'btn btn-default btn_area input-lg') );                     
-                        echo '</span>';
+        if(site::isGrant(array('add_areas') ) )  
+        {
+            echo form::open("empresas/save_areas",array('id' => "form_save_area"));
+                echo form::hidden("Empresa",$empresa);  
+                echo form::hidden("id",null);              
+                echo '<div class="row">';
+                    echo '<div class="col-lg-6">';
+                        echo '<div class="input-group">';
+                            echo form::input("Area",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome' ));
+                            echo '<span class="input-group-btn">';   
+                                                
+                                echo form::submit('submit', "+",array('class' => 'btn btn-success input-lg') );                     
+                            echo '</span>';
+                        echo '</div>';
                     echo '</div>';
-                echo '</div>';
-            echo '</div>';          
-        echo form::close();
-
+                echo '</div>';          
+            echo form::close();
+        }
    ?>
    <?php
-
-        echo form::open("empresas/save_areas",array('id' => "form_altera_area"));    
-            echo form::hidden("Empresa",$empresa);       
-            echo form::hidden("id",null);          
-            echo '<div class="row">';
-                echo '<div class="col-lg-6">';
-                    echo '<div class="input-group">';
-                        echo form::input("Area",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
-                        echo '<span class="input-group-btn">';
-                        echo form::submit('submit', "Alterar", array('class' => 'btn btn-default btn_area btn_alterar input-lg' ));                                        
-                        echo '</span>';
+        if(site::isGrant(array('edit_areas') ) )  
+        {
+            echo form::open("empresas/save_areas",array('id' => "form_altera_area"));    
+                echo form::hidden("Empresa",$empresa);       
+                echo form::hidden("id",null);          
+                echo '<div class="row">';
+                    echo '<div class="col-lg-6">';
+                        echo '<div class="input-group btn-group row_edit_areassetores">';
+                            echo form::input("Area",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
+                            echo '<span class="input-group-btn">';
+                            echo form::submit('submit', "Alterar", array('class' => 'btn btn-info input-lg btn_alterar_areassetores' ));
+                            if(site::isGrant(array('remove_areas'))){
+                                echo "<button type='button' class='btn btn-danger btn-sm ask_btn_area' id='ask_area' onclick='askDelete()'>REMOVER</button>";                                        
+                                echo "<button type='button' class='btn btn-success btn-sm confirm_hidden confirm_area' id='confirm_area'>S</button>";                     
+                                echo "<button type='button' class='btn btn-danger btn-sm confirm_hidden cancel_area' id='cancel_area'>N</button>";                       
+                            }
+                            echo '</span>';
+                        echo '</div>';
                     echo '</div>';
-                echo '</div>';
-            echo '</div>';          
-        echo form::close();
+                echo '</div>';          
+            echo form::close();
+        }
 
    ?>
    <div class="list-group" id='lista_areas'> 
@@ -62,39 +72,47 @@
   <div class="panel-heading"><h3>Setores</h3></div>
   <div class="panel-body">
     <?php
-
-        echo form::open("empresas/save_setores",array('id' => "form_save_setor"));
-            echo form::hidden("Area",null); 
-            echo form::hidden("id",null);   
-            echo '<div class="row">';
-                echo '<div class="col-lg-6">';
-                    echo '<div class="input-group">';
-                        echo form::input("Setor",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome', 'disabled' => 'disabled' ));
-                        echo '<span class="input-group-btn">';
-                        echo form::submit('submit', "+", array('class' => 'btn btn-default btn_area input-lg' ,'disabled' => 'disabled'));
-                        echo '</span>';
+        if(site::isGrant(array('add_setores') ) )  
+        {
+            echo form::open("empresas/save_setores",array('id' => "form_save_setor"));
+                echo form::hidden("Area",null); 
+                echo form::hidden("id",null);   
+                echo '<div class="row">';
+                    echo '<div class="col-lg-6">';
+                        echo '<div class="input-group">';
+                            echo form::input("Setor",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome', 'disabled' => 'disabled' ));
+                            echo '<span class="input-group-btn">';
+                            echo form::submit('submit', "+", array('class' => 'btn btn-success input-lg' ,'disabled' => 'disabled'));
+                            echo '</span>';
+                        echo '</div>';
                     echo '</div>';
-                echo '</div>';
-            echo '</div>';          
-        echo form::close();
-
+                echo '</div>';          
+            echo form::close();
+        }
    ?>
    <?php
-
-        echo form::open("empresas/save_setores",array('id' => "form_altera_setor"));
-            echo form::hidden("Area",null); 
-            echo form::hidden("id",null);   
-            echo '<div class="row">';
-                echo '<div class="col-lg-6">';
-                    echo '<div class="input-group">';
-                        echo form::input("Setor",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
-                        echo '<span class="input-group-btn">';
-                        echo form::submit('submit', "Alterar",array('class' => 'btn btn-default btn_area input-lg') );
-                        echo '</span>';
+        if(site::isGrant(array('edit_setores') ) )  
+        {
+            echo form::open("empresas/save_setores",array('id' => "form_altera_setor"));
+                echo form::hidden("Area",null); 
+                echo form::hidden("id",null);   
+                echo '<div class="row">';
+                    echo '<div class="col-lg-6">';
+                        echo '<div class="input-group row_edit_areassetores">';
+                            echo form::input("Setor",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
+                            echo '<span class="input-group-btn">';
+                            echo form::submit('submit', "Alterar",array('class' => 'btn btn-info input-lg btn_alterar_areassetores') );
+                             if(site::isGrant(array('remove_setores'))){
+                                echo "<button type='button' class='btn btn-danger btn-sm ask_btn_setor' id='ask_setor' onclick='askDelete()'>REMOVER</button>";                                        
+                                echo "<button type='button' class='btn btn-success btn-sm confirm_hidden confirm_setor' id='confirm_setor'>S</button>";                     
+                                echo "<button type='button' class='btn btn-danger btn-sm confirm_hidden cancel_setor' id='cancel_setor'>N</button>";                       
+                            }
+                            echo '</span>';
+                        echo '</div>';
                     echo '</div>';
-                echo '</div>';
-            echo '</div>';          
-        echo form::close();
+                echo '</div>';          
+            echo form::close();
+        }
 
    ?>
    <div class="list-group" id='lista_setores'> 
@@ -189,6 +207,12 @@
         $("#form_altera_area input[name='Area']").val( $("#area_"+a).attr("name") ); // coloca o nome da area no form para a ediçao
         $("#form_altera_area input[name='id']").val(a); // coloca o id da area no campo hidden
         $("#form_altera_setor input[name='Area']").val(a);
+        $('.ask_btn_area').attr('onclick','askDelete("'+a+'")');
+        $('.ask_btn_area').attr('id','ask_'+a);
+        $('.confirm_area').attr('id','confirm_'+a);
+        $('.confirm_area').attr('onclick','deleteRowArea("'+a+'")');
+        $('.cancel_area').attr('id','cancel_'+a);
+        $('.cancel_area').attr('onclick','askDelete("'+a+'")');
 
         $("#form_save_setor input[name='Setor']").prop("disabled",false); //habilita os botoes do form
         $("#form_save_setor input[type='submit']").prop("disabled",false);
@@ -207,10 +231,16 @@
     function edita_setor(s)
     {
 
-          $("#form_altera_setor").slideDown(); 
-          $("#form_altera_setor input[name='Setor']").val($("#setor_"+s).attr("name") ); 
-          $("#form_altera_setor input[name='id']").val(s); // coloca o id da area no campo hidden
-     
+        $("#form_altera_setor").slideDown(); 
+        $("#form_altera_setor input[name='Setor']").val($("#setor_"+s).attr("name") ); 
+        $("#form_altera_setor input[name='id']").val(s); // coloca o id da area no campo hidden
+        $('.ask_btn_setor').attr('onclick','askDelete("'+s+'")');
+        $('.ask_btn_setor').attr('id','ask_'+s);
+        $('.confirm_setor').attr('id','confirm_'+s);
+        $('.confirm_setor').attr('onclick','deleteRowSetor("'+s+'")');
+        $('.cancel_setor').attr('id','cancel_'+s);
+        $('.cancel_setor').attr('onclick','askDelete("'+s+'")');
+
     }
 
     $( "#form_altera_setor" ).submit(function( event ) {
@@ -266,3 +296,37 @@
     
 
 </script>
+
+<script type="text/javascript">
+            function deleteRowArea(id)
+            {
+                $.ajax({
+                    url : '/masterpred/index.php/welcome/delete',
+                    type: 'POST',  
+                    data: { id: id,class:'Area',cache:'areas_setores'},
+                    success : function(data) {
+                        if(data == 1)   
+                        {      
+                            $('#area_'+id).slideUp(); 
+                            $("#form_altera_area").slideUp(); 
+                            askDelete(id);
+                        }
+                    }
+                });
+            }
+            function deleteRowSetor(id)
+            {
+                $.ajax({
+                    url : '/masterpred/index.php/welcome/delete',
+                    type: 'POST',  
+                    data: { id: id,class:'Setor',cache:'areas_setores'},
+                    success : function(data) {
+                        if(data == 1)   
+                        {      
+                            $('#setor_'+id).slideUp(); 
+                             $("#form_altera_setor").slideUp(); 
+                             askDelete(id);
+                        }
+                    }
+                });
+            }</script> 

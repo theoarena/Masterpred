@@ -37,7 +37,7 @@
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>

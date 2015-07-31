@@ -1,19 +1,26 @@
-<h1 id="btn_adicionar">		
+
+	<?php
+		echo "<div id='search_empresas_anainsp' class='inline'>";
+		echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+		echo '</div>';
+	?>		
+<h1 id="btn_adicionar" class="inline">		
 			<?php 
 				if(site::selected_empresaatual())
 				{
-					echo html::anchor(site::segment(1)."/edit_".site::segment("empresas")."_novo","Adicionar +", array("class" => "label label-success" ));
+					echo html::anchor(site::segment(1)."/edit_".site::segment("empresas")."_novo"," +", array("class" => "label-success btn" ));
 					
-					echo "<a href='javascript:void(0)' class='label label-primary' id='btn_transferir' onclick='confirmar()'>Transferir</a>";
-					echo "<a href='javascript:void(0)' class='label label-danger' id='btn_nao' onclick='confirmar()'>Cancelar</a>";
-					echo "<a href='javascript:void(0)' class='label label-primary' id='btn_sim' onclick='transferir()'>Confirmar</a>";
-					echo "<a href='javascript:void(0)' class='label label-warning' id='btn_limpar' onclick='confirmar_limpar()'>Apagar todos</a>";
-					echo "<a href='javascript:void(0)' class='label label-danger' id='btn_nao_limpar' onclick='confirmar_limpar()'>Cancelar</a>";
-					echo "<a href='javascript:void(0)' class='label label-primary' id='btn_sim_limpar' onclick='limpar()'>Confirmar</a>";
-				
+					echo "<a href='javascript:void(0)' class='btn label-primary' id='btn_transferir' onclick='confirmar()'>Transferir</a>";
+					echo "<a href='javascript:void(0)' class='btn label-danger' id='btn_nao' onclick='confirmar()'>Cancelar</a>";
+					echo "<a href='javascript:void(0)' class='btn label-primary' id='btn_sim' onclick='transferir()'>Confirmar</a>";
+					echo "<a href='javascript:void(0)' class='btn label-warning' id='btn_limpar' onclick='confirmar_limpar()'>Apagar todos</a>";
+					echo "<a href='javascript:void(0)' class='btn label-danger' id='btn_nao_limpar' onclick='confirmar_limpar()'>Cancelar</a>";
+					echo "<a href='javascript:void(0)' class='btn label-primary' id='btn_sim_limpar' onclick='limpar()'>Confirmar</a>";
+					
 				}
 			?>
 		</h1>
+		
 		
 	<div class="alert alert-danger alert-dismissable naotemrisco">	 	
 		Não é possível analisar este item, <strong>ele não está definido como risco.</strong>  
@@ -26,7 +33,7 @@
 
 	if(count($objs) > 0) 
 	{ //se há rotas cadastradas nessa empresa
-		echo '<table class="footable table" data-page-navigation=".pagination">';
+		echo '<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>';
 			echo '<thead>';
 				echo '<tr>';
 					echo "<th id='col_id' data-type='numeric' data-sort-initial='true'><h3>".site::getTituloCampos('codigo')."</h3></th>";
@@ -68,10 +75,11 @@
 							echo "</td>";
 							echo "<td><div class='btn-group btn-group-lg'>";
 								echo form::hidden("inspecao_".$o->CodEquipamentoInspAnalise,$condicoes[ ($o->Condicao!=null)?($o->Condicao):0 ]);
-								echo "<button type='button' id='analise_".$o->CodEquipamentoInspAnalise."' class='btn btn-info' onclick=\"linkinspecao('".$o->CodEquipamentoInspAnalise."')\" >ANÁLISE</button>";								
-								echo "<button type='button' id='duplicar_".$o->CodEquipamentoInspAnalise."' class='btn btn-primary' onclick=\"duplicarinspecao('".$o->CodEquipamentoInspAnalise."')\" >+</button>";								
-								echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>REMOVER</button>";
-
+								echo '<div id="first_edit_row">';
+									echo "<button type='button' id='analise_".$o->CodEquipamentoInspAnalise."' class='btn btn-info btn_plusa' onclick=\"linkinspecao('".$o->CodEquipamentoInspAnalise."')\" >+A</button>";								
+									echo "<button type='button' id='duplicar_".$o->CodEquipamentoInspAnalise."' class='btn btn-primary btn_plusl' onclick=\"duplicarinspecao('".$o->CodEquipamentoInspAnalise."')\" >+L</button>";								
+								echo '</div>';
+								echo "<button type='button' class='btn btn-danger btn_removeanalise' id='ask_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>REMOVER</button>";								
 								echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEquipamentoInspAnalise."' onclick='deleteRow(\"$o->CodEquipamentoInspAnalise\")'>S</button>";														
 								echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>N</button>";						
 							echo "</div></td>";
@@ -84,7 +92,7 @@
 		?>
 			<tfoot class="hide-if-no-paging">
 				<tr>
-					<td colspan="5">
+					<td colspan="100">
 						<ul class="pagination pagination-centered"></ul>
 					</td>
 				</tr>
@@ -106,6 +114,11 @@
 
 	$(function () {
 	    $('.footable').footable();
+
+	      $('#campobusca').change(function(){
+	    		var footableFilter = $('.footable').data('footable-filter');			  
+			    footableFilter.filter($(this).val());
+	    });
 
 	    var qtd = $('.item_insp').length;
 	    if(qtd == 0)	
@@ -142,6 +155,8 @@
 		 $('#btn_transferir').toggle();
 		 $('#btn_sim').toggle();
 		 $('#btn_nao').toggle();
+		 $('#btn_sim').toggleClass('confirm_margin');
+		 $('#btn_nao').toggleClass('confirm_margin');
 	}
 
 	function confirmar_limpar()
@@ -149,6 +164,8 @@
 		 $('#btn_limpar').toggle();
 		 $('#btn_sim_limpar').toggle();
 		 $('#btn_nao_limpar').toggle();
+		 $('#btn_sim_limpar').toggleClass('confirm_margin');
+		 $('#btn_nao_limpar').toggleClass('confirm_margin');
 	}
 
 	function limpar()

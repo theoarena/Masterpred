@@ -1,7 +1,7 @@
 <?php if(count($objs) > 0) { 
 
-echo "<div id='select_data' class='inline'>";
-	echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+	echo "<div id='search_empresas' class='inline'>";
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
 	echo '</div>';	
 ?>
 <table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca data-filter-minimum="1">
@@ -9,10 +9,10 @@ echo "<div id='select_data' class='inline'>";
 		<tr>
 			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>
 			<th><h3><?php echo site::getTituloCampos("nome"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("unidade"); ?></h3></th>
+			<th id='col_negocio'><h3><?php echo site::getTituloCampos("unidade"); ?></h3></th>
 			<th><h3><?php echo site::getTituloCampos("fabrica"); ?></h3></th>			
 			<th data-sort-ignore="true" id='col_actions'><h3><?php echo site::getTituloCampos("acoes"); ?></h3></th>		
-			<th data-sort-ignore="true" id='col_actions'><h3><?php echo site::getTituloCampos("ativada"); ?></h3></th>		
+			<th class="col_min" data-sort-ignore="true"><h3><?php echo site::getTituloCampos("ativada"); ?></h3></th>		
 		</tr>
 	</thead>
 	<tbody>
@@ -25,11 +25,15 @@ echo "<div id='select_data' class='inline'>";
 					echo "<td>".$o->Unidade."</td>";
 					echo "<td>".$o->Fabrica."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
-						echo html::anchor("empresas/edit_empresas/".$o->CodEmpresa,"EDITAR", array("class"=>"btn btn-info"));						
-						echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodEmpresa."' onclick='askDelete(\"$o->CodEmpresa\")'>REMOVER</button>";
+						if(site::isGrant(array('edit_empresas')))
+							echo html::anchor("empresas/edit_empresas/".$o->CodEmpresa,"EDITAR", array("class"=>"btn btn-info"));						
 
-						echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEmpresa."' onclick='deleteRow(\"$o->CodEmpresa\")'>S</button>";						
-						echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEmpresa."' onclick='askDelete(\"$o->CodEmpresa\")'>N</button>";						
+						if(site::isGrant(array('remove_empresas')))
+						{
+							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodEmpresa."' onclick='askDelete(\"$o->CodEmpresa\")'>REMOVER</button>";
+							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEmpresa."' onclick='deleteRow(\"$o->CodEmpresa\")'>S</button>";						
+							echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEmpresa."' onclick='askDelete(\"$o->CodEmpresa\")'>N</button>";						
+						}
 					echo "</div></td>";
 					echo "<td> <button type='button' id='ativarempresa_".$o->CodEmpresa."' class='btn btn-danger btn_ativada ".$ativada."' onclick='toggle_empresas(\"$o->CodEmpresa\",\"$o->Empresa\")' /></button></td>";
 				echo "</tr>";
@@ -38,7 +42,7 @@ echo "<div id='select_data' class='inline'>";
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>
@@ -78,4 +82,4 @@ echo "<div id='select_data' class='inline'>";
 </script>
 
 
-<?php echo site::generateDelete('Empresa'); ?>
+<?php if(site::isGrant(array('remove_empresas'))) echo site::generateDelete('Empresa'); ?>

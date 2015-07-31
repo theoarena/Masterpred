@@ -56,12 +56,12 @@ class Controller_Front extends Controller {
 			$role = 1;		
 
 			if ($user->save() AND $user->add('roles', $role) ) 
-				HTTP::redirect('front/novo?sucesso=1');	
+				HTTP::redirect('front/cadastro?sucesso=1');	
 			else
-				HTTP::redirect('front/novo?erro=1');
+				HTTP::redirect('front/cadastro?erro=1');
 		}
 		else
-			HTTP::redirect('front/novo?erro=2');
+			HTTP::redirect('front/cadastro?erro=2');
 	}
 
 	public function action_login()
@@ -84,14 +84,14 @@ class Controller_Front extends Controller {
 		else
 		{			
 			$roles = $user->roles->find_all()->as_array('id','name');
-			unset($roles[1]);// tira a role LOGIN e pega só a outra		
-			$privileges =  $user->roles->privileges->find_all()->as_array('id','name');
-			$privileges_str = implode('_',$privileges);
-			
+			unset($roles[1]);// tira a role LOGIN e pega só a outra				
+			$ar = array_keys($roles);
+			$role = ORM::factory('Role', $ar[0]);	//melhorar isso
+					
 			//mudar pra cache???	
-			Session::instance()->set('usuario_roles', implode('',$roles) );
+			Session::instance()->set('usuario_roles', implode('',$roles) ); //melhorar isso
 			Session::instance()->set('usuario_system', $user->system ) ;
-			Session::instance()->set('usuario_privileges', $privileges_str);
+			Session::instance()->set('usuario_privileges', $user->get_privileges() );
 		
 			if( $user->termos != 0)
 				HTTP::redirect('welcome/index'); //logou =)					

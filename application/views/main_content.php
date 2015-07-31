@@ -1,5 +1,5 @@
-<h1 class="pull-left">
-	<?php echo site::getTituloMae(1); ?> <span class="label label-default"><?php echo site::getTituloInterna(2); ?></span>	
+<h1 class="pull-left ">
+	<?php echo site::getTituloInterna(2); ?> <small><?php echo site::getTituloTipo(1); ?></small>	
 </h1>
 
 <section id='list' class='Content'>			
@@ -39,13 +39,13 @@
 	if( !site::segment_has(2,'edit') && $show_add_link) { 
 	?>
 		<h1 id="btn_adicionar" class="inline">		
-			<?php echo html::anchor(site::segment(1)."/edit_".site::segment(2)."".$plus_add_link,"Adicionar +", array("class" => "label label-success" )); ?>
+			<?php echo html::anchor(site::segment(1)."/edit_".site::segment(2)."".$plus_add_link,"+", array('class' => 'label-success btn' )); ?>
 		</h1>
 	<?php
 	}
 	
 	if(site::segment_has(2,'edit') && $show_back_link)
-		echo '<h1>'.html::anchor(site::segment(1)."/".site::segment_get(2,1)."".$plus_back_link,"Voltar", array("class" => "label label-warning" )).'</h1>';
+		echo html::anchor(site::segment(1)."/".site::segment_get(2,1)."".$plus_back_link,"Voltar", array('class' => 'label-warning btn' ,'id'=>'btn_voltar'));
 	
 	 echo $conteudo; //conteudo da página interna ?> 
 </section>
@@ -57,6 +57,14 @@ $( document ).ready(function() {
 
 	$('button.close').click(function(){
 		$(this).parent().fadeOut('slow');
+	});
+
+	//talvez seja meio lerdo, mas ok
+	$('#col_actions').hide();
+	$('table.footable tbody .btn-group-lg').each(function(){
+		if( $(this).html() != '' )
+			$('#col_actions').show();
+
 	});
 });
 

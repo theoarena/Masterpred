@@ -62,12 +62,20 @@ class Model_User extends Model_Auth_User {
 		return true;
 	}
 
-	public function get_privileges()
+	public function get_privileges($return=true)
 	{
-		$role = $this->roles->find_all();
-		$role = $role[1]; //pega só a role que nao é LOGIN
-		$privileges = $role->privileges->find_all()->as_array('id','name');		
-		return $privileges;
+		if(Session::instance()->get('usuario_privileges',false))
+			return Session::instance()->get('usuario_privileges');
+		else
+		{		
+			$role = $this->roles->find_all();
+			$role = $role[1]; //pega só a role que nao é LOGIN
+			$privileges =  $role->privileges->find_all()->as_array('id','name');
+			$privileges_str = implode(',',$privileges);	
+			Session::instance()->set('usuario_privileges',$privileges_str);
+			if($return)
+				return $privileges_str;
+		}
 	}
 
 	function delete()

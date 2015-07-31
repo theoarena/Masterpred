@@ -2,6 +2,7 @@
   <h1>Olá, <?php echo $nome_usuario; ?></h1>
   <p>Bem Vindo ao Painel de Administração.</p>
 
+  <?php if(site::isGrant(array('access_usuarios_empresa'))) { ?>
 	<h2>Notificações</h2>
 	<div class="list-group">
 		<?php
@@ -19,7 +20,7 @@
 
 	 	?>	
 	</div>
-
+	<?php } ?>
 
  
 </div>

@@ -20,7 +20,8 @@
 	<?php
 		echo "<li id='home'>".html::anchor('', 'Home')."</li>";	
 		echo $tipo_menu;
-		echo "<li>".html::anchor('usuario/perfil', 'Minha conta' , array("class" => site::active("perfil",3,false,''), 'id' => 'perfil'  ) );
+		if(site::isGrant(array('edit_self_account')))	
+			echo "<li>".html::anchor('usuario/perfil', 'Minha conta' , array("class" => site::active("perfil",3,false,''), 'id' => 'perfil'  ) );
 		echo "<li id='logout'>".html::anchor('usuario/logout', 'Sair')."</li>";	
 	?>
 	</ul>

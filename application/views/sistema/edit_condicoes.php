@@ -1,4 +1,3 @@
-<h3>Cadastro <small>de condições</small></h3>
 <?php 
 	
 	echo form::open( site::segment(1)."/save_condicoes",array("id" => "form_edit" , 'enctype' => 'multipart/form-data' ) );	
@@ -25,7 +24,7 @@
 
 	echo "</div>";
 
-	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));
+	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn'));
 	
 	echo "</form>";
 	echo site::generateValidator(array('Condicao'=>'Nome da Condição','Funcao'=>"Função"));

@@ -1,5 +1,5 @@
 <h1 class="pull-left">
-	Minha <span class="label label-default">Conta</span>	
+	Meus dados
 </h1>
 
 <section id='list' class='Content'>			

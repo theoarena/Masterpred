@@ -2,20 +2,13 @@
 
 class Controller_Sistema extends Controller_Welcome {
 	
-	public $privileges_needed = array("access_sistema");
+	public $privileges_needed = array();// 'access_sistema' 
 	
-	public function before(){
-		parent::before();		
+	public function after(){
+		parent::after();
 
-		if(!site::checkPermissaoPagina($this->privileges_needed)) //se pode acessar a url
-			HTTP::redirect('avisos/denied');	
-		
-		//carregamento geral do cache
-	/*	if($view = Cache::instance()->get(site::segment(2), FALSE) )		
-		{
-			$this->template->content->conteudo = $view;	
-			$this->cached = true;
-		}*/
+		if(!site::isGrant($this->privileges_needed)) //se pode acessar a url
+			HTTP::redirect('avisos/denied');
 	}
 	//======================================================//
 	//==================CONDICOES=========================//
@@ -23,15 +16,19 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_condicoes() 
 	{	
-
+		$this->privileges_needed[] = 'access_condicoes';
 		$objs = ORM::factory("Condicao")->find_all();
 		$this->template->content->conteudo = View::factory("sistema/list_condicoes");					
-		$this->template->content->conteudo->objs = $objs;			
-		//print_r($objs);exit;
+		$this->template->content->conteudo->objs = $objs;	
+
+		if(!site::isGrant(array('add_condicoes')))
+			$this->template->content->show_add_link = false;					
 	}
 
 	public function action_edit_condicoes() //edit dos condicoes
 	{				
+		$this->privileges_needed[] = 'access_condicoes';
+		$this->privileges_needed[] = 'edit_condicoes';
 		$obj = ORM::factory("Condicao", site::segment("edit_condicoes",null) );
 		$tecnologias = ORM::factory("Tecnologia")->find_all()->as_array("CodTecnologia","Tecnologia");
 		$this->template->content->conteudo = View::factory("sistema/edit_condicoes");					
@@ -42,6 +39,7 @@ class Controller_Sistema extends Controller_Welcome {
 	
 	public function action_save_condicoes() //salvar novo e editar
 	{	
+		$this->privileges_needed[] = 'access_condicoes';
 		$obj = ORM::factory('Condicao',$this->request->post('CodCondicao' ));		
 		
 		$dir = Kohana::$config->load('config')->get('upload_directory_condicoes');
@@ -76,87 +74,57 @@ class Controller_Sistema extends Controller_Welcome {
 	//=====================================================
 
 	public function action_usuarios_sistema() //página principal dos usuarios
-	{			
+	{		
+		$this->privileges_needed[] = 'access_usuarios_sistema';	
 		$user = Auth::instance()->get_user();
 		$objs = ORM::factory('User')->where('system','=',1)->and_where('ativo','=',1)->and_where('id','!=',$user->id)->find_all();		
-		$this->template->content->conteudo = View::factory('sistema/list_usuarios');					
-		$this->template->content->conteudo->objs = $objs;			
+		$this->template->content->conteudo = View::factory('usuario/list_usuarios');					
+		$this->template->content->conteudo->tipo = 'sistema';	
+		$this->template->content->conteudo->link_edit = 'sistema/edit_usuarios_sistema';	
+		$this->template->content->conteudo->objs = $objs;	
+
 	}
 
 	public function action_edit_usuarios_sistema() //edit dos usuarios
 	{			
 		$obj = ORM::factory('User', site::segment('edit_usuarios_sistema',null) );
 		
-		$roles = ORM::factory('Role')->find_all()->as_array('id','name');		
+		$roles = ORM::factory('Role')->find_all()->as_array('id','nickname');		
 		unset($roles[1]);//tira a role LOGIN, já que ela é padrão
 
 		$roles_selecionadas = 1;
 		foreach ($obj->roles->find_all() as $r) 
 			$roles_selecionadas = $r->id;
 
-		$this->template->content->conteudo = View::factory('sistema/edit_usuarios');					
+		$this->template->content->conteudo = View::factory('usuario/edit_usuarios');
+		$this->template->content->conteudo->tipo = 'sistema';						
+		$this->template->content->conteudo->redir = 'usuarios_sistema';	
 		$this->template->content->conteudo->obj = $obj;	
 		$this->template->content->conteudo->roles = $roles;				
 		$this->template->content->conteudo->roles_selecionadas = $roles_selecionadas;				
 		$this->template->content->plus_back_link = '_sistema';	
 		$list = array();
 				
-	}
-	
-	public function action_save_usuarios_sistema() //salvar novo e editar
-	{			
-
-		$obj = ORM::factory('User',$this->request->post('id'));
-				
-		$obj->username = $this->request->post('username');					
-		$obj->ativo = $this->request->post('ativar');					
-		$obj->email = $this->request->post('email');					
-		$obj->nome = $this->request->post('nome');					
-		$obj->telefone = $this->request->post('telefone');
-		$obj->system = 1;
-		
-		$obj->nascimento = site::data_EN( $this->request->post('nascimento') );	
-
-		$password = null;
-		$password_email = '';
-
-		if($this->request->post('gerar_senha')==1) //se é pra alterar a senha	
-		{	
-			if($this->request->post('senha_aleatoria')==0)	
-				$password_email = $this->request->post('password');								
-			else			
-				$password_email = site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
-				
-			$obj->password = $password_email; 
-		}		
-			
-			
-		if ($obj->save()) 
-		{	
-			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');			
-						
-			HTTP::redirect('sistema/usuarios_sistema?sucesso=1');
-		}
-		else
-			HTTP::redirect('sistema/edit_usuarios_sistema?erro=1&Usuario='.$this->request->post('Usuario'));
-		
 	}	
-
+	
 	//======================================================//
 	//==================ROLES=========================//
 	//======================================================//	
 
 	public function action_roles() 
 	{		
+		$this->privileges_needed[] = 'access_roles';
 		$objs = ORM::factory('Role')->where('name','!=','login')->find_all();
 		$this->template->content->conteudo = View::factory('sistema/list_roles');					
-		$this->template->content->conteudo->objs = $objs;			
+		$this->template->content->conteudo->objs = $objs;
+
 	}
 
 	public function action_edit_roles() //edit dos grupos de acesso
-	{				
+	{		
+		$this->privileges_needed[] = 'access_roles';		
 		$obj = ORM::factory('Role', site::segment('edit_roles',null) );		
-		$privileges = ORM::factory('Privilege')->find_all();
+		$privileges = ORM::factory('Privilege')->order_by('ord','ASC')->find_all();
 		$privileges_selecionados = $obj->privileges->find_all()->as_array('id','name');
 		$this->template->content->conteudo = View::factory('sistema/edit_roles');												
 		$this->template->content->conteudo->privileges = $privileges;							
@@ -165,14 +133,18 @@ class Controller_Sistema extends Controller_Welcome {
 	}
 	
 	public function action_save_roles() //salvar as roles do usuario, atualizando os privilégios de cada uma
-	{	
+	{		
 		$obj = ORM::factory('Role',$this->request->post('id'));		
 	   
 		$obj->name = $this->request->post('name');				
 		$obj->description = $this->request->post('description');				
 		$obj->nickname = $this->request->post('nickname');				
+		$post = $this->request->post('privileges');
 
-		site::addORMRelation($obj, $obj->privileges,$this->request->post('privileges'),'privileges');
+		if($post == null)
+			$post = array();	
+		
+		site::addORMRelation($obj, $obj->privileges,$post,'privileges');
 
 		if ($obj->save()) 
 			HTTP::redirect('sistema/roles?sucesso=1');
@@ -220,14 +192,20 @@ class Controller_Sistema extends Controller_Welcome {
 	//======================================================//	
 
 	public function action_analistas() //página principal dos componentes
-	{			
+	{		
+		$this->privileges_needed[] = 'access_analistas';	
 		$objs = ORM::factory("Analista")->find_all();
 		$this->template->content->conteudo = View::factory("sistema/list_analistas");					
-		$this->template->content->conteudo->objs = $objs;			
+		$this->template->content->conteudo->objs = $objs;	
+
+		if(!site::isGrant(array('add_analistas')))
+			$this->template->content->show_add_link = false;			
 	}
 
 	public function action_edit_analistas() //edit dos analistas
 	{			
+		$this->privileges_needed[] = 'access_analistas';	
+		$this->privileges_needed[] = 'edit_analistas';	
 		$obj = ORM::factory("Analista", site::segment("edit_analistas",null) );
 		
 		$this->template->content->conteudo = View::factory("sistema/edit_analistas");					
@@ -255,6 +233,7 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_componentes() //página principal dos componentes
 	{			
+		$this->privileges_needed[] = 'access_componentes';	
 		if(!$this->cached)
 		{
 			$objs = ORM::factory("Componente")->find_all();
@@ -262,10 +241,14 @@ class Controller_Sistema extends Controller_Welcome {
 			$this->template->content->conteudo->objs = $objs;			
 			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
 		}
+		if(!site::isGrant(array('add_componentes')))
+			$this->template->content->show_add_link = false;
 	}
 
 	public function action_edit_componentes() //edit dos componentes
 	{			
+		$this->privileges_needed[] = 'access_componentes';	
+		$this->privileges_needed[] = 'edit_componentes';	
 		$obj = ORM::factory("Componente", site::segment("edit_componentes",null) );
 
 		$tecnologias = ORM::factory("Tecnologia")->find_all()->as_array('CodTecnologia', 'Tecnologia');
@@ -300,6 +283,7 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_anomalias() //página principal dos componentes
 	{			
+		$this->privileges_needed[] = 'access_anomalias';	
 		if(!$this->cached)
 		{
 			$objs = ORM::factory("anomalia")->find_all();
@@ -307,10 +291,14 @@ class Controller_Sistema extends Controller_Welcome {
 			$this->template->content->conteudo->objs = $objs;			
 			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
 		}
+		if(!site::isGrant(array('add_anomalias')))
+			$this->template->content->show_add_link = false;
 	}
 
 	public function action_edit_anomalias() //edit dos componentes
 	{			
+		$this->privileges_needed[] = 'access_anomalias';	
+		$this->privileges_needed[] = 'edit_anomalias';	
 		$obj = ORM::factory("anomalia", site::segment("edit_anomalias",null) );
 		$tecnologias = ORM::factory("Tecnologia")->find_all()->as_array('CodTecnologia', 'Tecnologia');;
 		$this->template->content->conteudo = View::factory("sistema/edit_anomalias");					
@@ -343,6 +331,8 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_recomendacoes() //página principal dos componentes
 	{						
+		$this->privileges_needed[] = 'access_recomendacoes';	
+
 		if(!$this->cached)
 		{
 			$objs = ORM::factory("recomendacao")->find_all();
@@ -350,10 +340,15 @@ class Controller_Sistema extends Controller_Welcome {
 			$this->template->content->conteudo->objs = $objs;			
 			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
 		}
+		if(!site::isGrant(array('add_recomendacoes')))
+			$this->template->content->show_add_link = false;
 	}
 
 	public function action_edit_recomendacoes() //edit dos componentes
 	{			
+		$this->privileges_needed[] = 'access_recomendacoes';	
+		$this->privileges_needed[] = 'edit_recomendacoes';	
+
 		$obj = ORM::factory("recomendacao", site::segment("edit_recomendacoes",null) );
 		$tecnologias = ORM::factory("Tecnologia")->find_all()->as_array('CodTecnologia', 'Tecnologia');;
 		$this->template->content->conteudo = View::factory("sistema/edit_recomendacoes");					
@@ -386,13 +381,21 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_tipoinspecao() //página principal dos componentes
 	{			
+		$this->privileges_needed[] = 'access_tipos_inspecao';	
+
 		$objs = ORM::factory("tipoinspecao")->find_all();
 		$this->template->content->conteudo = View::factory("sistema/list_tipoinspecao");					
-		$this->template->content->conteudo->objs = $objs;			
+		$this->template->content->conteudo->objs = $objs;
+
+		if(!site::isGrant(array('add_tipo_inspecao')))
+			$this->template->content->show_add_link = false;			
 	}
 
 	public function action_edit_tipoinspecao() //edit dos componentes
 	{			
+		$this->privileges_needed[] = 'access_tipos_inspecao';	
+		$this->privileges_needed[] = 'edit_tipos_inspecao';	
+
 		$obj = ORM::factory("tipoinspecao", site::segment("edit_tipoinspecao",null) );		
 		$this->template->content->conteudo = View::factory("sistema/edit_tipoinspecao");					
 		$this->template->content->conteudo->obj = $obj;				
@@ -420,17 +423,25 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_tipoequipamento() //página principal dos componentes
 	{			
+		$this->privileges_needed[] = 'access_tipos_equipamento';	
+
 		if(!$this->cached)
 		{
 			$objs = ORM::factory("TipoEquipamento")->find_all();
 			$this->template->content->conteudo = View::factory("sistema/list_tipoequipamento");					
 			$this->template->content->conteudo->objs = $objs;			
 			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
-		}				
+		}			
+
+		if(!site::isGrant(array('add_tipos_equipamento')))
+			$this->template->content->show_add_link = false;
 	}
 
 	public function action_edit_tipoequipamento() //edit dos tipoequipamento
 	{			
+		$this->privileges_needed[] = 'access_tipos_equipamento';	
+		$this->privileges_needed[] = 'edit_tipos_equipamento';	
+
 		$obj = ORM::factory("TipoEquipamento", site::segment("edit_tipoequipamento",null) );
 		
 		$this->template->content->conteudo = View::factory("sistema/edit_tipoequipamento");					
@@ -460,17 +471,23 @@ class Controller_Sistema extends Controller_Welcome {
 
 	public function action_tecnologias() //página principal dos componentes
 	{					
+		$this->privileges_needed[] = 'access_tecnologias';	
 		if(!$this->cached)
 		{
 			$objs = ORM::factory("tecnologia")->find_all();	
 			$this->template->content->conteudo = View::factory("sistema/list_tecnologias");					
 			$this->template->content->conteudo->objs = $objs;			
 			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
-		}			
+		}		
+		if(!site::isGrant(array('add_tecnologias')))
+			$this->template->content->show_add_link = false;	
 	}
 
 	public function action_edit_tecnologias() //edit dos componentes
 	{			
+		$this->privileges_needed[] = 'access_tecnologias';	
+		$this->privileges_needed[] = 'edit_tecnologias';	
+
 		$obj = ORM::factory("tecnologia", site::segment("edit_tecnologias",null) );
 
 		$this->template->content->conteudo = View::factory("sistema/edit_tecnologias");					

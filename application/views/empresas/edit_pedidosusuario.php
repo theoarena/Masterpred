@@ -1,25 +1,14 @@
 <link href="<?php echo site::mediaUrl(); ?>css/chosen.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo site::mediaUrl(); ?>js/chosen.js"></script>
 
-<h3>Análise <small>de usuários pendentes</small></h3>
-
 <?php 
 	
-    if($obj->obs != null)
-    { 
-       
-        echo "<div class='well'>";
-         echo "<h4>Comentários inseridos pelo usuário:</h4>";
-         echo $obj->obs;
-        echo "</p></div>";
-
-
-    }
+    
 	echo form::open( site::segment(1)."/save_pedidos_usuario",array("id" => "form_edit") );			
 	echo form::hidden("role[]",1);
     echo form::hidden("id",$obj->id); 
     echo "<label class='control checkbox chk_equip'>".form::checkbox('ativar',1, false )." <span class='checkbox-label'>Perfil ativado</span></label>";   
-    echo "<label class='control checkbox chk_equip'> ".form::checkbox('notificar',1, false )." <span class='checkbox-label'>Notificar automaticamente o usuário que seu perfil foi ativado.</span></label>";   
+    
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo de Usuário</span>". form::select('role[]',$roles,$roles_selecionadas, array('class' => 'form-control', 'id' => 'roles' )) ."</div>";      
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nome',$obj->nome, array('class' => 'form-control', 'maxlength' => '200', 'placeholder' => 'Nome completo')) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('email',$obj->email, array('class' => 'form-control', 'maxlength' => '127', 'placeholder' => 'Email' )) ."</div>";   
@@ -35,7 +24,7 @@
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>#</span>". form::input('password',null, array('class' => 'form-control', 'maxlength' => '8', 'placeholder' => 'Senha customizada')) ."</div>";      
    
 
-	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));       
+	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn'));       
 	
 	echo "</form>";
     echo site::generateValidator(array(

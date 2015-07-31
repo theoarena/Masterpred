@@ -22,11 +22,15 @@
 					echo "<td>".$o->CodRota."</td>";
 					echo "<td>".$o->Rota."</td>";				
 					echo "<td><div class='btn-group btn-group-lg'>";
-						echo html::anchor("empresas/edit_rotas/".$o->CodRota,"EDITAR", array("class"=>"btn btn-info"));						
-						echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodRota."' onclick='askDelete(\"$o->CodRota\")'>REMOVER</button>";
+						if(site::isGrant(array('edit_rotas')))
+							echo html::anchor("empresas/edit_rotas/".$o->CodRota,"EDITAR", array("class"=>"btn btn-info"));						
 
-						echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodRota."' onclick='deleteRow(\"$o->CodRota\")'>S</button>";						
-						echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodRota."' onclick='askDelete(\"$o->CodRota\")'>N</button>";						
+						if(site::isGrant(array('remove_rotas')))
+						{
+							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodRota."' onclick='askDelete(\"$o->CodRota\")'>REMOVER</button>";
+							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodRota."' onclick='deleteRow(\"$o->CodRota\")'>S</button>";						
+							echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodRota."' onclick='askDelete(\"$o->CodRota\")'>N</button>";						
+						}
 					echo "</div></td>";
 				echo "</tr>";
 			}	
@@ -34,7 +38,7 @@
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>
@@ -56,4 +60,4 @@
 
 </script>
 
-<?php echo site::generateDelete('Rota'); ?>
+<?php if(!site::isGrant(array('remove_rotas'))) echo site::generateDelete('Rota'); ?>

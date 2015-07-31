@@ -2,13 +2,14 @@
 
 class Controller_Empresas extends Controller_Welcome {
 	
-	public $privileges_needed = array("access_empresa");
+	public $privileges_needed = array();//"access_empresa"
 
-	public function before(){
-		parent::before();
+	public function after(){
+		parent::after();
 
-		if(!site::checkPermissaoPagina($this->privileges_needed)) //se pode acessar a url
+		if(!site::isGrant($this->privileges_needed)) //se pode acessar a url
 			HTTP::redirect('avisos/denied');
+	}
 
 		//carregamento geral do cache
 	/*	if($view = Cache::instance()->get(site::segment(2), FALSE) )		
@@ -16,7 +17,6 @@ class Controller_Empresas extends Controller_Welcome {
 			$this->template->content->conteudo = $view;	
 			$this->cached = true;
 		}					*/
-	}
 	
 	//======================================================//
 	//==================GRAU DE RISCO================================//
@@ -52,7 +52,7 @@ class Controller_Empresas extends Controller_Welcome {
 
 		$query = parse_url(URL::query());
 		$this->template->content->conteudo->query = ( isset($query["query"]) )?($query["query"]):("1=1");
-		$this->template->content->plus_back_link = '?'.( isset($query["query"]) )?($query["query"]):("1=1");	
+		$this->template->content->plus_back_link = ( isset($query["query"]) )?("?".$query["query"]):("");	
 	}
 
 	public function action_carrega_grausderisco() 
@@ -81,10 +81,10 @@ class Controller_Empresas extends Controller_Welcome {
 		
 		$objs->where('Data', 'BETWEEN', array($de, $ate));
 		// fazer select pra escolher só as que estao em emergencia
-		$objs->where("EquipamentoInspecionado.Tecnologia",'=',$this->request->post('tecnologia'));	
-		$objs->where("EquipamentoInspecionado.Empresa",'=',site::get_empresaatual());	
-		$objs->join('Condicao','LEFT')->on('Condicao.CodCondicao','=','EquipamentoInspecionado.Condicao');
-		$objs->where("Condicao.Emergencia",'=',1);
+		$objs->where("equipamentoinspecionado.Tecnologia",'=',$this->request->post('tecnologia'));	
+		$objs->where("equipamentoinspecionado.Empresa",'=',site::get_empresaatual());	
+		$objs->join('condicao','LEFT')->on('condicao.CodCondicao','=','equipamentoinspecionado.Condicao');
+		$objs->where("condicao.Emergencia",'=',1);
 			
 		$equip = $objs->find_all();
 		foreach ($equip as $equipamento) { //peguei os equip inspecionado
@@ -211,12 +211,11 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj = ORM::factory('AnaliseEquipamentoInspecionado', site::segment('edit_analiseinspecao',null));
 
 		$tecnologia = $obj->tecnologia; //pega a tecnologia que esta vinculada a esta analise
-		$componentes = $tecnologia->componentes->find_all()->as_array('CodComponente','Componente');
+		$componentes = $tecnologia->componentes->find_all()->as_array('CodComponente','Componente');		
 		$anomalias = $tecnologia->anomalias->find_all()->as_array('CodAnomalia','Anomalia');
 		$recomendacoes = $tecnologia->recomendacoes->find_all()->as_array('CodRecomendacao','Recomendacao');
 		
 		$this->template->content->conteudo = View::factory('empresas/edit_analiseinspecao');							
-		
 		$componentes[0] = Kohana::$config->load('config')->get('select_default'); 
 		$anomalias[0] = Kohana::$config->load('config')->get('select_default');
 		
@@ -330,7 +329,16 @@ class Controller_Empresas extends Controller_Welcome {
 			$gr->Detalhe = $item->Detalhe;
 			$gr->TemperaturaRef = $item->TemperaturaRef;
 			$gr->TemperaturaMed = $item->TemperaturaMed;
-			$gr->Obs = $item->Obs;			
+			$gr->Obs = $item->Obs;	
+
+			$gr->Ir = $item->Ir;
+			$gr->Is = $item->Is;
+			$gr->It = $item->It;
+			$gr->In = $item->In;
+			$gr->Vr = $item->Vr;
+			$gr->Vs = $item->Vs;
+			$gr->Vt = $item->Vt;
+			$gr->Vn = $item->Vn;		
 			//$gr->TipoInspecao = 1;			
 			$gr->save();
 
@@ -416,6 +424,7 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_empresas() //página principal dos empresas
 	{	
+		$this->privileges_needed[] = 'access_list_empresas';
 		if(!$this->cached)// se não há cache
 		{
 			$objs =ORM::factory('Empresa')->find_all();
@@ -424,14 +433,20 @@ class Controller_Empresas extends Controller_Welcome {
 
 			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());
 		}			
+
+		if(!site::isGrant(array('add_empresas')))
+			$this->template->content->show_add_link = false;	
 	}
 
 	public function action_edit_empresas() //edit dos empresas
 	{			
+		$this->privileges_needed[] = 'access_list_empresas';
+		$this->privileges_needed[] = 'edit_empresas';
+
 		$obj = ORM::factory('Empresa', site::segment('edit_empresas',null) );
 
 		$this->template->content->conteudo = View::factory('empresas/edit_empresas');					
-		$this->template->content->conteudo->obj = $obj;			
+		$this->template->content->conteudo->obj = $obj;	
 	}
 	
 	public function action_save_empresas() //salvar novo e editar
@@ -441,6 +456,11 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj->Empresa = $this->request->post('Empresa'); //nome da empresa
 		$obj->Unidade = $this->request->post('Unidade');				
 		$obj->Fabrica = $this->request->post('Fabrica');				
+		$obj->contato = $this->request->post('contato');				
+		$obj->cep = $this->request->post('cep');				
+		$obj->endereco = $this->request->post('endereco');				
+		$obj->departamento = $this->request->post('departamento');	
+					
 		Cache::instance()->delete('empresas');
 		
 		if ($obj->save()) 
@@ -467,14 +487,19 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_rotas() //página principal dos rotas
 	{			
+		$this->privileges_needed[] = 'access_rotas';
 		$objs = ORM::factory('Rota')->where('Empresa','=',site::get_empresaatual())->find_all();
 		
 		$this->template->content->conteudo = View::factory('empresas/list_rotas');					
 		$this->template->content->conteudo->objs = $objs;			
+
+		if(!site::isGrant(array('add_rotas')))
+			$this->template->content->show_add_link = false;	
 	}
 
 	public function action_edit_rotas() //edit dos rotas
 	{			
+		$this->privileges_needed[] = 'edit_rotas';
 		$obj = ORM::factory('Rota', site::segment('edit_rotas',null) );
 		$equipamentos_selecionados = $obj->equipamentos->find_all()->as_array('CodEquipamento','Equipamento');
 		//print_r($equipamentos_selecionados);exit;
@@ -512,15 +537,19 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_equipamentos() //página principal dos equipamentos
 	{					
+		$this->privileges_needed[] = 'access_equipamentos';
 		$this->template->content->conteudo = View::factory('empresas/list_equipamentos');					
 		$this->template->content->conteudo->objs = ORM::factory('Area')->where('Empresa','=',site::get_empresaatual())->find_all()->as_array('CodArea', 'Area');	//pega as areas		
 		$this->template->content->conteudo->area =  site::segment(3,null);	
-		$this->template->content->conteudo->setor =  site::segment(4,null);		
+		$this->template->content->conteudo->setor =  site::segment(4,null);	
+		if(!site::isGrant(array('add_equipamentos')))
+			$this->template->content->show_add_link = false;	
 
 	}
 
 	public function action_edit_equipamentos() //edit dos equipamentos
 	{			
+		$this->privileges_needed[] = 'edit_equipamentos';
 		$obj = ORM::factory('Equipamento', site::segment('edit_equipamentos',null) );
 		$tipo_equipamento = ORM::factory('TipoEquipamento')->find_all()->as_array('CodTipoEquipamento','TipoEquipamento');
 		
@@ -579,6 +608,7 @@ class Controller_Empresas extends Controller_Welcome {
 	
 	public function action_areas_setores() //página principal dos rotas
 	{			
+		$this->privileges_needed[] = 'access_areassetores';
 		$objs = ORM::factory('Area')->where('Empresa','=',site::get_empresaatual())->find_all();
 		
 		$this->template->content->conteudo = View::factory('empresas/list_areas_setores');					
@@ -660,13 +690,17 @@ class Controller_Empresas extends Controller_Welcome {
 	//=====================================================
 	public function action_usuarios() //página principal dos usuarios
 	{			
+		$this->privileges_needed[] = 'access_usuarios_empresa';
 		$empresa = ORM::factory('Empresa',site::get_empresaatual());		
-		$this->template->content->conteudo = View::factory('empresas/list_usuarios');					
-		$this->template->content->conteudo->objs = $empresa->where('ativo','=',1)->users->find_all();	//mostra só os usuários que estão ativos		
+		$this->template->content->conteudo = View::factory('usuario/list_usuarios');					
+		$this->template->content->conteudo->tipo = 'empresa';					
+		$this->template->content->conteudo->link_edit = 'empresas/edit_usuarios';									
+		$this->template->content->conteudo->objs = $empresa->users->where('ativo','=',1)->find_all();	//mostra só os usuários que estão ativos		
 	}
 
 	public function action_edit_usuarios() //edit dos usuarios
 	{			
+		$this->privileges_needed[] = 'access_usuarios_empresa';
 		$obj = ORM::factory('User', site::segment('edit_usuarios',null) );
 		
 		$array = array();
@@ -676,14 +710,16 @@ class Controller_Empresas extends Controller_Welcome {
 		if(sizeof($array) == 0) //se nao tiver nenhuma, deixa a empresa atual como já selecionada
 			$array[] = site::get_empresaatual();
 
-		$roles = ORM::factory('Role')->find_all()->as_array('id','name');		
+		$roles = ORM::factory('Role')->find_all()->as_array('id','nickname');		
 		unset($roles[1]);//tira a role LOGIN, já que ela é padrão
 
 		$roles_selecionadas = 1;
 		foreach ($obj->roles->find_all() as $r) 
 			$roles_selecionadas = $r->id;
 
-		$this->template->content->conteudo = View::factory('empresas/edit_usuarios');					
+		$this->template->content->conteudo = View::factory('usuario/edit_usuarios');	
+		$this->template->content->conteudo->redir = 'usuarios';	
+		$this->template->content->conteudo->tipo = 'empresa';					
 		$this->template->content->conteudo->obj = $obj;	
 		$this->template->content->conteudo->roles = $roles;				
 		$this->template->content->conteudo->roles_selecionadas = $roles_selecionadas;				
@@ -695,59 +731,6 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo->empresas = $list;				
 	}
 	
-	public function action_save_usuarios() //salvar novo e editar
-	{			
-
-		$obj = ORM::factory('User',$this->request->post('id'));
-				
-		$obj->username = $this->request->post('username');					
-		$obj->ativo = $this->request->post('ativar');					
-		$obj->email = $this->request->post('email');					
-		$obj->nome = $this->request->post('nome');					
-		$obj->telefone = $this->request->post('telefone');
-		
-		$obj->nascimento = site::data_EN( $this->request->post('nascimento') );	
-
-		$password = null;
-		$password_email = '';
-
-		if($this->request->post('gerar_senha')==1) //se é pra alterar a senha	
-		{	
-			if($this->request->post('senha_aleatoria')==0)	
-				$password_email = $this->request->post('password');								
-			else			
-				$password_email = site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
-				
-			$obj->password = $password_email; 
-		}		
-				
-		/*
-			Atualmente, se o usuario desmarcar a caixa de seleção de senha aleatória
-			ou se nao marcar pra atribuir nova senha (desmarcar), vai dar problema
-			uma vez que espera-se que sempre venha a senha para ser salva no BD.
-		*/
-
-		try{
-
-			$obj->save();
-			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');
-			site::addORMRelation($obj, $obj->empresas,$this->request->post('lista_empresas'),'empresas');
-
-			$e=2; //2 é sem ação
-			if($this->request->post('notificar')==1)			
-				$e = enviaEmail::aviso_usuarioAtivado($obj,$password_email); //enviar o email de aviso 
-			
-			HTTP::redirect('empresas/usuarios?sucesso=1&enviado='.$e);
-		}
-	    catch (ORM_Validation_Exception $e)
-	    {		    	
-	        $errors = site::handleErrors($e->errors('models'));				           
-	        HTTP::redirect('empresas/edit_usuarios/'.$obj->id.'?erro=1&error_info='.$errors);
-	    }
-	
-	}
-
-	
 	//======================================================
 	//======================================================
 
@@ -758,14 +741,18 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_pedidos_usuario() //página principal dos usuarios
 	{			
+		$this->privileges_needed[] = 'access_usuarios_empresa';
 		$objs = ORM::factory('User')->where('ativo','=',0)->find_all();		
-		$this->template->content->conteudo = View::factory('empresas/list_pedidosusuario');					
+		$this->template->content->conteudo = View::factory('usuario/list_usuarios');	
+		$this->template->content->conteudo->tipo = 'pendente';					
+		$this->template->content->conteudo->link_edit = 'empresas/edit_pedidos_usuario';					
 		$this->template->content->conteudo->objs = $objs;	
 		$this->template->content->show_add_link = false;				
 	}
 
 	public function action_edit_pedidos_usuario() //edit dos usuarios
 	{			
+		$this->privileges_needed[] = 'access_usuarios_empresa';
 		$this->template->content->plus_back_link = '_usuario';		
 
 		$obj = ORM::factory('User', site::segment('edit_pedidos_usuario',null) );
@@ -780,7 +767,9 @@ class Controller_Empresas extends Controller_Welcome {
 		foreach ($obj->roles->find_all() as $r) 
 			$roles_selecionadas = $r->id;
 
-		$this->template->content->conteudo = View::factory('empresas/edit_pedidosusuario');					
+		$this->template->content->conteudo = View::factory('usuario/edit_usuarios');	
+		$this->template->content->conteudo->redir = 'pedidos_usuario';		
+		$this->template->content->conteudo->tipo = 'pendente';					
 		$this->template->content->conteudo->obj = $obj;				
 		$this->template->content->conteudo->roles = $roles;				
 		$this->template->content->conteudo->roles_selecionadas = $roles_selecionadas;				
@@ -793,50 +782,6 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo->empresas = $list;				
 	}
 	
-	public function action_save_pedidos_usuario() //salvar novo e editar
-	{	
-		//print_r($this->request->post('role') );exit;
-		$obj = ORM::factory('User',$this->request->post('id'));		
-		$obj->username = $this->request->post('username');					
-		$obj->email = $this->request->post('email');					
-		$obj->nome = $this->request->post('nome');					
-		$obj->telefone = $this->request->post('telefone');											
-		$obj->nascimento = site::data_EN($this->request->post('nascimento'));	
-		$obj->ativo = $this->request->post('ativar');
-		
-		$password = null;
-		$password_email = '';
-		
-		if($this->request->post('gerar_senha')==1) //se é pra alterar a senha	
-		{	
-			if($this->request->post('senha_aleatoria')==0)	
-				$password_email = $this->request->post('password');								
-			else			
-				$password_email = site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
-				
-			$obj->password = $password_email; 
-		}		
-
-		try{
-
-			$obj->save();
-			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');
-			site::addORMRelation($obj, $obj->empresas,$this->request->post('lista_empresas'),'empresas');
-
-			$e=2; //2 é sem ação
-			if($this->request->post('notificar')==1)			
-				$e = enviaEmail::aviso_usuarioAtivado($obj,$password_email); //enviar o email de aviso 
-			
-			Session::instance()->delete('qtd_usuarios'); //reinicia o contador de usuários pendentes
-			HTTP::redirect('empresas/pedidos_usuario?sucesso=1&enviado='.$e);
-		}
-	    catch (ORM_Validation_Exception $e)
-	    {		    	
-	        $errors = site::handleErrors($e->errors('models'));				           
-	        HTTP::redirect('empresas/edit_pedidos_usuario/'.$obj->id.'?erro=1&error_info='.$errors);
-	    }	
-		
-	}
 
 	//session::instance()->delete('qtd_usuarios');	
 		

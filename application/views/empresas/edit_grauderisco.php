@@ -1,5 +1,3 @@
-<h1>Grau de risco</h1>
-
 <?php 
 
     $equip = $obj->equipamentoinspecionado;	
@@ -41,7 +39,7 @@
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Recomendação</span>". form::textarea('Recomendacao',$obj->Recomendacao, array('class' => 'form-control', 'placeholder' => 'Recomendação')) ."</div>";     
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Observação</span>". form::textarea('Obs',$obj->Obs, array('class' => 'form-control', 'placeholder' =>'Observações')) ."</div>";  
     
-    echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));       
+    echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn'));       
     echo "</div>";
 
     echo "<div id='right_grauderisco'>";
@@ -100,7 +98,6 @@
 
     function changeValores()
     {
-
         var carga  = ( ( ( Number($('input[name=Ir]').val()) + Number($('input[name=Is]').val()) + Number($('input[name=It]').val()) ) / 3 ) * 100 ) / Number($('input[name=In]').val()) ;
         var delta = ( ( Number($('input[name=TemperaturaRef]').val()) - Number($('input[name=TemperaturaMed]').val()) )* 100 ) / ( ( Number(carga)*(100) ) /Number(carga) ) ;
 

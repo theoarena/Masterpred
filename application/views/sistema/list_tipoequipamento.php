@@ -1,6 +1,12 @@
-<?php if(count($objs) > 0) { ?>
+<?php if(count($objs) > 0) { 
 
-<table class="footable table" data-page-navigation=".pagination">
+	echo "<div id='search_empresas' class='inline'>";
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+	echo '</div>';
+
+?>
+
+<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>
 	<thead>
 		<tr>
 			<th id='col_id' data-type='numeric'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>
@@ -15,11 +21,16 @@
 					echo "<td data-sort-initial='true'>".$o->CodTipoEquipamento."</td>";
 					echo "<td>".$o->TipoEquipamento."</td>";					
 					echo "<td><div class='btn-group btn-group-lg'>";
-						echo html::anchor("sistema/edit_tipoequipamento/".$o->CodTipoEquipamento,"EDITAR", array("class"=>"btn btn-info"));						
-						echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodTipoEquipamento."' onclick='askDelete(\"$o->CodTipoEquipamento\")'>REMOVER</button>";
+						if(site::isGrant(array('edit_tipos_equipamento')))
+							echo html::anchor("sistema/edit_tipoequipamento/".$o->CodTipoEquipamento,"EDITAR", array("class"=>"btn btn-info"));						
 
-						echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodTipoEquipamento."' onclick='deleteRow(\"$o->CodTipoEquipamento\")'>S</button>";						
-						echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodTipoEquipamento."' onclick='askDelete(\"$o->CodTipoEquipamento\")'>N</button>";						
+						if(site::isGrant(array('remove_tipos_equipamento')))
+						{
+							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodTipoEquipamento."' onclick='askDelete(\"$o->CodTipoEquipamento\")'>REMOVER</button>";
+							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodTipoEquipamento."' onclick='deleteRow(\"$o->CodTipoEquipamento\")'>S</button>";						
+							echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodTipoEquipamento."' onclick='askDelete(\"$o->CodTipoEquipamento\")'>N</button>";						
+						}
+
 					echo "</div></td>";
 				echo "</tr>";
 			}	
@@ -27,7 +38,7 @@
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>
@@ -40,9 +51,14 @@
 <script type="text/javascript">
 	$(function () {
 	    $('.footable').footable();
+
+	     $('#campobusca').change(function(){
+	    		var footableFilter = $('.footable').data('footable-filter');			  
+			    footableFilter.filter($(this).val());
+	    });
 	});
 
 </script>
 
 
-<?php echo site::generateDelete('TipoEquipamento'); ?>
+<?php if(site::isGrant(array('remove_tipos_equipamento'))) echo site::generateDelete('TipoEquipamento'); ?>

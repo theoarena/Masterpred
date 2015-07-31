@@ -5,7 +5,7 @@
 		<p style="margin:0;color:#f7f7f7">Usuário: <?php echo $username; ?></p>
 		<p style="margin:0;color:#f7f7f7">Senha: <?php echo($password != null)?($password):("não foi mudada"); ?></p>
 	</div>
-	<p style="margin:0"><a href='<?php echo Kohana::config('config.endereco_sistema'); ?>'>Clique aqui</a> para acessar o sistema e desfrutar de todas as suas funcionalidades.</p>
+	<p style="margin:0"><a href='<?php echo Kohana::$config->load('config')->get('endereco_sistema'); ?>'>Clique aqui</a> para acessar o sistema e desfrutar de todas as suas funcionalidades.</p>
 	<p style="margin:0">&nbsp;</p>
 	<p style="margin:0">Atenciosamente,</p>
 	<p style="margin:0">Equipe MASTERPRED ©</p>

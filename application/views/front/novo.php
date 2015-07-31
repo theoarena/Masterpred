@@ -9,8 +9,7 @@
 	
 ?>
 
-<div class="jumbotron">
-<h1 id='welcome'><?php echo Kohana::$config->load('config')->get('site_name'); ?></h1>        
+<h1 id='welcome'><img src="<?php echo site::mediaUrl().'images/front_logo.jpg' ?> ?>" width=355></h1>        
   <h3>Para se cadastrar, preencha os campos abaixo</h3>
   <p>Nós analisaremos seu pedido e logo entraremos em contato.</p>
 
@@ -27,16 +26,16 @@
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nascimento',null, array('class' => 'form-control', 'maxlength' => '10' ,'placeholder' => 'Data de nascimento' , 'onkeypress' => "return mask(event,this,'##/##/####')" )) ."</div>";	
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>@</span>". form::input('username',null, array('class' => 'form-control', 'maxlength' => '32' ,'placeholder' => 'Nome de usuário' )) ."</div>";  
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Observações</span>". form::textarea('obs',null, array('class' => 'form-control' )) ."</div>"; 
-	echo form::submit('submit', "Enviar pedido", array ('class' => 'btn btn-primary btn-lg' ));
-    echo html::anchor('','Voltar', array('class' => "btn btn-warning btn-lg" , "id" => "voltar_esqueci_senha"));            
+	echo form::submit('submit', "Enviar pedido", array ('class' => 'btn label-primary btn-pq' ));
+    echo html::anchor('','Voltar', array('class' => "btn btn-warning btn-pq" , "id" => "voltar_esqueci_senha"));            
 	
 	
 	echo "</form>";
 	
 ?>
 
-  
-</div>
+
+
 
 <script>
 

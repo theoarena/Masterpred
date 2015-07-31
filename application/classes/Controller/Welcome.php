@@ -52,11 +52,12 @@ class Controller_Welcome extends Controller {
 		$this->template->content->plus_back_link = '';								
 		$this->template->content->show_back_link = true;		
 
+		/*
 		if($view = Cache::instance()->get(site::segment(2), FALSE) )		
 		{
 			$this->template->content->conteudo = $view;	
 			//die();
-		}							
+		}*/							
 
 	}	
 
@@ -64,8 +65,8 @@ class Controller_Welcome extends Controller {
 	{			
 		$this->response->body($this->template);	
 
-		if(!Cache::instance()->get(site::segment(2), FALSE) )		
-			Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());				
+		//if(!Cache::instance()->get(site::segment(2), FALSE) )		
+		//	Cache::instance()->set(site::segment(2),$this->template->content->conteudo->render());				
 	}	
 
 	public function action_index()

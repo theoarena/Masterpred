@@ -1,5 +1,4 @@
 <script src="<?php echo site::mediaUrl(); ?>js/slide.js"></script>
-<h3>Análise <small>de um item de inspeção</small></h3>
 
 <?php 
 	    
@@ -45,7 +44,7 @@
     echo '</div>';
     echo "<div class='cb'></div>";
     echo "</section>";
-	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));       
+	echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn'));       
 	echo form::close();
     echo site::generateValidator(array('Data'=>'Data'));
 ?>
@@ -80,6 +79,7 @@ function setrecomendacao(id)
 function muda()
 {
   $( "#form_edit" ).toggle( "slide" );
+  $( "#btn_voltar" ).fadeToggle();
   $( "#list > h1" ).fadeToggle();
   $( "#list > h3" ).fadeToggle();     
   $( "#lista_recomendacoes" ).fadeToggle();    

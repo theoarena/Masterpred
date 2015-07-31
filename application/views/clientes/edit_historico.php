@@ -2,7 +2,10 @@
 <h1 id="btn_adicionar">     
     <?php echo html::anchor(site::segment(1)."/historico","< Voltar", array("class" => "label label-warning" )); ?>
      <?php echo html::anchor(site::segment(1)."/resultado_historico/".$obj->resultado->CodResultado."?gr=".$obj->CodGR,"Resultados", array("class" => "label label-primary" )); ?>
-     <?php echo html::anchor("relatorios/empresa_resultado/".$obj->resultado->CodResultado,"Imprimir", array("class" => "label label-info" )); ?>            
+     <?php 
+        if(site::isGrant(array('access_print_osp')))
+            echo html::anchor("relatorios/empresa_resultado/".$obj->resultado->CodResultado,"Imprimir", array("class" => "label label-info" )); 
+      ?>            
      
 </h1>
 

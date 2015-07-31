@@ -7,14 +7,17 @@
 <?php
 	
 	$tipo = array('sim' => 'Confirmados', 'nao'=>'Não confirmados');
-	$date = date('d/m/Y');
+	$hoje = date('d/m/Y');
+	$amanha = date('d/m/Y', strtotime("+1 days"));	
 
 	echo "<div id='select_data'>";
-	echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>De</span>". form::input('de', Arr::get($_GET, 'de') , array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" , 'placeholder' => 'Data Inicial' )) ."</div>";	
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Até</span>". form::input('ate', Arr::get($_GET, 'ate', $date) , array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" , 'placeholder' => 'Data Inicial' )) ."</div>";		
+	echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>De</span>". form::input('de', Arr::get($_GET, 'de',$hoje) , array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" , 'placeholder' => 'Data Inicial' )) ."</div>";	
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Até</span>". form::input('ate', Arr::get($_GET, 'ate', $amanha) , array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" , 'placeholder' => 'Data Inicial' )) ."</div>";		
+	echo "<div class='input-group input-group-lg div_filtrar'><h1 id='btn_filtrar'>". html::anchor('#','Buscar', array('class' => 'btn btn-primary' )) ."</h1></div>";	
+	echo '</div>';		
+	echo "<div id='select_data'>";
 	echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Tecnologia</span>". form::select('tecnologia',$tecnologias, Arr::get($_GET, 'tec', 'padrao') , array('class' => 'form-control')) ."</div>";		
 	echo "<div class='input-group input-group-lg drop2'> <span class='input-group-addon'>Tipo</span>". form::select('tipo', $tipo ,Arr::get($_GET, 'tipo', 'nao'), array('class' => 'form-control')) ."</div>";			
-	echo "<div class='input-group input-group-lg div_filtrar'><h1 id='btn_filtrar'>". html::anchor('#','Buscar', array('class' => 'label label-primary' )) ."</h1></div>";	
 	echo '</div>';		
 ?>
 
@@ -34,7 +37,7 @@
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>
@@ -93,6 +96,12 @@
 				    	colunas += "<td>"+gr["Componente"]+"</td>";				   				    	
 				    	colunas += "<td><div class='btn-group btn-group-lg'>";
 				    	colunas += "<a href='<?php echo site::baseUrl() ?>empresas/edit_grauderisco/"+cod+"?de="+de+"&ate="+ate+"&tec="+tec+"&tipo="+tipo+"' class='btn btn-info'>EDITAR</a>";						
+
+				    	<?php if(site::isGrant(array('remove_grauderisco'))) { ?>				    	
+				    		colunas += "<button type='button' class='btn btn-danger' id='ask_"+cod+"' onclick='askDelete(\""+cod+"\")'>REMOVER</button>";
+							colunas += "<button type='button' class='btn btn-success confirm_hidden' id='confirm_"+cod+"' onclick='deleteRow(\""+cod+"\")'>S</button>";						
+							colunas += "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_"+cod+"' onclick='askDelete(\""+cod+"\")'>N</button>";	
+						<?php } ?>
 						colunas += "</div></td></tr>";
 				   		$(".footable tbody").append(colunas);				    	
 					}					
@@ -113,3 +122,5 @@
 	});
 
 </script>
+
+<?php if(site::isGrant(array('remove_grauderisco'))) echo site::generateDelete('gr'); ?>

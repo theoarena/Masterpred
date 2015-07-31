@@ -1,6 +1,12 @@
-<?php if( count($obj) > 0) { ?>
+<?php if(count($objs) > 0) { 
+
+	echo "<div id='search_empresas' class='inline'>";
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+	echo '</div>';
+
+?>
 <div class="alert alert-danger"><p><?php echo Kohana::message('admin', 'privileges_aviso'); ?></p></div>
-<table class="footable table" data-page-navigation=".pagination">
+<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>
 	<thead>
 		<tr>
 			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("id"); ?></h3></th>
@@ -29,7 +35,7 @@
 	</tbody>
 	<tfoot class="hide-if-no-paging">
 		<tr>
-			<td colspan="5">
+			<td colspan="100">
 				<ul class="pagination pagination-centered"></ul>
 			</td>
 		</tr>
@@ -42,6 +48,11 @@
 <script type="text/javascript">
 	$(function () {
 	    $('.footable').footable();
+
+	     $('#campobusca').change(function(){
+	    		var footableFilter = $('.footable').data('footable-filter');			  
+			    footableFilter.filter($(this).val());
+	    });
 	});
 	
 </script>

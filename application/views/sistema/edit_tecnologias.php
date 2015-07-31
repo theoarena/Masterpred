@@ -1,4 +1,3 @@
-<h3>Cadastro <small>de tecnologias</small></h3>
 <?php 
 	
 	echo form::open( "sistema/save_tecnologias",array("id" => "form_edit" ) );			
@@ -9,7 +8,7 @@
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Id',$obj->Id,array('class'=>'form-control', 'maxlength' => '5', 'placeholder' => 'Id'))."</div>";		
 
 	
-	echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn-lg'));
+	echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn'));
 	
 	echo "</form>";
 	echo site::generateValidator(array('Tecnologia'=>'Tecnologia','Id'=>'Id'));

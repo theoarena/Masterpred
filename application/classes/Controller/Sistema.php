@@ -511,27 +511,6 @@ class Controller_Sistema extends Controller_Welcome {
 	//======================================================
 	//======================================================
 
-	public function equipinsp_set_empresa()
-	{
-		$this->template = "";
-		$empresas = ORM::factory("Empresa")->find_all();
-
-		foreach ($empresas as $empresa) {
-			foreach ($empresa->area as $area) {
-				foreach ($area->setor as $setor) {
-					foreach ($setor->equipamento as $equipamento) {
-						foreach ($equipamento->equipamentoinspecionado as $equipinsp) {
-							$obj = ORM::factory("EquipamentoInspecionado",$equipinsp->CodEquipamentoInspecionado);
-							$obj->Empresa = $empresa->CodEmpresa;
-							$obj->save();
-						}						
-					}
-				}				
-			}
-		}
-		echo "fim";
-		exit;
-	}
 
 	public function action___call($method, $arguments)
 	{

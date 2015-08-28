@@ -216,7 +216,7 @@
 
     </script>
     
-<aside id='graficos'>   
+<aside id='graficos_sidebar'>   
 
     <div id='sem_planejamento'></div>
     <div id='pendentes'></div>

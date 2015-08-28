@@ -10,20 +10,20 @@
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo do Componente</span>". form::select('TipoComponente',$componentes,($obj->TipoComponente!=null)?($obj->TipoComponente):0, array('class' => 'form-control') ) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Componente',$obj->Componente, array('class' => 'form-control', 'maxlength' => '255', 'placeholder' => 'Componente')) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Detalhe',$obj->Detalhe, array('class' => 'form-control', 'maxlength' => '255', 'placeholder' => 'Detalhes')) ."</div>"; 
-    echo "<br/>";    
+    echo "<div class='margin_5'></div>";    
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo da Anomalia</span>". form::select('TipoAnomalia',$anomalias,($obj->TipoAnomalia!=null)?$obj->TipoAnomalia:0, array('class' => 'form-control')) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Anomalia</span>". form::textarea('Anomalia',$obj->Anomalia, array('class' => 'form-control', 'placeholder' => 'Detalhes da anomalia' )) ."</div>"; 
-    echo "<br/>";
+    echo "<div class='margin_5'></div>";    
     echo '<div class="btn-group btn-group-lg"><button type="button" class="btn btn-primary btn_switch" id="buscar_recomendacoes">Buscar recomendações</button></div>';
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Recomendação</span>". form::textarea('Recomendacao',$obj->Recomendacao, array('id' => 'Recomendacao','class' => 'form-control', 'placeholder' => 'Digite para buscar uma recomendação')) ."</div>";     
-    echo "<br/>";
+    echo "<div class='margin_5'></div>";    
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Observações</span>". form::textarea('Obs',$obj->Obs, array('class' => 'form-control', 'placeholder' => 'Observações desta análise')) ."</div>"; 
-	echo "<br/>";
+	echo "<div class='margin_5'></div>";    
 
     echo "<section>";
     echo '<div class="panel panel-primary" id="list_areas">';
         echo '<div class="panel-heading"><h4>Grandezas Elétricas</h4></div>';
-        echo '<div class="panel-body">';
+        echo '<div class="panel-body" id="grandezas">';
             echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>I(R)</span>". form::input('Ir',$obj->Ir, array('class' => 'form-control grandezas', 'maxlength' => '10') ) ."</div>"; 
             echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>I(S)</span>". form::input('Is',$obj->Is, array('class' => 'form-control grandezas', 'maxlength' => '10') ) ."</div>"; 
             echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>I(T)</span>". form::input('It',$obj->It, array('class' => 'form-control grandezas', 'maxlength' => '10') ) ."</div>"; 

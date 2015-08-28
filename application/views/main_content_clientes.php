@@ -4,7 +4,7 @@
 	Empresas <span class="label label-default"><?php echo site::getTituloInterna(2); ?></span>	
 </h1>
 
-<section id='list' class='Content'>			
+<section id='ContentClientes' class='Content'>			
 	<?php 
 
 		if(isset($_GET['sucesso']))

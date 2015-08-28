@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+	<?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Controller_Clientes extends Controller_Welcome {
 	
@@ -17,11 +17,11 @@ class Controller_Clientes extends Controller_Welcome {
 		$user = Auth::instance()->get_user();	
 						
 		$this->template->content->conteudo = View::factory('clientes/list_historico');					
-	    $this->template->content->conteudo->objs = $user->empresas->find_all();	//todas as empresas do usuario	
-	    $this->template->content->conteudo->user = $user;	//todas as empresas do usuario	
- 
+	    //$this->template->content->conteudo->objs = $user->empresas->find_all();	//todas as empresas do usuario	
+	    //$this->template->content->conteudo->user = $user;	//todas as empresas do usuario	
+
 	    $de = Arr::get($_GET, 'de',"01/".date('m')."/".date('Y')) ;
-	    $ate = Arr::get($_GET, 'ate',date('d/m/Y')) ;
+	    $ate = Arr::get($_GET, 'ate',date('d/m/Y', strtotime("+1 days")) ) ;
 	    $sp =  Arr::get($_GET, 'sem_planejamento',0);
 	    $pe = Arr::get($_GET, 'pendentes',0);
 	    $ex = Arr::get($_GET, 'executadas',0);
@@ -42,7 +42,71 @@ class Controller_Clientes extends Controller_Welcome {
 	    $this->template->content->conteudo->ex = $ex;
 	    $this->template->content->conteudo->fi = $fi; 
 
+	    //================================================================novo search das OSPs
+
+	   $empresas = array_keys($user->empresas->find_all()->as_array('CodEmpresa','Empresa'));	  
+
+	   $objs = ORM::factory('gr');
+	   $objs->join('equipamentoinspecionado','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado');
+	   $objs->join('resultados','LEFT')->on('gr.CodGR','=','resultados.GR');
+	   $objs->where('equipamentoinspecionado.Empresa', 'IN', $empresas );
+	   $objs->where('equipamentoinspecionado.Data', 'BETWEEN', array( site::data_EN($de) , site::data_EN($ate) ) );
+
+	   $objs->where_open();
+			if($sp!=0)
+				$objs->where("resultados.DataPlanejamento",'IS',NULL);
+			if($pe!=0)
+			{
+				$objs->or_where_open();
+					$objs->and_where("resultados.DataPlanejamento",'IS NOT',NULL);
+					$objs->and_where("resultados.DataCorretiva",'IS',NULL);	
+					$objs->and_where("resultados.DataFinalizacao",'IS',NULL);				
+				$objs->or_where_close();
+			}
+			
+			if($ex!=0)				
+			{
+				$objs->or_where_open();
+					$objs->and_where("resultados.DataCorretiva",'IS NOT',NULL);						
+					$objs->and_where("resultados.DataFinalizacao",'IS',NULL);				
+				$objs->or_where_close();
+			}						
+			
+			if($fi!=0)
+				$objs->or_where("resultados.DataFinalizacao",'IS NOT',NULL);		
+		$objs->where_close();		
+
+		$objs->where('gr.Confirmado','=',1)->order_by('equipamentoinspecionado.Data','desc');
+
+		$objs = $objs->find_all();
+		
+		$list = array();
+		
+		foreach ($objs as $r)
+		{
+			$estado = 'vermelho'; 	
+			
+			if( !in_array( site::datahora_BR($r->resultado->DataCorretiva), array(null,'00/00/0000') ) )
+			{	
+				$estado = 'verde_pendente'; 
+				if( ($r->resultado->Total != null) && ($r->resultado->Total != 0) &&
+					!in_array( site::datahora_BR($r->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
+					$estado = 'verde';
+			}
+			elseif( !in_array( site::datahora_BR($r->resultado->DataPlanejamento), array(null,'00/00/0000')) )
+				$estado = 'laranja'; 								
+			
+			$list[] = "<span class='caminho'>".$r->equipamentoinspecionado->equipamento->setor->area->Area." - ".$r->equipamentoinspecionado->equipamento->setor->Setor."</span>".
+				"<a class='".$estado."' target='parent' href='".site::baseUrl()."clientes/edit_historico/".$r->CodGR."'>".				
+				site::datahora_BR($r->equipamentoinspecionado->Data)." | TE | OSP #".$r->NumeroGR."/".$r->CodGR." | ".$r->equipamentoinspecionado->condicao->Condicao." | ".$r->componente->Componente.": ".$r->Componente.
+			"</a>";
+					
+		}	
+
+		//=====================================================================================
+
 	    $this->template->content->graficos = View::factory('clientes/list_historico_graficos');
+	    $this->template->content->conteudo->objs = $list;
 		$this->template->content->graficos->valores_grafico = $this->action_getGraficosOSP_gauge($user,$de,$ate,$sp,$pe,$ex,$fi);
 	}
 
@@ -51,7 +115,6 @@ class Controller_Clientes extends Controller_Welcome {
 		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
 		$tipo = explode('_',Arr::get($_GET, 'id',null)); //separa o id do tipo
 	
-
 		switch ($tipo[0]) {
 			case 'empresa': //pegar as áreas da empresa
 				$ret = array();
@@ -179,18 +242,31 @@ class Controller_Clientes extends Controller_Welcome {
 	{		
 		$this->template->content->graficos = "";	
 		$obj = ORM::factory('Gr', site::segment('edit_historico',null) );
+
+		$auth = Auth::instance();
+		$user = $auth->get_user();
+
+		if(!in_array($obj->equipamentoinspecionado->Empresa, $user->getListEmpresas(false) ) ) //caso não seja o historico da sua empresa
+			HTTP::redirect('avisos/denied');
+
 		$this->template->content->conteudo = View::factory('clientes/edit_historico');						
 		$this->template->content->conteudo->obj = $obj;								
 	}
 
 	public function action_resultado_historico()
-	{		
-		//$this->template->content = View::factory('clientes/home_clientes');	
+	{	
+		$auth = Auth::instance();
+		$user = $auth->get_user();
+		
 		$this->template->content->graficos = "";	
 		$id = (site::segment('resultado_historico',null) != 0)?(site::segment('resultado_historico',null) ):(null);		
 		$obj = ORM::factory('Resultados', $id);
+		$gr = ORM::factory('Gr', $_GET['gr']);
 		$this->template->content->conteudo = View::factory('clientes/resultado_historico');						
 		
+		if(!in_array($gr->equipamentoinspecionado->Empresa, $user->getListEmpresas(false) ) ) //caso não seja o historico da sua empresa
+			HTTP::redirect('avisos/denied');
+
 		$this->template->content->conteudo->PreMOPreco = site::formata_moeda_input($obj->PreMOPreco);	
 		$this->template->content->conteudo->PreProdPreco = site::formata_moeda_input($obj->PreProdPreco);					
 		$this->template->content->conteudo->PredTercPreco = site::formata_moeda_input($obj->PredTercPreco);		

@@ -9,7 +9,7 @@
 	
 ?>
 
-<h1 id='welcome'><img src="<?php echo site::mediaUrl().'images/front_logo.jpg' ?> ?>" width=355></h1>        
+<h1 id='welcome'><img src="<?php echo site::mediaUrl().'images/front_logo.jpg'?>" width=355></h1>        
   <h3>Para se cadastrar, preencha os campos abaixo</h3>
   <p>Nós analisaremos seu pedido e logo entraremos em contato.</p>
 
@@ -18,7 +18,8 @@
 	echo '<div class="alert alert-danger" id="box_error"></div>';
 
 	echo form::open( "front/cadastrar_novo" ,array("id" => "form_edit")  );			
-	echo form::hidden("senha_aleatoria",1); 
+    echo form::hidden("senha_aleatoria",1); 
+	echo form::hidden("birthday",null); 
 	
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nome',null, array('class' => 'form-control', 'maxlength' => '200', 'placeholder' => 'Nome completo' )) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('email',null, array('class' => 'form-control', 'maxlength' => '127', 'placeholder' => 'Email' )) ."</div>";   

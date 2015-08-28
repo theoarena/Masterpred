@@ -42,6 +42,9 @@ class Controller_Front extends Controller {
 	{	
 		$user = ORM::factory('User',null);
 	
+		if($this->request->post('birthday') != null) //campo somente pra desviar spam
+			exit; //talvez bloquear o ip?
+		
 		if( $user->checa_email($this->request->post('email')) and $user->checa_usuario( $this->request->post('username') )  )
 		{			
 			$user->username = $this->request->post('username');					
@@ -62,6 +65,8 @@ class Controller_Front extends Controller {
 		}
 		else
 			HTTP::redirect('front/cadastro?erro=2');
+		
+				
 	}
 
 	public function action_login()

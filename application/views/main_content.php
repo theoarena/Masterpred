@@ -59,13 +59,14 @@ $( document ).ready(function() {
 		$(this).parent().fadeOut('slow');
 	});
 
+	//nao sei pq fiz isso aqui hahaha
 	//talvez seja meio lerdo, mas ok
-	$('#col_actions').hide();
+	/*$('#col_actions').hide();
 	$('table.footable tbody .btn-group-lg').each(function(){
 		if( $(this).html() != '' )
 			$('#col_actions').show();
 
-	});
+	});*/
 });
 
 </script>

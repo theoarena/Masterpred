@@ -19,7 +19,7 @@ return array
 			 * Ports and sockets may be appended to the hostname.
 			 */
 			'hostname'   => 'localhost',
-			'database'   => 'masterpred',
+			'database'   => 'masterpred2',
 			'username'   => 'root',
 			'password'   => FALSE,
 			'persistent' => FALSE,

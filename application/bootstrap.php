@@ -129,8 +129,8 @@ Kohana::modules(array(
 	 'image'      => MODPATH.'image',      // Image manipulation
 	 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 	 'cache'      => MODPATH.'cache',      // Caching with multiple backends
+	 'minion'     => MODPATH.'minion',     // CLI Tasks
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	// 'minion'     => MODPATH.'minion',     // CLI Tasks
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));

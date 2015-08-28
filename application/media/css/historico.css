@@ -1,10 +1,18 @@
-.fancytree-title .verde_pendente{color: #f7f7f7;background: url("../images/verde.png") no-repeat scroll 10px 11px #007700;padding: 6px 14px 6px 46px;}
-.fancytree-title .vermelho{  background: url("../images/vermelho.png") no-repeat scroll 10px 11px #cc0000; color: #f7f7f7; padding: 6px 14px 6px 34px;}
-.fancytree-title .laranja{ background: url("../images/laranja.png") no-repeat scroll 10px 11px #ffb700;color: #333333;padding: 6px 14px 6px 34px;}
-.fancytree-title .verde{  background: url("../images/verde.png") no-repeat scroll 10px 11px #00ff00;color: #333333; padding: 6px 14px 6px 34px;}
-.fancytree-title a {display: block;}
-#graficos {background: none repeat scroll 0 0 #FFFFFF;  border: 1px solid #CCCCCC;   height: 100%;   position: absolute;  right: 0;  top: -1px;}
-#finalizadas,#pendentes,#sem_planejamento,#executadas{width: 200px;height: 160px;display:block;}
-#graficos > div svg+a{display: none !important;}
+body.historico section#ContentClientes {border-top: 1px solid #f1f1f1; display: block; float: left; margin-top: -1px; padding-top: 20px; width: calc(98% - 200px) ;clear: none;}
 
+#historico_list{margin-top: 10px}
+#historico_list ul{list-style: none; padding-left: 10px;}
+#historico_list ul li+li{margin-top: 10px}
+
+li .verde_pendente{color: #f7f7f7;background: url("../images/verde_pendente.png") no-repeat scroll 10px 11px #007700;padding: 6px 14px 6px 46px;}
+li .vermelho{  background: url("../images/vermelho.png") no-repeat scroll 10px 11px #cc0000; color: #f7f7f7; padding: 6px 14px 6px 34px;}
+li .laranja{ background: url("../images/laranja.png") no-repeat scroll 10px 11px #ffb700;color: #333333;padding: 6px 14px 6px 34px;}
+li .verde{  background: url("../images/verde.png") no-repeat scroll 10px 11px #00ff00;color: #333333; padding: 6px 14px 6px 34px;}
+li a {display: block;}
+li .caminho {display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; padding-left: 5px;}
+
+#graficos_sidebar { background: #ffffff none repeat scroll 0 0; border: 1px solid #cccccc; float: right; height: 100%; position: relative; top: -1px; width:200px;}
+#graficos_sidebar > div{width:100%;height: 160px;display:block;}
+#finalizadas,#pendentes,#sem_planejamento,#executadas{}
+#graficos_sidebar > div svg+a{display: none !important;}
 #historico_check{ display: block; margin-top: 18px;}

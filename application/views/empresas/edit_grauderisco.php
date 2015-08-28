@@ -27,8 +27,10 @@
     echo '<div class="well well-sm">';
 
     echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Inspeção</span>". form::select('TipoInspecao',$inspecoes,$obj->TipoInspecao, array('class' => 'form-control') ) ."</div>";                
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('GRReferencia',$obj->GRReferencia, array('class' => 'form-control', 'maxlength' => '11', 'placeholder' => 'GR Referência' )) ."</div>"; 
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('GRReferencia',$obj->GRReferencia, array('class' => 'form-control', 'maxlength' => '11', 'placeholder' => 'GR Referência' )) . "</div>";
 
+    
+    echo "<div class='input-group input-group-lg'> <button class='btn_picker label-warning btn' id='btn_gr_referencia'>Buscar</button> </div>";
     echo '</div>';
    
 
@@ -94,6 +96,18 @@
         changeValores();
         $('div#grandezas input').change(function(){ changeValores() });
         $('input[name=TemperaturaRef],input[name=TemperaturaMed]').change(function(){ changeValores() });
+
+        $('#btn_gr_referencia').click(function(e){
+            $.fancybox.open(
+            {
+                href: '<?php echo site::baseUrl() ?>requests/grReferencia/?equipamento=<?php echo $equip->equipamento->CodEquipamento; ?>&componente=<?php echo $obj->TipoComponente; ?>&data=<?php echo site::datahora_EN($equip->Data); ?>',
+                type: 'ajax',
+                title: 'Selecione a GR',
+                padding:20
+            });           
+            e.preventDefault();
+        });
+
     });
 
     function changeValores()

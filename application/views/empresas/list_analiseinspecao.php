@@ -1,6 +1,6 @@
 
 	<?php
-		echo "<div id='search_empresas_anainsp' class='inline'>";
+		echo "<div id='search_empresas' class='inline'>";
 		echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
 		echo '</div>';
 	?>		

@@ -11,6 +11,7 @@
 	<!-- Le styles -->
 	<link rel='stylesheet' type='text/css' href='<?php echo site::mediaUrl(); ?>css/metro-bootstrap.css'>
 	<link href='<?php echo site::mediaUrl(); ?>css/main.css' rel='stylesheet' type='text/css' />	
+	<link href='<?php echo site::mediaUrl(); ?>css/fancybox.css' rel='stylesheet' type='text/css' />	
 	<script src='<?php echo site::mediaUrl(); ?>js/jquery.js'></script>
 	
 	<?php if(site::getInfoUsuario('usuario_system') == 1) { ?>
@@ -19,6 +20,7 @@
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.sort.js'></script>
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.filter.js'></script>
 		<script src='<?php echo site::mediaUrl(); ?>js/footable.paginate.js'></script>		
+		<script src='<?php echo site::mediaUrl(); ?>js/fancybox.js'></script>		
 	<?php } ?>
 
 	<?php if(site::getInfoUsuario('usuario_system') == 0) { ?>

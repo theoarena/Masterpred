@@ -78,6 +78,15 @@ class Model_User extends Model_Auth_User {
 		}
 	}
 
+	public function getListEmpresas($with_values=true)
+	{
+		$emp = $this->empresas->find_all()->as_array('CodEmpresa','Empresa');
+		if(!$with_values)
+			return array_keys($emp);
+		else
+			return $emp;
+	}
+
 	function delete()
 	{
 		foreach($this->roles->find_all() as $entry)		

@@ -163,6 +163,7 @@ class site {
 			case 'edit_grauderisco':$tit = "Graus de Risco"; break;
 			case 'historico':
 			case 'edit_historico':$tit = "Histórico de Ordens de serviço"; break;
+			case 'resultado_historico':$tit = "Resultados da ordem de serviço"; break;
 			case 'roles':
 			case 'edit_roles':$tit = "Grupos de acesso de Usuário"; break;
 			case 'privileges':
@@ -211,50 +212,54 @@ class site {
 		return $tit;
 	}
 
-	public static function check_empresaatual()
-	{
-		if(!isset($_SESSION["empresa_atual"])) //se a empresa atual nao foi seleciona, inicializa			
-			Session::instance()->set('empresa_atual',0);	
-	}
-
-	public static function set_empresaatual($v,$nome)
-	{
-		Session::instance()->set('empresa_atual', $v);// atribui a empresa selecionada		
-		Session::instance()->set('nome_empresa_atual', $nome);// atribui a empresa selecionada		
-	}
-
-	public static function remove_empresaatual()
-	{
-		Session::instance()->delete('empresa_atual');
-		Session::instance()->delete('nome_empresa_atual');
-	}
-
-	public static function get_empresaatual($i=1)
-	{
-		if($i==0)
-			return ORM::factory('Empresa', Session::instance()->get('empresa_atual',null) );
-		elseif($i==1)
-			return Session::instance()->get('empresa_atual',null);// pega a empresa selecionada	
-		else	
-			return Session::instance()->get('nome_empresa_atual',null);// pega a empresa selecionada	
-	}
-
-	public static function selected_empresaatual()//retorna se alguma empresa foi selecionada
-	{
-		return ( Session::instance()->get('empresa_atual') != 0);
-	}
-
-	public static function avatar_empresaatual() //pega o nome e o codigo da empresa pra deixar lá em cima
-	{
-		$str = "";
-		if(site::selected_empresaatual())
+	//===============empresa que está ativada no ADMIN
+	//================================================
+		public static function check_empresaatual()
 		{
-			$empresa = 
-			$str = '<h2 class="pull-right">'.site::get_empresaatual(2).' <span class="label label-primary">'.site::get_empresaatual().'</span></h2>';
+			if(!isset($_SESSION["empresa_atual"])) //se a empresa atual nao foi seleciona, inicializa			
+				Session::instance()->set('empresa_atual',0);	
 		}
-		return $str;
 
-	}
+		public static function set_empresaatual($v,$nome)
+		{
+			Session::instance()->set('empresa_atual', $v);// atribui a empresa selecionada		
+			Session::instance()->set('nome_empresa_atual', $nome);// atribui a empresa selecionada		
+		}
+
+		public static function remove_empresaatual()
+		{
+			Session::instance()->delete('empresa_atual');
+			Session::instance()->delete('nome_empresa_atual');
+		}
+
+		public static function get_empresaatual($i=1)
+		{
+			if($i==0)
+				return ORM::factory('Empresa', Session::instance()->get('empresa_atual',null) );
+			elseif($i==1)
+				return Session::instance()->get('empresa_atual',null);// pega a empresa selecionada	
+			else	
+				return Session::instance()->get('nome_empresa_atual',null);// pega a empresa selecionada	
+		}
+
+		public static function selected_empresaatual()//retorna se alguma empresa foi selecionada
+		{
+			return ( Session::instance()->get('empresa_atual') != 0);
+		}
+
+		public static function avatar_empresaatual() //pega o nome e o codigo da empresa pra deixar lá em cima
+		{
+			$str = "";
+			if(site::selected_empresaatual())
+			{
+				$empresa = 
+				$str = '<h2 class="pull-right">'.site::get_empresaatual(2).' <span class="label label-primary">'.site::get_empresaatual().'</span></h2>';
+			}
+			return $str;
+
+		}
+	//================================================
+	//=============================================
 
 	public static function qtd_pedidosusuario() //quantidade de usuarios que fizeram pedidos
 	{
@@ -268,9 +273,15 @@ class site {
 		return Session::instance()->get('qtd_usuarios');
 	}
 
-	public static function data_BR($d,$return=false)
+	public static function data_BR($d,$return=false,$notime=true)
 	{		
 		if($d=="") return ( (!$return)?(date('d/m/Y')):($return) );
+
+		if($notime)
+		{
+			$d = explode(" ",$d);
+			$d = $d[0];
+		}
 
 		$d = explode("-",$d);
 		return $d[2]."/".$d[1]."/".$d[0];
@@ -345,7 +356,7 @@ class site {
 	    return $password;
 	}
 
-	public function generateValidator($fields,$form_name = 'form_edit') //gera o script de validação dos campos
+	public function generateValidator($fields,$form_name = 'form_edit',$error_box='box_error') //gera o script de validação dos campos
 	{		
 		$return = '<script>';
 
@@ -369,7 +380,7 @@ class site {
 		}	
 			   
 		$return .= "}], function(errors, event) {
-			    var SELECTOR_ERRORS = $('#box_error'); 
+			    var SELECTOR_ERRORS = $('#".$error_box."'); 
 			    if (errors.length > 0) {
 			        SELECTOR_ERRORS.empty();
 			           for (var i = 0, errorLength = errors.length; i < errorLength; i++) {

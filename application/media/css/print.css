@@ -73,7 +73,7 @@ footer p {font-size: 13px; text-align: center;}
 #empresa_resultado header h3 { bottom: 10px; color: #CC0000;  font-size: 20px; position: absolute; right: 30px;}
 #empresa_resultado #Info p+p{margin-bottom: 5px}
 #empresa_resultado #Info #tipo_gr{position: absolute; right: 40px; top: 90px;}
-#empresa_resultado #Info #tipo_gr h1{ font-size: 90px;  font-weight: bold;}
+#empresa_resultado #Info #tipo_gr h1{ font-size: 90px;  font-weight: bold;text-align: center;}
 /* cores definidas em config.php */
   #empresa_resultado #Info #tipo_gr h1.green{color: #008703}
   #empresa_resultado #Info #tipo_gr h1.bordeaux{color: #860000}

@@ -9,7 +9,7 @@
 ?>
 
 <header>
-	<img src="<?php echo site::mediaUrl(); ?>images/logo.jpg" id='logo'>
+	<img src="<?php echo site::mediaUrl(); ?>images/front_logo.jpg" id='logo'>
 	<h3>Seção D - Ordem de Serviço</h3>
 </header>
 

@@ -4,25 +4,38 @@
 	<div class="btn-group" id='collapse_container'> <button id="collapse-sidebar" class="btn btn-primary">MENU</button> </div>
 	
 	<?php
-		if(isset($empresas))
-			foreach ($empresas as $empresa) {
-				
-				echo '<div class="block_info_empresa">';
-					echo '<span>'.$empresa->Empresa. ' - '.$empresa->Unidade.'</span>';
-					echo '<span>Fábrica: '.$empresa->Fabrica.'</span>';
-				echo '</div>';
+		if(isset($empresas)){			
+			echo "<a id='unidacess' href='javascript:void(0)'>Unidades acessíveis</a>";		
+			
 
-			}
+	?>
+		<script type="text/javascript">
+
+			  $('#unidacess').click(function(e){
+	            $.fancybox.open(
+	            {
+	                href: '<?php echo site::baseUrl() ?>requests/popup_empresas',
+	                type: 'ajax',
+	                title: 'Unidades acessíveis',
+	                padding:20
+	            });           
+	            e.preventDefault();
+	        });
+		</script>
+    <?php
+
+    	}
+
 	?>
 </div>
 <div class="collapse navbar-collapse">	     
 	<ul class="nav navbar-nav" id="menu_lateral">
 	<?php
-		echo "<li id='home'>".html::anchor('', 'Home')."</li>";	
+		echo "<li id='home'>".HTML::anchor('', 'Home')."</li>";	
 		echo $tipo_menu;
 		if(site::isGrant(array('edit_self_account')))	
-			echo "<li>".html::anchor('usuario/perfil', 'Minha conta' , array("class" => site::active("perfil",3,false,''), 'id' => 'perfil'  ) );
-		echo "<li id='logout'>".html::anchor('usuario/logout', 'Sair')."</li>";	
+			echo "<li>".HTML::anchor('usuario/perfil', 'Minha conta' , array("class" => Site::active("perfil",3,false,''), 'id' => 'perfil'  ) );
+		echo "<li id='logout'>".HTML::anchor('usuario/logout', 'Sair')."</li>";	
 	?>
 	</ul>
 

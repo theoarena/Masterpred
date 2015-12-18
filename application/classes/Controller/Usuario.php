@@ -27,14 +27,14 @@ class Controller_Usuario extends Controller_Welcome {
 			$user->email = $email;					
 			$user->nome = "admin";					
 			$user->system = 1;					
-			$user->nascimento = site::data_EN("07/10/1990");			
+			$user->nascimento = Site::data_EN("07/10/1990");			
 
 			$user->ativo = 1;
 			$role = 1;		
 
-			if ($user->save() AND $user->add("roles",ORM::factory('role', $role))) 
+			if ($user->save() AND $user->add("roles",ORM::factory('Role', $role))) 
 			{
-				$user->add("roles",ORM::factory('role',2));
+				$user->add("roles",ORM::factory('Role',2));
 				echo "sucesso";
 			}
 			else
@@ -54,7 +54,7 @@ class Controller_Usuario extends Controller_Welcome {
 
 	public function action_alterar_perfil()
 	{		
-		$user = ORM::factory('user', $this->request->post("id")); //tenta achar o usuário
+		$user = ORM::factory('User', $this->request->post("id")); //tenta achar o usuário
 		$user->nome = $this->request->post("nome");
 		$user->telefone = $this->request->post("telefone");
 
@@ -81,7 +81,7 @@ class Controller_Usuario extends Controller_Welcome {
 		if($redir == 'usuarios_sistema')
 		$obj->system = 1;
 		
-		$obj->nascimento = site::data_EN( $this->request->post('nascimento') );	
+		$obj->nascimento = Site::data_EN( $this->request->post('nascimento') );	
 
 		$password = null;
 		$password_email = '';
@@ -91,7 +91,7 @@ class Controller_Usuario extends Controller_Welcome {
 			if($this->request->post('senha_aleatoria')==0)	
 				$password_email = $this->request->post('password');								
 			else			
-				$password_email = site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
+				$password_email = Site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
 				
 			$obj->password = $password_email; 
 		}		
@@ -105,10 +105,10 @@ class Controller_Usuario extends Controller_Welcome {
 		try{
 
 			$obj->save();
-			site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');
+			Site::addORMRelation($obj, $obj->roles,$this->request->post('role'),'roles');
 
 			if($this->request->post('lista_empresas'))
-				site::addORMRelation($obj, $obj->empresas,$this->request->post('lista_empresas'),'empresas');
+				Site::addORMRelation($obj, $obj->empresas,$this->request->post('lista_empresas'),'empresas');
 
 			$e=2; //2 é sem ação
 
@@ -125,7 +125,7 @@ class Controller_Usuario extends Controller_Welcome {
 		}
 	    catch (ORM_Validation_Exception $e)
 	    {		    	
-	        $errors = site::handleErrors($e->errors('models'));				           
+	        $errors = Site::handleErrors($e->errors('models'));				           
 	        HTTP::redirect($menu.'/edit_'.$redir.'/'.$obj->id.'?erro=1&error_info='.$errors);
 	    }
 	

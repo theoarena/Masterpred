@@ -1,14 +1,8 @@
-
-	<?php
-		echo "<div id='search_empresas' class='inline'>";
-		echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
-		echo '</div>';
-	?>		
 <h1 id="btn_adicionar" class="inline">		
 			<?php 
-				if(site::selected_empresaatual())
+				if(Site::selected_empresaatual())
 				{
-					echo html::anchor(site::segment(1)."/edit_".site::segment("empresas")."_novo"," +", array("class" => "label-success btn" ));
+					echo HTML::anchor(Site::segment(1)."/edit_".Site::segment("empresas")."_novo"," +", array("class" => "label-success btn" ));
 					
 					echo "<a href='javascript:void(0)' class='btn label-primary' id='btn_transferir' onclick='confirmar()'>Transferir</a>";
 					echo "<a href='javascript:void(0)' class='btn label-danger' id='btn_nao' onclick='confirmar()'>Cancelar</a>";
@@ -36,54 +30,58 @@
 		echo '<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>';
 			echo '<thead>';
 				echo '<tr>';
-					echo "<th id='col_id' data-type='numeric' data-sort-initial='true'><h3>".site::getTituloCampos('codigo')."</h3></th>";
-					echo "<th><h3>".site::getTituloCampos('area')."</h3></th>";
-					echo "<th><h3>".site::getTituloCampos('setor')."</h3></th>";
-					echo "<th><h3>".site::getTituloCampos('tag')."</h3></th>";
-					echo "<th><h3>".site::getTituloCampos('equipamento')."</h3></th>";
-					echo "<th><h3>".site::getTituloCampos('tipo_equipamento')."</h3></th>";
-					echo "<th><h3>".site::getTituloCampos('data')."</h3></th>";
-					echo "<th  id='col_id' data-sort-ignore='true'><h3>".site::getTituloCampos('condicao')."</h3></th>";
-					echo "<th data-sort-ignore='true' id='col_actions'><h3>".site::getTituloCampos("acoes")."</h3></th>";
+					echo "<th id='col_id' data-type='numeric' data-sort-initial='true'><h3>".Site::getTituloCampos('codigo')."</h3></th>";
+					echo "<th><h3>".Site::getTituloCampos('area')."</h3></th>";
+					echo "<th><h3>".Site::getTituloCampos('setor')."</h3></th>";
+					echo "<th><h3>".Site::getTituloCampos('tag')."</h3></th>";
+					echo "<th><h3>".Site::getTituloCampos('equipamento')."</h3></th>";
+					echo "<th><h3>".Site::getTituloCampos('tipo_equipamento')."</h3></th>";
+					echo "<th><h3>".Site::getTituloCampos('data')."</h3></th>";
+					echo "<th  id='col_id' data-sort-ignore='true'><h3>".Site::getTituloCampos('condicao')."</h3></th>";
+					echo "<th data-sort-ignore='true' id='col_actions'><h3>".Site::getTituloCampos("acoes")."</h3></th>";
 				echo "</tr>";
 			echo "</thead>";
 
 			echo "<tbody>";
-			foreach ($objs as $rotas) //para cada rota
+			foreach ($objs as $area) //para cada area
 			{
-				foreach ($rotas->equipamentos->find_all() as $equipamento) //para cada equipamento
+				foreach ($area->setores->find_all() as $setor) //para cada setor
 				{
-					foreach ($equipamento->analiseequipamentoinspecionados->find_all() as $o)
+					foreach ($setor->equipamentos->find_all() as $equip)
 					{	
+						foreach ($equip->analiseequipamentoinspecionados->find_all() as $o)
+						{	
+							//echo "rota: ".$areas->CodRota." - equipamento: ".$equipamento->CodEquipamento." - equipinsp: ".$o->CodEquipamentoInspAnalise."<br>";
 
-						$condicoes = $o->tecnologia->condicoes->find_all()->as_array("CodCondicao","Condicao"); //condicoes da tecnlogia deste equipamento
-						
-						$condicoes[0] = "";
-						
-						//$grHabilitada = (site::inspecaoGraudeRisco($o->Condicao,$condicoes))?(""):("hide");
+							$condicoes = $o->tecnologia->condicoes->find_all()->as_array("CodCondicao","Condicao"); //condicoes da tecnlogia deste equipamento
+							
+							$condicoes[0] = "";
+							
+							//$grHabilitada = (Site::inspecaoGraudeRisco($o->Condicao,$condicoes))?(""):("hide");
 
-						echo "<tr class='item_insp' id='inspecao_".$o->CodEquipamentoInspAnalise."'>";
-							echo "<td>".$o->CodEquipamentoInspAnalise."</td>";
-							echo "<td>".$equipamento->setor->area->Area."</td>";					
-							echo "<td>".$equipamento->setor->Setor."</td>";
-							echo "<td>".$equipamento->Tag."</td>";
-							echo "<td>".$equipamento->Equipamento."</td>";
-							echo "<td>".$equipamento->tipoequipamento->TipoEquipamento."</td>";
-							echo "<td>".site::datahora_BR($o->Data)."</td>";
-							echo "<td>";										
-								echo "<div class='input-group input-group-lg drop_condicao'>". form::select('Condicao'.$o->CodEquipamentoInspAnalise,$condicoes,($o->Condicao)?($o->Condicao):(0), array('class'=> 'form-control select_condicao', 'onchange' => "mudacondicao('".$o->CodEquipamentoInspAnalise."')" )) ."</div>"; 
-							echo "</td>";
-							echo "<td><div class='btn-group btn-group-lg'>";
-								echo form::hidden("inspecao_".$o->CodEquipamentoInspAnalise,$condicoes[ ($o->Condicao!=null)?($o->Condicao):0 ]);
-								echo '<div id="first_edit_row">';
-									echo "<button type='button' id='analise_".$o->CodEquipamentoInspAnalise."' class='btn btn-info btn_plusa' onclick=\"linkinspecao('".$o->CodEquipamentoInspAnalise."')\" >+A</button>";								
-									echo "<button type='button' id='duplicar_".$o->CodEquipamentoInspAnalise."' class='btn btn-primary btn_plusl' onclick=\"duplicarinspecao('".$o->CodEquipamentoInspAnalise."')\" >+L</button>";								
-								echo '</div>';
-								echo "<button type='button' class='btn btn-danger btn_removeanalise' id='ask_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>REMOVER</button>";								
-								echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEquipamentoInspAnalise."' onclick='deleteRow(\"$o->CodEquipamentoInspAnalise\")'>S</button>";														
-								echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>N</button>";						
-							echo "</div></td>";
-						echo "</tr>";								
+							echo "<tr class='item_insp' id='inspecao_".$o->CodEquipamentoInspAnalise."'>";
+								echo "<td>".$o->CodEquipamentoInspAnalise."</td>";
+								echo "<td>".$equip->setor->area->Area."</td>";					
+								echo "<td>".$equip->setor->Setor."</td>";
+								echo "<td>".$equip->Tag."</td>";
+								echo "<td>".$equip->Equipamento."</td>";
+								echo "<td>".$equip->tipoequipamento->TipoEquipamento."</td>";
+								echo "<td>".Site::datahora_BR($o->Data)."</td>";
+								echo "<td>";										
+									echo "<div class='input-group input-group-lg drop_condicao'>". Form::select('Condicao'.$o->CodEquipamentoInspAnalise,$condicoes,($o->Condicao)?($o->Condicao):(0), array('class'=> 'form-control select_condicao', 'onchange' => "mudacondicao('".$o->CodEquipamentoInspAnalise."')" )) ."</div>"; 
+								echo "</td>";
+								echo "<td><div class='btn-group btn-group-lg'>";
+									echo Form::hidden("inspecao_".$o->CodEquipamentoInspAnalise,$condicoes[ ($o->Condicao!=null)?($o->Condicao):0 ]);
+									echo '<div id="first_edit_row">';
+										echo "<button type='button' id='analise_".$o->CodEquipamentoInspAnalise."' class='btn btn-info btn_plusa' onclick=\"linkinspecao('".$o->CodEquipamentoInspAnalise."')\" >+A</button>";								
+										echo "<button type='button' id='duplicar_".$o->CodEquipamentoInspAnalise."' class='btn btn-primary btn_plusl' onclick=\"duplicarinspecao('".$o->CodEquipamentoInspAnalise."')\" >+L</button>";								
+									echo '</div>';
+									echo "<button type='button' class='btn btn-danger btn_removeanalise' id='ask_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>REMOVER</button>";								
+									echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEquipamentoInspAnalise."' onclick='deleteRow(\"$o->CodEquipamentoInspAnalise\")'>S</button>";														
+									echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>N</button>";						
+								echo "</div></td>";
+							echo "</tr>";	
+						}
 					}
 				}
 			}			
@@ -101,7 +99,7 @@
 		
 		echo '</table>';
 	} 
-	elseif(!site::selected_empresaatual())		
+	elseif(!Site::selected_empresaatual())		
 		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
 	else
 		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhuma_rota')."</div>"; 
@@ -109,16 +107,11 @@
 
 <script type="text/javascript">
 
-	var condicoes =	"<?php echo site::inspecaoGraudeRisco(null,null,true);?>";
+	var condicoes =	"<?php echo Site::inspecaoGraudeRisco(null,null,true);?>";
 			condicoes = condicoes.split(",");
 
 	$(function () {
-	    $('.footable').footable();
-
-	      $('#campobusca').change(function(){
-	    		var footableFilter = $('.footable').data('footable-filter');			  
-			    footableFilter.filter($(this).val());
-	    });
+	    $('.footable').footable();	   
 
 	    var qtd = $('.item_insp').length;
 	    if(qtd == 0)	
@@ -136,7 +129,7 @@
 		var c = $("#inspecao_"+id+" select").val();
 		var txt = $("#inspecao_"+id+" select option:selected").text();		
 		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/mudacondicao",
+			url : "<?php echo Site::baseUrl() ?>empresas/mudacondicao",
 			type: "POST",  
   			data: { id: id, condicao: c},
 			success : function(data) {
@@ -170,9 +163,9 @@
 
 	function limpar()
 	{
-		$(".footable tbody").html("<tr><td colspan='9'><span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span></td></tr>");
+		$(".footable tbody").html("<tr><td colspan='9'><span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span></td></tr>");
 		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/delete_analiseinspecao?todos=1",			
+			url : "<?php echo Site::baseUrl() ?>empresas/delete_analiseinspecao?todos=1",			
 			success : function(data) {
 				if(data == 1)	
 				{			
@@ -202,7 +195,7 @@
 		
 		var value = $("input:hidden[name='inspecao_"+id+"']").val(); //tipo da condicao
 		if(jQuery.inArray(value,condicoes) >= 0)
-			window.location.href = '<?php echo site::baseUrl() ?>empresas/edit_analiseinspecao/'+id;
+			window.location.href = '<?php echo Site::baseUrl() ?>empresas/edit_analiseinspecao/'+id;
 		else
 		{
 			$('.naotemrisco').show().delay(4000).fadeOut('slow');  //tira quaisquer alertas depois de 4 segundos
@@ -222,9 +215,9 @@
 
 		if(entra)
 		{
-			$(".footable tbody").html("<tr><td colspan='9'><span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span></td></tr>");
+			$(".footable tbody").html("<tr><td colspan='9'><span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span></td></tr>");
 			$.ajax({
-				url : "<?php echo site::baseUrl() ?>empresas/transferir_analiseinspecao",			
+				url : "<?php echo Site::baseUrl() ?>empresas/transferir_analiseinspecao",			
 				success : function(data) {
 					if(data == 1)	
 					{			
@@ -245,7 +238,7 @@
 	{
 		$("*").css("cursor", "progress");
 		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/duplicate_analiseinspecao",
+			url : "<?php echo Site::baseUrl() ?>empresas/duplicate_analiseinspecao",
 			type: "POST",  
   			data: { id: id},
 			success : function(data) {
@@ -265,7 +258,7 @@
 	{
 		$("*").css("cursor", "progress");
 		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/delete_analiseinspecao",
+			url : "<?php echo Site::baseUrl() ?>empresas/delete_analiseinspecao",
 			type: "POST",  
   			data: { id: id},
 			success : function(data) {
@@ -282,4 +275,4 @@
 	
 </script>
 
-<?php echo site::generateDelete('AnaliseEquipamentoInspecionado'); ?>
+<?php echo Site::generateDelete('AnaliseEquipamentoInspecionado'); ?>

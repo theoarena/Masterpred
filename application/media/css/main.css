@@ -91,7 +91,7 @@ th { text-align: center;}
   #btn_adicionar a+a{margin-left: 10px}
   #btn_adicionar .label-danger+.label-primary{margin: 0}
 #btn_adicionar.disabled{display: none}
-#search_empresas+#btn_adicionar{margin-top:0px}
+#search_box+#btn_adicionar{margin-top:0px}
 #box_error{display:none; font-size: 14px;}
 
 #list_areas{width:48%;float: left;}
@@ -139,17 +139,17 @@ th.col_negocio{ width: 195px;}
 .naotemrisco,.naoprossegue{display: none;}
 
 #select_data { display: block;margin-bottom: 10px}
-#select_data input#btn_buscar{margin: 0 0 0 20px}
-#select_data > div{float: left;  margin: 0; width:1%;}
+#select_data input#btn_buscar{margin: 0}
+#select_data > div{display: inline-table;vertical-align: top;  margin: 0; width:1%;}
 #select_data > div+div{margin-left:10px;}
-#select_data input{ width: 200px;}
+#select_data input{ width: 198px;}
 #select_data select{width: auto}
 
 .div_filtrar{float: none !important;}
 #btn_filtrar{margin:0 0 0 10px}
 #btn_filtrar a{}
 
-#search_empresas{float: left;margin-right: 5px;display: inline-table;}
+#search_box{float: left;margin-right: 5px;display: inline-table;}
 
 
 
@@ -284,6 +284,7 @@ th.col_negocio{ width: 195px;}
 
 .btn_picker{    background: #cc0000 none repeat scroll 0 0; display: inline-block;}
     
+#busca_cod_relatorio{float: left; margin-right: 10px; width: 35%;}
 
 .no_margin {margin:0 !important;}
 .w10{width: 10%}
@@ -332,6 +333,9 @@ th.col_negocio{ width: 195px;}
 .nav .menu_dropdown li a.active{ background: none repeat scroll 0 0 #FFFFFF; color: #555555;}
 .nav .menu_dropdown li a:hover{ background: none repeat scroll 0 0 #FFFFFF; color: #666666;}
 
+#unidacess {background: #333 none repeat scroll 0 0; border: 1px solid #484848; color: #c7c7c7; display: block; font-size: 12px; font-weight: bold; margin: 0 auto; padding: 7px; text-align: center; width: 90%;}
+#unidacess:hover {background: #373737}
+
 #collapse_container{position: absolute;
     right: 5%;display: none;
     top: 25px;}
@@ -343,7 +347,7 @@ th.col_negocio{ width: 195px;}
 .menu_dropdown.active + ul {display: block;}
 .menu_dropdown + ul {display: none;}
 
-.block_info_empresa{ width: 90%; margin: 0 auto; background: #333333; color: #f7f7f7; padding: 10px; font-size: 11px;}
+.block_info_empresa{ width: 100%; margin: 0 auto; background: #333333; color: #f7f7f7; padding: 10px; font-size: 11px;}
 .block_info_empresa span{display: block;}
 .block_info_empresa+.block_info_empresa{ margin-top: 5px;}
 

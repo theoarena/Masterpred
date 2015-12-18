@@ -1,13 +1,15 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
 class Model_Rota extends ORM {
-	protected $_belongs_to = array('empresas' => array('model' => 'empresa', 'foreign_key' => 'CodEmpresa') );
+	protected $_belongs_to = array('empresas' => array('model' => 'Empresa', 'foreign_key' => 'CodEmpresa') );
 	protected $_has_many = array( 
 		'equipamentos' => array (
-			 'model' => 'equipamento' ,
+			 'model' => 'Equipamento' ,
 			 'foreign_key' => 'rota_CodRota',
 			 'far_key' => 'equipamento_CodEquipamento',
-			 'through' => 'equipamento_rota')
+			 'through' => 'equipamento_rota'),
+
+		'relatorios' => array('model' => 'Relatorios', 'foreign_key' => 'Rota')
 			 );	
 
   	protected $_table_name = 'rota';

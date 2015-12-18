@@ -1,58 +1,58 @@
-<link href="<?php echo site::mediaUrl(); ?>css/datepicker.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo site::mediaUrl(); ?>js/datepicker.js"></script>
-<script src="<?php echo site::mediaUrl(); ?>js/money.js"></script>
+<link href="<?php echo Site::mediaUrl(); ?>css/datepicker.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo Site::mediaUrl(); ?>js/datepicker.js"></script>
+<script src="<?php echo Site::mediaUrl(); ?>js/money.js"></script>
 
 <h1>		
-	<?php echo html::anchor(site::segment(1)."/edit_historico/".Arr::get($_GET, "gr"),"< Voltar", array("class" => "label label-warning" )); ?>
+	<?php echo HTML::anchor(Site::segment(1)."/edit_historico/".Arr::get($_GET, "gr"),"< Voltar", array("class" => "label label-warning" )); ?>
 </h1>
 <h1>Avaliação de resultados</h1>
 
 <?php     
     echo "<h2>Ordem de serviço: <span class='label label-primary'>".((!$obj->GR)?(Arr::get($_GET, "gr")):($obj->GR))."</span></h2>";    
     echo "<br>";
-    echo form::open( site::segment(1)."/save_resultado",array("id" => "form_edit" ) );          
-    echo form::hidden("GR",Arr::get($_GET, "gr")); 
-    echo form::hidden("CodResultado",$obj->CodResultado); 
+    echo Form::open( Site::segment(1)."/save_resultado",array("id" => "form_edit" ) );          
+    echo Form::hidden("GR",Arr::get($_GET, "gr")); 
+    echo Form::hidden("CodResultado",$obj->CodResultado); 
     
   
-    if(site::isGrant(array('planejar_os')))
+    if(Site::isGrant(array('planejar_os')))
     {   
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('CodCliente',$obj->CodCliente, array('class' => 'form-control', 'placeholder' => 'Código da ordem gerada internamente')) ."</div>";         
-        echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data de Planejamento</span>". form::input('DataPlanejamento',site::datahora_BR($obj->DataPlanejamento), array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" ,'placeholder' => 'Data')) ."</div>";   
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('RespPlanejamento',$obj->RespPlanejamento, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('CodCliente',$obj->CodCliente, array('class' => 'form-control', 'placeholder' => 'Código da ordem gerada internamente')) ."</div>";         
+        echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data de Planejamento</span>". Form::input('DataPlanejamento',Site::datahora_BR($obj->DataPlanejamento), array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" ,'placeholder' => 'Data')) ."</div>";   
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('RespPlanejamento',$obj->RespPlanejamento, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
         echo "<br>";
     }
 
-    if(site::isGrant(array('executar_os')))
+    if(Site::isGrant(array('executar_os')))
     {
-        echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data da Corretiva</span>". form::input('DataCorretiva',site::datahora_BR($obj->DataCorretiva), array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')", 'placeholder' => 'Data')) ."</div>";   
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('RespCorretiva',$obj->RespCorretiva, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::textarea('Obs',$obj->Obs, array('class' => 'form-control', 'placeholder' => 'Ações')) ."</div>"; 
+        echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data da Corretiva</span>". Form::input('DataCorretiva',Site::datahora_BR($obj->DataCorretiva), array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')", 'placeholder' => 'Data')) ."</div>";   
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('RespCorretiva',$obj->RespCorretiva, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::textarea('Obs',$obj->Obs, array('class' => 'form-control', 'placeholder' => 'Ações')) ."</div>"; 
         echo "<br>";
     }
 
-    if(site::isGrant(array('contabilizar_os')))
+    if(Site::isGrant(array('contabilizar_os')))
     {
 
         echo "<div id='block_historico'>";     
             echo "<h3><span class='label label-info'>Manutenção Preditiva</span></h3>";
             echo '<div class="well well-sm" >';            
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Mão de Obra (h)</span>". form::input('PreMOHora',$obj->PreMOHora,  array('class' => 'form-control', 'placeholder' => 'Quantidade')). form::input('PreMOPreco',$PreMOPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Serv. Terceirizado (h)</span>". form::input('PredTercHora',$obj->PredTercHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). form::input('PredTercPreco',$PredTercPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Material Reparo($)</span>". form::input('PredMatPreco',$PredMatPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Produção (h)</span>". form::input('PreProdHora',$obj->PreProdHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). form::input('PreProdPreco',$PreProdPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                               
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Outros</span>". form::input('PredOutrPreco',$PredOutrPreco, array('class' => 'form-control  valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Mão de Obra (h)</span>". Form::input('PreMOHora',$obj->PreMOHora,  array('class' => 'form-control', 'placeholder' => 'Quantidade')). Form::input('PreMOPreco',$PreMOPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Serv. Terceirizado (h)</span>". Form::input('PredTercHora',$obj->PredTercHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). Form::input('PredTercPreco',$PredTercPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Material Reparo($)</span>". Form::input('PredMatPreco',$PredMatPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Produção (h)</span>". Form::input('PreProdHora',$obj->PreProdHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). Form::input('PreProdPreco',$PreProdPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                               
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Outros</span>". Form::input('PredOutrPreco',$PredOutrPreco, array('class' => 'form-control  valor', 'placeholder' => 'Valor($)'))."</div>";                                   
             echo "</div>";    
         echo "</div>";
 
         echo "<div id='block_historico'>";       
             echo "<h3><span class='label label-info'>Manutenção Convencional</span></h3>";
             echo '<div class="well well-sm" >';            
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Mão de Obra (h)</span>". form::input('ConvMOHora',$obj->ConvMOHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). form::input('ConvMOPreco',$ConvMOPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Serv. Terceirizado (h)</span>". form::input('ConvTercHora',$obj->ConvTercHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). form::input('ConvTercPreco',$ConvTercPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Material Reparo($)</span>". form::input('ConvMatPreco',$ConvMatPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Produção (h)</span>". form::input('ConvProdHora',$obj->ConvProdHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). form::input('ConvProdPreco',$ConvProdPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                               
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Outros</span>". form::input('ConvOutrPreco',$ConvOutrPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Mão de Obra (h)</span>". Form::input('ConvMOHora',$obj->ConvMOHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). Form::input('ConvMOPreco',$ConvMOPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Serv. Terceirizado (h)</span>". Form::input('ConvTercHora',$obj->ConvTercHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). Form::input('ConvTercPreco',$ConvTercPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Material Reparo($)</span>". Form::input('ConvMatPreco',$ConvMatPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Produção (h)</span>". Form::input('ConvProdHora',$obj->ConvProdHora, array('class' => 'form-control', 'placeholder' => 'Quantidade')). Form::input('ConvProdPreco',$ConvProdPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                               
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Outros</span>". Form::input('ConvOutrPreco',$ConvOutrPreco, array('class' => 'form-control valor', 'placeholder' => 'Valor($)'))."</div>";                                   
             echo "</div>";
         echo "</div>";
 
@@ -60,12 +60,12 @@
             echo "<h3><span class='label label-info'>Retorno de Investimento</span></h3>";
             echo '<div class="well well-sm" >';   
                      
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Mão de Obra (h)</span>". form::input('total_1',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Serv. Terceirizado (h)</span>". form::input('total_2',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Material Reparo($)</span>". form::input('total_3',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Produção (h)</span>". form::input('total_4',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                               
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Outros</span>". form::input('total_5',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
-                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'><strong>Total(R$)</strong></span>". form::input('Total',null, array('class' => 'form-control valorfinal', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Mão de Obra (h)</span>". Form::input('total_1',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Serv. Terceirizado (h)</span>". Form::input('total_2',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Material Reparo($)</span>". Form::input('total_3',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Produção (h)</span>". Form::input('total_4',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                               
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Outros</span>". Form::input('total_5',null, array('class' => 'form-control', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
+                echo "<div class='input-group input-group-lg'> <span class='input-group-addon'><strong>Total(R$)</strong></span>". Form::input('Total',null, array('class' => 'form-control valorfinal', 'placeholder' => 'Valor(R$)' ,'disabled' => 'disabled'))."</div>";                                   
             echo "</div>";    
         echo "</div>";
 
@@ -73,14 +73,14 @@
 
     }
 
-    if(site::isGrant(array('finalizar_os')))
+    if(Site::isGrant(array('finalizar_os')))
     {
-        echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data de Finalização</span>". form::input('DataFinalizacao',site::datahora_BR($obj->DataFinalizacao), array('class' => 'form-control' , 'onkeypress' => "return mask(event,this,'##/##/####')"  ,'placeholder' => 'Data')) ."</div>";   
-        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('RespFinalizacao',$obj->RespFinalizacao, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
+        echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data de Finalização</span>". Form::input('DataFinalizacao',Site::datahora_BR($obj->DataFinalizacao), array('class' => 'form-control' , 'onkeypress' => "return mask(event,this,'##/##/####')"  ,'placeholder' => 'Data')) ."</div>";   
+        echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('RespFinalizacao',$obj->RespFinalizacao, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
     }
-    echo form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));  
+    echo Form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn-lg'));  
 
-	echo form::close();
+	echo Form::close();
   
 ?>
 

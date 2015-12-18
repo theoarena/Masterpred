@@ -4,15 +4,15 @@ class Model_Gr extends ORM {
 	protected $_primary_key = 'CodGR';
   	protected $_table_name = 'gr';
 	protected $_belongs_to = array(
-		'equipamentoinspecionado' => array('model' => 'equipamentoinspecionado', 'foreign_key' => 'EquipamentoInspecionado'), 
-		'anomalia' => array('model' => 'anomalia', 'foreign_key' => 'TipoAnomalia'), 
-		'componente' => array('model' => 'componente', 'foreign_key' => 'TipoComponente'), 
-		'tipoinspecao' => array('model' => 'tipoinspecao', 'foreign_key' => 'TipoInspecao'), 
+		'equipamentoinspecionado' => array('model' => 'EquipamentoInspecionado', 'foreign_key' => 'EquipamentoInspecionado'), 
+		'anomalia' => array('model' => 'Anomalia', 'foreign_key' => 'TipoAnomalia'), 
+		'componente' => array('model' => 'Componente', 'foreign_key' => 'TipoComponente'), 
+		'tipoinspecao' => array('model' => 'TipoInspecao', 'foreign_key' => 'TipoInspecao'), 
 	);
 	
 	protected $_has_one = array(
 
-		'resultado' => array('model' => 'resultados', 'foreign_key' => 'GR')
+		'resultado' => array('model' => 'Resultados', 'foreign_key' => 'GR')
 		
 	);
 

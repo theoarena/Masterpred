@@ -2,14 +2,14 @@
  
 class Model_EquipamentoInspecionado extends ORM {
 	protected $_belongs_to = array(
-		'equipamento' => array('model' => 'equipamento', 'foreign_key' => 'Equipamento'),
-		'condicao' => array('model' => 'condicao', 'foreign_key' => 'Condicao'),
-		'analista' => array('model' => 'analista', 'foreign_key' => 'Analista'),
-		'tecnologia' => array('model' => 'tecnologia', 'foreign_key' => 'Tecnologia')
+		'equipamento' => array('model' => 'Equipamento', 'foreign_key' => 'Equipamento'),
+		'condicao' => array('model' => 'Condicao', 'foreign_key' => 'Condicao'),
+		'analista' => array('model' => 'Analista', 'foreign_key' => 'Analista'),
+		'tecnologia' => array('model' => 'Tecnologia', 'foreign_key' => 'Tecnologia')
 	);
 	
 	protected $_has_one = array(
-		'gr' => array('model' => 'gr', 'foreign_key' => 'EquipamentoInspecionado')	
+		'gr' => array('model' => 'Gr', 'foreign_key' => 'EquipamentoInspecionado')	
 	);
 
   	protected $_table_name = 'equipamentoinspecionado';

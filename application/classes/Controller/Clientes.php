@@ -46,11 +46,11 @@ class Controller_Clientes extends Controller_Welcome {
 
 	   $empresas = array_keys($user->empresas->find_all()->as_array('CodEmpresa','Empresa'));	  
 
-	   $objs = ORM::factory('gr');
+	   $objs = ORM::factory('Gr');
 	   $objs->join('equipamentoinspecionado','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado');
 	   $objs->join('resultados','LEFT')->on('gr.CodGR','=','resultados.GR');
 	   $objs->where('equipamentoinspecionado.Empresa', 'IN', $empresas );
-	   $objs->where('equipamentoinspecionado.Data', 'BETWEEN', array( site::data_EN($de) , site::data_EN($ate) ) );
+	   $objs->where('equipamentoinspecionado.Data', 'BETWEEN', array( Site::data_EN($de) , Site::data_EN($ate) ) );
 
 	   $objs->where_open();
 			if($sp!=0)
@@ -86,19 +86,21 @@ class Controller_Clientes extends Controller_Welcome {
 		{
 			$estado = 'vermelho'; 	
 			
-			if( !in_array( site::datahora_BR($r->resultado->DataCorretiva), array(null,'00/00/0000') ) )
+			$gr = $r->equipamentoinspecionado->condicao->Cor;
+
+			if( !in_array( Site::datahora_BR($r->resultado->DataCorretiva), array(null,'00/00/0000') ) )
 			{	
 				$estado = 'verde_pendente'; 
 				if( ($r->resultado->Total != null) && ($r->resultado->Total != 0) &&
-					!in_array( site::datahora_BR($r->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
+					!in_array( Site::datahora_BR($r->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
 					$estado = 'verde';
 			}
-			elseif( !in_array( site::datahora_BR($r->resultado->DataPlanejamento), array(null,'00/00/0000')) )
+			elseif( !in_array( Site::datahora_BR($r->resultado->DataPlanejamento), array(null,'00/00/0000')) )
 				$estado = 'laranja'; 								
 			
-			$list[] = "<span class='caminho'>".$r->equipamentoinspecionado->equipamento->setor->area->Area." - ".$r->equipamentoinspecionado->equipamento->setor->Setor."</span>".
-				"<a class='".$estado."' target='parent' href='".site::baseUrl()."clientes/edit_historico/".$r->CodGR."'>".				
-				site::datahora_BR($r->equipamentoinspecionado->Data)." | TE | OSP #".$r->NumeroGR."/".$r->CodGR." | ".$r->equipamentoinspecionado->condicao->Condicao." | ".$r->componente->Componente.": ".$r->Componente.
+			$list[] = "<span class='caminho'>".$r->equipamentoinspecionado->equipamento->setor->area->Area." - ".$r->equipamentoinspecionado->equipamento->setor->Setor."</span><span class='estado estado_".$estado."'></span>".
+				"<a class='gr cor_".$gr."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->CodGR."'>".				
+				Site::datahora_BR($r->equipamentoinspecionado->Data)." | ".$r->equipamentoinspecionado->tecnologia->Tecnologia." | OSP #".$r->NumeroGR."/".$r->CodGR." | ".$r->equipamentoinspecionado->condicao->Condicao." | ".$r->equipamentoinspecionado->equipamento->Equipamento." | ".$r->componente->Componente.": ".$r->Componente.
 			"</a>";
 					
 		}	
@@ -110,7 +112,7 @@ class Controller_Clientes extends Controller_Welcome {
 		$this->template->content->graficos->valores_grafico = $this->action_getGraficosOSP_gauge($user,$de,$ate,$sp,$pe,$ex,$fi);
 	}
 
-	public function action_load_historico() //edit dos rotas
+	public function action_load_historico() 
 	{			
 		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
 		$tipo = explode('_',Arr::get($_GET, 'id',null)); //separa o id do tipo
@@ -150,8 +152,8 @@ class Controller_Clientes extends Controller_Welcome {
 				$ret = array();
 				$setor = ORM::factory('Setor', $tipo[1]);	
 
-				$de = site::data_EN(Arr::get($_GET, 'de',null)); 
-				$ate = site::data_EN(Arr::get($_GET, 'ate',null)); 
+				$de = Site::data_EN(Arr::get($_GET, 'de',null)); 
+				$ate = Site::data_EN(Arr::get($_GET, 'ate',null)); 
 				$sp = Arr::get($_GET, 'sp',0); 
 				$ex = Arr::get($_GET, 'ex',0); 
 				$pe = Arr::get($_GET, 'pe',0); 
@@ -161,7 +163,7 @@ class Controller_Clientes extends Controller_Welcome {
 				{
 					$children = array();					
 
-					$equipinsp = ORM::factory('equipamentoinspecionado')
+					$equipinsp = ORM::factory('EquipamentoInspecionado')
 					->where('equipamentoinspecionado.Equipamento','=', $a->CodEquipamento)//$tipo[1])
 					->where('equipamentoinspecionado.Data', 'BETWEEN', array($de, $ate))
 					->join('gr','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado')
@@ -205,21 +207,21 @@ class Controller_Clientes extends Controller_Welcome {
 					{
 						$estado = 'vermelho'; 	
 						
-						if( !in_array( site::datahora_BR($r->gr->resultado->DataCorretiva), array(null,'00/00/0000') ) )
+						if( !in_array( Site::datahora_BR($r->gr->resultado->DataCorretiva), array(null,'00/00/0000') ) )
 						{	
 							$estado = 'verde_pendente'; 
 
 							if( ($r->gr->resultado->Total != null) && ($r->gr->resultado->Total != 0) &&
-								!in_array( site::datahora_BR($r->gr->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
+								!in_array( Site::datahora_BR($r->gr->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
 								$estado = 'verde';
 
 						}
-						elseif( !in_array( site::datahora_BR($r->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
+						elseif( !in_array( Site::datahora_BR($r->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
 							$estado = 'laranja'; 								
 
 						
 						$children[] =  array('key' => 'equipamentoinspecionado_'.$r->CodEquipamentoInspecionado , 
-										'title' => "<a class='".$estado."' target='parent' href='".site::baseUrl()."clientes/edit_historico/".$r->gr->CodGR."'>".site::datahora_BR($r->Data)." | TE | OSP #".$r->gr->NumeroGR."/".$r->gr->CodGR." | ".$r->condicao->Condicao." | ".$r->gr->componente->Componente.": ".$r->gr->Componente."</a>"									
+										'title' => "<a class='".$estado."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->gr->CodGR."'>".Site::datahora_BR($r->Data)." | TE | OSP #".$r->gr->NumeroGR."/".$r->gr->CodGR." | ".$r->condicao->Condicao." | ".$r->gr->componente->Componente.": ".$r->gr->Componente."</a>"									
 										);
 					}
 
@@ -232,7 +234,7 @@ class Controller_Clientes extends Controller_Welcome {
 			
 		}
 
-		//$obj = ORM::factory('Rota', site::segment('edit_rotas',null) );
+		//$obj = ORM::factory('Rota', Site::segment('edit_rotas',null) );
 		//$equipamentos_selecionados = $obj->equipamento->find_all()->as_array('CodEquipamento','Equipamento');
 		//print_r($equipamentos_selecionados);exit;				
 					
@@ -241,7 +243,7 @@ class Controller_Clientes extends Controller_Welcome {
 	public function action_edit_historico()
 	{		
 		$this->template->content->graficos = "";	
-		$obj = ORM::factory('Gr', site::segment('edit_historico',null) );
+		$obj = ORM::factory('Gr', Site::segment('edit_historico',null) );
 
 		$auth = Auth::instance();
 		$user = $auth->get_user();
@@ -249,8 +251,12 @@ class Controller_Clientes extends Controller_Welcome {
 		if(!in_array($obj->equipamentoinspecionado->Empresa, $user->getListEmpresas(false) ) ) //caso não seja o historico da sua empresa
 			HTTP::redirect('avisos/denied');
 
+		$encrypt = Encrypt::instance('relatorios');
+		$codgr = $encrypt->encode($obj->CodGR);
+
 		$this->template->content->conteudo = View::factory('clientes/edit_historico');						
 		$this->template->content->conteudo->obj = $obj;								
+		$this->template->content->conteudo->codgr = $codgr;								
 	}
 
 	public function action_resultado_historico()
@@ -259,7 +265,7 @@ class Controller_Clientes extends Controller_Welcome {
 		$user = $auth->get_user();
 		
 		$this->template->content->graficos = "";	
-		$id = (site::segment('resultado_historico',null) != 0)?(site::segment('resultado_historico',null) ):(null);		
+		$id = (Site::segment('resultado_historico',null) != 0)?(Site::segment('resultado_historico',null) ):(null);		
 		$obj = ORM::factory('Resultados', $id);
 		$gr = ORM::factory('Gr', $_GET['gr']);
 		$this->template->content->conteudo = View::factory('clientes/resultado_historico');						
@@ -267,23 +273,23 @@ class Controller_Clientes extends Controller_Welcome {
 		if(!in_array($gr->equipamentoinspecionado->Empresa, $user->getListEmpresas(false) ) ) //caso não seja o historico da sua empresa
 			HTTP::redirect('avisos/denied');
 
-		$this->template->content->conteudo->PreMOPreco = site::formata_moeda_input($obj->PreMOPreco);	
-		$this->template->content->conteudo->PreProdPreco = site::formata_moeda_input($obj->PreProdPreco);					
-		$this->template->content->conteudo->PredTercPreco = site::formata_moeda_input($obj->PredTercPreco);		
-		$this->template->content->conteudo->PredMatPreco = site::formata_moeda_input($obj->PredMatPreco);					
-		$this->template->content->conteudo->PredOutrPreco = site::formata_moeda_input($obj->PredOutrPreco);			
-		$this->template->content->conteudo->ConvMOPreco = site::formata_moeda_input($obj->ConvMOPreco);						
-		$this->template->content->conteudo->ConvProdPreco = site::formata_moeda_input($obj->ConvProdPreco);							
-		$this->template->content->conteudo->ConvTercPreco = site::formata_moeda_input($obj->ConvTercPreco);					
-		$this->template->content->conteudo->ConvMatPreco = site::formata_moeda_input($obj->ConvMatPreco);					
-		$this->template->content->conteudo->ConvOutrPreco = site::formata_moeda_input($obj->ConvOutrPreco);	
+		$this->template->content->conteudo->PreMOPreco = Site::formata_moeda_input($obj->PreMOPreco);	
+		$this->template->content->conteudo->PreProdPreco = Site::formata_moeda_input($obj->PreProdPreco);					
+		$this->template->content->conteudo->PredTercPreco = Site::formata_moeda_input($obj->PredTercPreco);		
+		$this->template->content->conteudo->PredMatPreco = Site::formata_moeda_input($obj->PredMatPreco);					
+		$this->template->content->conteudo->PredOutrPreco = Site::formata_moeda_input($obj->PredOutrPreco);			
+		$this->template->content->conteudo->ConvMOPreco = Site::formata_moeda_input($obj->ConvMOPreco);						
+		$this->template->content->conteudo->ConvProdPreco = Site::formata_moeda_input($obj->ConvProdPreco);							
+		$this->template->content->conteudo->ConvTercPreco = Site::formata_moeda_input($obj->ConvTercPreco);					
+		$this->template->content->conteudo->ConvMatPreco = Site::formata_moeda_input($obj->ConvMatPreco);					
+		$this->template->content->conteudo->ConvOutrPreco = Site::formata_moeda_input($obj->ConvOutrPreco);	
 
 		$this->template->content->conteudo->obj = $obj;	
 	}
 	
 	public function action_save_historico() //salvar novo e editar
 	{	
-		$obj = ORM::factory('rota',$this->request->post('CodRota' ));		
+		$obj = ORM::factory('Rota',$this->request->post('CodRota' ));		
 
 		$obj->Rota = $this->request->post('Rota');					
 		$obj->equipamento = $this->request->post('equipamento');					
@@ -301,31 +307,31 @@ class Controller_Clientes extends Controller_Welcome {
 		$obj->GR = $this->request->post('GR');					
 		$obj->CodCliente = $this->request->post('CodCliente');					
 		$obj->PreMOHora = $this->request->post('PreMOHora');					
-		$obj->PreMOPreco = site::formata_moeda($this->request->post('PreMOPreco'));					
+		$obj->PreMOPreco = Site::formata_moeda($this->request->post('PreMOPreco'));					
 		$obj->PreProdHora = $this->request->post('PreProdHora');					
-		$obj->PreProdPreco = site::formata_moeda($this->request->post('PreProdPreco'));					
+		$obj->PreProdPreco = Site::formata_moeda($this->request->post('PreProdPreco'));					
 		$obj->PredTercHora = $this->request->post('PredTercHora');					
-		$obj->PredTercPreco = site::formata_moeda($this->request->post('PredTercPreco'));					
-		$obj->PredMatPreco = site::formata_moeda($this->request->post('PredMatPreco'));					
-		$obj->PredOutrPreco = site::formata_moeda($this->request->post('PredOutrPreco'));					
+		$obj->PredTercPreco = Site::formata_moeda($this->request->post('PredTercPreco'));					
+		$obj->PredMatPreco = Site::formata_moeda($this->request->post('PredMatPreco'));					
+		$obj->PredOutrPreco = Site::formata_moeda($this->request->post('PredOutrPreco'));					
 		$obj->ConvMOHora = $this->request->post('ConvMOHora');					
-		$obj->ConvMOPreco = site::formata_moeda($this->request->post('ConvMOPreco'));					
+		$obj->ConvMOPreco = Site::formata_moeda($this->request->post('ConvMOPreco'));					
 		$obj->ConvProdHora = $this->request->post('ConvProdHora');					
-		$obj->ConvProdPreco = site::formata_moeda($this->request->post('ConvProdPreco'));					
+		$obj->ConvProdPreco = Site::formata_moeda($this->request->post('ConvProdPreco'));					
 		$obj->ConvTercHora = $this->request->post('ConvTercHora');					
-		$obj->ConvTercPreco = site::formata_moeda($this->request->post('ConvTercPreco'));					
-		$obj->ConvMatPreco = site::formata_moeda($this->request->post('ConvMatPreco'));					
-		$obj->ConvOutrPreco = site::formata_moeda($this->request->post('ConvOutrPreco'));	
+		$obj->ConvTercPreco = Site::formata_moeda($this->request->post('ConvTercPreco'));					
+		$obj->ConvMatPreco = Site::formata_moeda($this->request->post('ConvMatPreco'));					
+		$obj->ConvOutrPreco = Site::formata_moeda($this->request->post('ConvOutrPreco'));	
 
-		$obj->Total = ( site::formata_moeda($this->request->post('PreMOPreco'))+site::formata_moeda($this->request->post('PreProdPreco'))+
-				  site::formata_moeda($this->request->post('PredTercPreco'))+site::formata_moeda($this->request->post('PredMatPreco'))+
-				  site::formata_moeda($this->request->post('PredOutrPreco'))+site::formata_moeda($this->request->post('ConvMOPreco'))+
-				  site::formata_moeda($this->request->post('ConvProdPreco'))+site::formata_moeda($this->request->post('ConvTercPreco'))+
-				  site::formata_moeda($this->request->post('ConvMatPreco'))+site::formata_moeda($this->request->post('ConvOutrPreco'))
+		$obj->Total = ( Site::formata_moeda($this->request->post('PreMOPreco'))+Site::formata_moeda($this->request->post('PreProdPreco'))+
+				  Site::formata_moeda($this->request->post('PredTercPreco'))+Site::formata_moeda($this->request->post('PredMatPreco'))+
+				  Site::formata_moeda($this->request->post('PredOutrPreco'))+Site::formata_moeda($this->request->post('ConvMOPreco'))+
+				  Site::formata_moeda($this->request->post('ConvProdPreco'))+Site::formata_moeda($this->request->post('ConvTercPreco'))+
+				  Site::formata_moeda($this->request->post('ConvMatPreco'))+Site::formata_moeda($this->request->post('ConvOutrPreco'))
 				   	);		
-		$obj->DataPlanejamento = site::data_EN( $this->request->post('DataPlanejamento') ,null );					
-		$obj->DataCorretiva = site::data_EN( $this->request->post('DataCorretiva'), null );					
-		$obj->DataFinalizacao = site::data_EN( $this->request->post('DataFinalizacao'), null );		
+		$obj->DataPlanejamento = Site::data_EN( $this->request->post('DataPlanejamento') ,null );					
+		$obj->DataCorretiva = Site::data_EN( $this->request->post('DataCorretiva'), null );					
+		$obj->DataFinalizacao = Site::data_EN( $this->request->post('DataFinalizacao'), null );		
 
 		if( ( $this->request->post('DataFinalizacao') != null) && $obj->Total != 0) //significa que a OS foi finalizada
 			enviaEmail::aviso_ospFinalizada($this->request->post('GR'));			
@@ -350,8 +356,8 @@ class Controller_Clientes extends Controller_Welcome {
 		if($this->request->is_ajax())
 			$this->template = "";
 
-		$de = site::data_EN($de);
-		$ate = site::data_EN($ate);
+		$de = Site::data_EN($de);
+		$ate = Site::data_EN($ate);
 		$total = 0;
 		$finalizadas = 0;
 		$executadas = 0;
@@ -360,7 +366,7 @@ class Controller_Clientes extends Controller_Welcome {
 
 		foreach ($user->empresas->find_all() as $empresa) {	
 
-			$equipamentos = ORM::factory('equipamentoinspecionado')
+			$equipamentos = ORM::factory('EquipamentoInspecionado')
 			->where('equipamentoinspecionado.Empresa','=',$empresa->CodEmpresa)
 			->and_where('equipamentoinspecionado.Data', 'BETWEEN', array($de, $ate))
 			->join('gr','LEFT')->on('gr.equipamentoinspecionado','=','equipamentoinspecionado.CodEquipamentoInspecionado')
@@ -410,13 +416,13 @@ class Controller_Clientes extends Controller_Welcome {
 					continue;
 				}
 
-				if( !in_array( site::datahora_BR($e->gr->resultado->DataCorretiva), array(null,'00/00/0000')) )
+				if( !in_array( Site::datahora_BR($e->gr->resultado->DataCorretiva), array(null,'00/00/0000')) )
 				{
 					$executadas++;
 					continue;
 				}	
 
-				if( !in_array( site::datahora_BR($e->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
+				if( !in_array( Site::datahora_BR($e->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
 				{
 					$pendentes++;
 					continue;

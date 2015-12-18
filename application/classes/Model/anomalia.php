@@ -2,10 +2,10 @@
  
 class Model_Anomalia extends ORM {
 	protected $_belongs_to = array(
-		'tecnologia' => array('model' => 'tecnologia', 'foreign_key' => 'Tecnologia'),
-		'analiseequipamentoinspecionados' => array('model' =>'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise')
+		'tecnologia' => array('model' => 'Tecnologia', 'foreign_key' => 'Tecnologia'),
+		'analiseequipamentoinspecionados' => array('model' =>'AnaliseEquipamentoInspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise')
 	);	
-	protected $_has_many = array('grs' => array('model' => 'gr', 'foreign_key' => 'TipoAnomalia') );
+	protected $_has_many = array('grs' => array('model' => 'Gr', 'foreign_key' => 'TipoAnomalia') );
 	protected $_primary_key = 'CodAnomalia';
   	protected $_table_name = 'anomalia';
 	

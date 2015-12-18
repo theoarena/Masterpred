@@ -1,22 +1,22 @@
 <?php 
 
-	if(site::selected_empresaatual()) {
+	if(Site::selected_empresaatual()) {
 		
 		echo "<div id='select_areas'>";
-		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Área</span>". form::select('area',$objs,$area,array("id"=>"area"))."</div>";
-		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Setores</span>". form::select('setor',null,null,array("id"=>"setor"))."</div>";
+		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Área</span>". Form::select('area',$objs,$area,array("id"=>"area"))."</div>";
+		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Setores</span>". Form::select('setor',null,null,array("id"=>"setor"))."</div>";
 		echo "</div>";
 ?>
 
 <br/>
-<table class="footable table" data-page-navigation=".pagination">
+<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>
 	<thead>
 		<tr>
-			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>				
-			<th data-sort-ignore="true"><h3><?php echo site::getTituloCampos("tag"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("equipamento"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("tipo_equipamento"); ?></h3></th>			
-			<th data-sort-ignore="true" id='col_actions'><h3><?php echo site::getTituloCampos("acoes"); ?></h3></th>		
+			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo Site::getTituloCampos("codigo"); ?></h3></th>				
+			<th ><h3><?php echo Site::getTituloCampos("tag"); ?></h3></th>
+			<th><h3><?php echo Site::getTituloCampos("equipamento"); ?></h3></th>
+			<th><h3><?php echo Site::getTituloCampos("tipo_equipamento"); ?></h3></th>			
+			<th data-sort-ignore="true" id='col_actions'><h3><?php echo Site::getTituloCampos("acoes"); ?></h3></th>		
 		</tr>
 	</thead>
 	<tbody>
@@ -39,13 +39,18 @@
 
 <script type="text/javascript">
 
+	$(document).ready(function(){
+		$("#search_box").hide();
+	});
+
 	$( "select#area" ).change(function () {
 		$(".footable tbody").html("");
 		$( "#btn_adicionar" ).addClass("disabled");
+		$("#search_box").hide();
 		var selected = $( "select#area option:selected" ).val(); //pega a area selecionada
 		$('select#setor').empty();
 		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/carrega_setores/?a=1",
+			url : "<?php echo Site::baseUrl() ?>empresas/carrega_setores/?a=1",
 			type: "POST",  
 			dataType: "json",
   			data: { id: selected},
@@ -74,14 +79,15 @@
 
 
 	$( "select#setor" ).change(function () {
-		$(".footable tbody").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
+		$(".footable tbody").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
 
 		var selected = $( "select#setor option:selected" ).val(); //pega o setor selecionado
 		var area = $( "select#area option:selected" ).val(); //pega a area selecionado
 		$( "#btn_adicionar" ).removeClass("disabled");
-		$( "#btn_adicionar a" ).attr("href", "<?php echo site::baseUrl() ?>empresas/edit_equipamentos/0/"+selected+"/"+area );
+		$("#search_box").show();
+		$( "#btn_adicionar a" ).attr("href", "<?php echo Site::baseUrl() ?>empresas/edit_equipamentos/0/"+selected+"/"+area );
 		$.ajax({
-			url : "<?php echo site::baseUrl() ?>empresas/carrega_equipamentos",
+			url : "<?php echo Site::baseUrl() ?>empresas/carrega_equipamentos",
 			type: "POST",  
 			dataType: "json",
   			data: { setor: selected},
@@ -103,10 +109,10 @@
 				    	colunas += "<td>"+equipamento["Equipamento"]+"</td>";
 				    	colunas += "<td>"+equipamento["TipoEquipamento"]+"</td>";				    	
 				    	colunas += "<td><div class='btn-group btn-group-lg'>";
-				    	<?php if(site::isGrant(array('edit_equipamentos'))) { ?>			
-				    		colunas += "<a href='<?php echo site::baseUrl() ?>empresas/edit_equipamentos/"+equipamento["CodEquipamento"]+"/"+equipamento["codSetor"]+"/"+area+"' class='btn btn-info'>EDITAR</a>";
+				    	<?php if(Site::isGrant(array('edit_equipamentos'))) { ?>			
+				    		colunas += "<a href='<?php echo Site::baseUrl() ?>empresas/edit_equipamentos/"+equipamento["CodEquipamento"]+"/"+equipamento["codSetor"]+"/"+area+"' class='btn btn-info'>EDITAR</a>";
 				    	<?php } ?>
-				    	<?php if(site::isGrant(array('remove_equipamentos'))) { ?>	
+				    	<?php if(Site::isGrant(array('remove_equipamentos'))) { ?>	
 							colunas += "<button type='button' class='btn btn-danger' id='ask_"+equipamento["CodEquipamento"]+"' onclick='askDelete(\""+cod+"\")'>REMOVER</button>";
 							colunas += "<button type='button' class='btn btn-success confirm_hidden' id='confirm_"+equipamento['CodEquipamento']+"' onclick='deleteRow(\""+cod+"\")'>S</button>";						
 							colunas += "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_"+equipamento['CodEquipamento']+"' onclick='askDelete(\""+cod+"\")'>N</button>";						
@@ -124,11 +130,11 @@
 				}
 
 				$('.footable').footable();	
-				
 			    
 			}
 		});
 		
+			
 	});
 
 	
@@ -136,4 +142,4 @@
 </script>
 
 
-<?php if(site::isGrant(array('remove_empresas'))) echo site::generateDelete('Equipamento'); ?>
+<?php if(Site::isGrant(array('remove_empresas'))) echo Site::generateDelete('Equipamento'); ?>

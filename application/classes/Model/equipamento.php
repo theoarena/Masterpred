@@ -2,8 +2,8 @@
  
 class Model_Equipamento extends ORM {
 	protected $_belongs_to = array(
-		'setor' => array('model' => 'setor', 'foreign_key' => 'Setor'),
-		'tipoequipamento' => array('model' => 'tipoequipamento', 'foreign_key' => 'TipoEquipamento')
+		'setor' => array('model' => 'Setor', 'foreign_key' => 'Setor'),
+		'tipoequipamento' => array('model' => 'TipoEquipamento', 'foreign_key' => 'TipoEquipamento')
 	);
 	
 	protected $_has_many = array(
@@ -13,8 +13,8 @@ class Model_Equipamento extends ORM {
 			'far_key' => 'rota_CodRota' , 
 			'through' => 'equipamento_rota'
 		),
-		'analiseequipamentoinspecionados' => array('model' => 'analiseequipamentoinspecionado', 'foreign_key' => 'Equipamento'),
-		'equipamentoinspecionados' => array('model' => 'equipamentoinspecionado', 'foreign_key' => 'Equipamento')
+		'analiseequipamentoinspecionados' => array('model' => 'AnaliseEquipamentoInspecionado', 'foreign_key' => 'Equipamento'),
+		'equipamentoinspecionados' => array('model' => 'EquipamentoInspecionado', 'foreign_key' => 'Equipamento')
 	);		
 
   	protected $_table_name = 'equipamento';

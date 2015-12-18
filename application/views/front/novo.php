@@ -17,18 +17,18 @@
 	
 	echo '<div class="alert alert-danger" id="box_error"></div>';
 
-	echo form::open( "front/cadastrar_novo" ,array("id" => "form_edit")  );			
-    echo form::hidden("senha_aleatoria",1); 
-	echo form::hidden("birthday",null); 
+	echo Form::open( "front/cadastrar_novo" ,array("id" => "form_edit")  );			
+    echo Form::hidden("senha_aleatoria",1); 
+	echo Form::hidden("birthday",null); 
 	
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nome',null, array('class' => 'form-control', 'maxlength' => '200', 'placeholder' => 'Nome completo' )) ."</div>"; 
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('email',null, array('class' => 'form-control', 'maxlength' => '127', 'placeholder' => 'Email' )) ."</div>";   
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('telefone',null, array('class' => 'form-control', 'maxlength' => '127', 'placeholder' => 'Telefone' )) ."</div>";  
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nascimento',null, array('class' => 'form-control', 'maxlength' => '10' ,'placeholder' => 'Data de nascimento' , 'onkeypress' => "return mask(event,this,'##/##/####')" )) ."</div>";	
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>@</span>". form::input('username',null, array('class' => 'form-control', 'maxlength' => '32' ,'placeholder' => 'Nome de usuário' )) ."</div>";  
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Observações</span>". form::textarea('obs',null, array('class' => 'form-control' )) ."</div>"; 
-	echo form::submit('submit', "Enviar pedido", array ('class' => 'btn label-primary btn-pq' ));
-    echo html::anchor('','Voltar', array('class' => "btn btn-warning btn-pq" , "id" => "voltar_esqueci_senha"));            
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('nome',null, array('class' => 'form-control', 'maxlength' => '200', 'placeholder' => 'Nome completo' )) ."</div>"; 
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('email',null, array('class' => 'form-control', 'maxlength' => '127', 'placeholder' => 'Email' )) ."</div>";   
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('telefone',null, array('class' => 'form-control', 'maxlength' => '127', 'placeholder' => 'Telefone' )) ."</div>";  
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('nascimento',null, array('class' => 'form-control', 'maxlength' => '10' ,'placeholder' => 'Data de nascimento' , 'onkeypress' => "return mask(event,this,'##/##/####')" )) ."</div>";	
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>@</span>". Form::input('username',null, array('class' => 'form-control', 'maxlength' => '32' ,'placeholder' => 'Nome de usuário' )) ."</div>";  
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon addon_textarea'>Observações</span>". Form::textarea('obs',null, array('class' => 'form-control' )) ."</div>"; 
+	echo Form::submit('submit', "Enviar pedido", array ('class' => 'btn label-primary btn-pq' ));
+    echo HTML::anchor('','Voltar', array('class' => "btn btn-warning btn-pq" , "id" => "voltar_esqueci_senha"));            
 	
 	
 	echo "</form>";

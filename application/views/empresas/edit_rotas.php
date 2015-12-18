@@ -1,11 +1,11 @@
-<?php 
+    <?php 
 	
-	echo form::open( site::segment(1)."/save_rotas",array("id" => "form_edit") );			
+	echo Form::open( Site::segment(1)."/save_rotas",array("id" => "form_edit") );			
 	
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
-    echo form::hidden("CodRota",$obj->CodRota); 
-	echo form::hidden("Empresa",$empresa->CodEmpresa);	
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Rota',$obj->Rota, array('class' => 'form-control', 'maxlength' => '100', 'placeholder' => 'Nome da rota' )) ."</div>";	
+    echo Form::hidden("CodRota",$obj->CodRota); 
+	echo Form::hidden("Empresa",$empresa->CodEmpresa);	
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('Rota',$obj->Rota, array('class' => 'form-control', 'maxlength' => '100', 'placeholder' => 'Nome da rota' )) ."</div>";	
 	
         echo "<br/>";
         echo '<div class="panel-primary">';
@@ -18,7 +18,7 @@
                     {
                         echo '<a href="javascript:abrirfechar(\'area\',\''.$a->CodArea.'\')" class="list-group-item">';                       
                             echo '<label class="checkbox check_all">';
-                                echo form::checkbox('checkall_area_'.$a->CodArea);
+                                echo Form::checkbox('checkall_area_'.$a->CodArea);
                                 echo '<span class="checkbox-label"></span>';
                             echo '</label>';
                         echo '<span class="label_chkall">'.$a->Area.'</span>';
@@ -31,7 +31,7 @@
                                 {
                                     echo '<a href="javascript:abrirfechar(\'setor\',\''.$s->CodSetor.'\')" class="list-group-item">';
                                         echo '<label class="checkbox check_all">';
-                                            echo form::checkbox('checkall_setor_'.$s->CodSetor);
+                                            echo Form::checkbox('checkall_setor_'.$s->CodSetor);
                                             echo '<span class="checkbox-label"></span>';
                                         echo '</label>';                                        
                                         echo '<span class="label_chkall">'.$s->Setor.'</span>';
@@ -45,8 +45,8 @@
                                                     $id = $e->CodEquipamento;
                                                     echo ' <li class="list-group-item chk_equip">';
                                                     echo '<label class="checkbox">';
-                                                    echo form::checkbox('equipamento[]', $id, array_key_exists($id,$equipamentos_selecionados));
-                                                    echo '<span class="checkbox-label">'.$e->Equipamento.'</span>';
+                                                    echo Form::checkbox('equipamento[]', $id, array_key_exists($id,$equipamentos_selecionados));
+                                                    echo '<span class="checkbox-label">'.$e->tipoequipamento->TipoEquipamento." / ".$e->Equipamento.'</span>';
                                                     echo '</label>';
                                                   
                                                     echo '</li>';
@@ -69,10 +69,10 @@
             echo "</div>";
         echo '</div></div>';
    
-    echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn'));       
-	echo form::close();
+    echo Form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn'));       
+	echo Form::close();
 
-    echo site::generateValidator(array('Rota'=>'Rota'));
+    echo Site::generateValidator(array('Rota'=>'Rota'));
 ?>
 
 

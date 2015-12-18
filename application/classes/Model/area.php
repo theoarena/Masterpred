@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
 class Model_Area extends ORM {
-	protected $_belongs_to = array('empresa' => array('model' => 'empresa', 'foreign_key' => 'Empresa') );	
-	protected $_has_many = array("setores" => array('model' => 'setor', 'foreign_key' => 'Area') );
+	protected $_belongs_to = array('empresa' => array('model' => 'Empresa', 'foreign_key' => 'Empresa') );	
+	protected $_has_many = array("setores" => array('model' => 'Setor', 'foreign_key' => 'Area') );
 
   	protected $_table_name = 'area';
 	protected $_primary_key = "CodArea";

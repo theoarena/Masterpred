@@ -1,6 +1,6 @@
 <?php
 
- if(site::selected_empresaatual()) {
+ if(Site::selected_empresaatual()) {
 
 ?>
 
@@ -8,38 +8,38 @@
   <div class="panel-heading"><h3>Áreas</h3></div>
   <div class="panel-body">
    <?php 
-        if(site::isGrant(array('add_areas') ) )  
+        if(Site::isGrant(array('add_areas') ) )  
         {
-            echo form::open("empresas/save_areas",array('id' => "form_save_area"));
-                echo form::hidden("Empresa",$empresa);  
-                echo form::hidden("id",null);              
+            echo Form::open("empresas/save_areas",array('id' => "form_save_area"));
+                echo Form::hidden("Empresa",$empresa);  
+                echo Form::hidden("id",null);              
                 echo '<div class="row">';
                     echo '<div class="col-lg-6">';
                         echo '<div class="input-group">';
-                            echo form::input("Area",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome' ));
+                            echo Form::input("Area",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome' ));
                             echo '<span class="input-group-btn">';   
                                                 
-                                echo form::submit('submit', "+",array('class' => 'btn btn-success input-lg') );                     
+                                echo Form::submit('submit', "+",array('class' => 'btn btn-success input-lg') );                     
                             echo '</span>';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';          
-            echo form::close();
+            echo Form::close();
         }
    ?>
    <?php
-        if(site::isGrant(array('edit_areas') ) )  
+        if(Site::isGrant(array('edit_areas') ) )  
         {
-            echo form::open("empresas/save_areas",array('id' => "form_altera_area"));    
-                echo form::hidden("Empresa",$empresa);       
-                echo form::hidden("id",null);          
+            echo Form::open("empresas/save_areas",array('id' => "form_altera_area"));    
+                echo Form::hidden("Empresa",$empresa);       
+                echo Form::hidden("id",null);          
                 echo '<div class="row">';
                     echo '<div class="col-lg-6">';
                         echo '<div class="input-group btn-group row_edit_areassetores">';
-                            echo form::input("Area",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
+                            echo Form::input("Area",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
                             echo '<span class="input-group-btn">';
-                            echo form::submit('submit', "Alterar", array('class' => 'btn btn-info input-lg btn_alterar_areassetores' ));
-                            if(site::isGrant(array('remove_areas'))){
+                            echo Form::submit('submit', "Alterar", array('class' => 'btn btn-info input-lg btn_alterar_areassetores' ));
+                            if(Site::isGrant(array('remove_areas'))){
                                 echo "<button type='button' class='btn btn-danger input-lg ask_btn_area' id='ask_area' onclick='askDelete()'>REMOVER</button>";                                        
                                 echo "<button type='button' class='btn btn-success input-lg confirm_hidden confirm_area' id='confirm_area'>S</button>";                     
                                 echo "<button type='button' class='btn btn-danger input-lg confirm_hidden cancel_area' id='cancel_area'>N</button>";                       
@@ -48,7 +48,7 @@
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';          
-            echo form::close();
+            echo Form::close();
         }
 
    ?>
@@ -72,37 +72,37 @@
   <div class="panel-heading"><h3>Setores</h3></div>
   <div class="panel-body">
     <?php
-        if(site::isGrant(array('add_setores') ) )  
+        if(Site::isGrant(array('add_setores') ) )  
         {
-            echo form::open("empresas/save_setores",array('id' => "form_save_setor"));
-                echo form::hidden("Area",null); 
-                echo form::hidden("id",null);   
+            echo Form::open("empresas/save_setores",array('id' => "form_save_setor"));
+                echo Form::hidden("Area",null); 
+                echo Form::hidden("id",null);   
                 echo '<div class="row">';
                     echo '<div class="col-lg-6">';
                         echo '<div class="input-group">';
-                            echo form::input("Setor",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome', 'disabled' => 'disabled' ));
+                            echo Form::input("Setor",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome', 'disabled' => 'disabled' ));
                             echo '<span class="input-group-btn">';
-                            echo form::submit('submit', "+", array('class' => 'btn btn-success input-lg' ,'disabled' => 'disabled'));
+                            echo Form::submit('submit', "+", array('class' => 'btn btn-success input-lg' ,'disabled' => 'disabled'));
                             echo '</span>';
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';          
-            echo form::close();
+            echo Form::close();
         }
    ?>
    <?php
-        if(site::isGrant(array('edit_setores') ) )  
+        if(Site::isGrant(array('edit_setores') ) )  
         {
-            echo form::open("empresas/save_setores",array('id' => "form_altera_setor"));
-                echo form::hidden("Area",null); 
-                echo form::hidden("id",null);   
+            echo Form::open("empresas/save_setores",array('id' => "form_altera_setor"));
+                echo Form::hidden("Area",null); 
+                echo Form::hidden("id",null);   
                 echo '<div class="row">';
                     echo '<div class="col-lg-6">';
                         echo '<div class="input-group row_edit_areassetores">';
-                            echo form::input("Setor",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
+                            echo Form::input("Setor",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
                             echo '<span class="input-group-btn">';
-                            echo form::submit('submit', "Alterar",array('class' => 'btn btn-info input-lg btn_alterar_areassetores') );
-                             if(site::isGrant(array('remove_setores'))){
+                            echo Form::submit('submit', "Alterar",array('class' => 'btn btn-info input-lg btn_alterar_areassetores') );
+                             if(Site::isGrant(array('remove_setores'))){
                                 echo "<button type='button' class='btn btn-danger input-lg ask_btn_setor' id='ask_setor' onclick='askDelete()'>REMOVER</button>";                                        
                                 echo "<button type='button' class='btn btn-success input-lg confirm_hidden confirm_setor' id='confirm_setor'>S</button>";                     
                                 echo "<button type='button' class='btn btn-danger input-lg confirm_hidden cancel_setor' id='cancel_setor'>N</button>";                       
@@ -111,7 +111,7 @@
                         echo '</div>';
                     echo '</div>';
                 echo '</div>';          
-            echo form::close();
+            echo Form::close();
         }
 
    ?>
@@ -137,11 +137,11 @@
             return false;   
         else    
         {
-            $("#lista_areas").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
+            $("#lista_areas").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo site::baseUrl() ?>/empresas/save_areas",
+                url: "<?php echo Site::baseUrl() ?>/empresas/save_areas",
                 data: {empresa: emp, area: ar, id: id }
             }).done(function( text ) {   
                 $("#form_altera_area").slideUp();            
@@ -171,11 +171,11 @@
             return false;   
         else    
         {
-            $("#lista_areas").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
+            $("#lista_areas").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo site::baseUrl() ?>/empresas/save_areas",
+                url: "<?php echo Site::baseUrl() ?>/empresas/save_areas",
                 data: {empresa: emp, area: ar, id: id }
             }).done(function( text ) {   
                  $("#form_altera_area").slideUp();            
@@ -218,10 +218,10 @@
         $("#form_save_setor input[type='submit']").prop("disabled",false);
         $("#form_save_setor input[name='Area']").val(a); // coloca o id da area no form
 
-        $("#lista_setores").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
+        $("#lista_setores").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
         $.ajax({
             type: "POST",
-            url: "<?php echo site::baseUrl() ?>/empresas/carrega_setores",
+            url: "<?php echo Site::baseUrl() ?>/empresas/carrega_setores",
             data: {area: a }
         }).done(function( text ) {          
             $( "#lista_setores" ).html( text );
@@ -253,11 +253,11 @@
                 return false;   
             else    
             {
-                $("#lista_setores").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
+                $("#lista_setores").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
 
                 $.ajax({
                     type: "POST",
-                    url: "<?php echo site::baseUrl() ?>/empresas/save_setores",
+                    url: "<?php echo Site::baseUrl() ?>/empresas/save_setores",
                     data: {setor: set, area: ar, id: id }
                 }).done(function( text ) {          
                      $("#form_altera_setor").slideUp(); 
@@ -279,11 +279,11 @@
             return false;   
         else    
         {
-            $("#lista_setores").html("<span id='loading'><img src='<?php echo site::mediaUrl() ?>images/loading.gif'></span>");
+            $("#lista_setores").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo site::baseUrl() ?>/empresas/save_setores",
+                url: "<?php echo Site::baseUrl() ?>/empresas/save_setores",
                 data: {setor: set, area: ar, id: id }
             }).done(function( text ) {          
                 $( "#lista_setores" ).html( text );

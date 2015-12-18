@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
 class Model_Resultados extends ORM {
-	protected $_belongs_to = array('gr' => array('model' => 'gr', 'foreign_key' => 'GR') );	
+	protected $_belongs_to = array('gr' => array('model' => 'Gr', 'foreign_key' => 'GR') );	
 	protected $_table_name = 'resultados';
 	protected $_primary_key = "CodResultado";		
 	// protected $table_names_plural = false;

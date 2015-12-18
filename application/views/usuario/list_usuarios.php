@@ -1,6 +1,6 @@
 <?php 
 	
-	if($tipo != 'empresa' || site::selected_empresaatual()) {
+	if($tipo != 'empresa' || Site::selected_empresaatual()) {
 	
 		if(count($objs) > 0) { 
 		
@@ -9,11 +9,11 @@
 <table class="footable table" data-page-navigation=".pagination">
 	<thead>
 		<tr>
-			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>	
-			<th><h3><?php echo site::getTituloCampos("nome"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("tipo_usuario"); ?></h3></th>
+			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo Site::getTituloCampos("codigo"); ?></h3></th>	
+			<th><h3><?php echo Site::getTituloCampos("nome"); ?></h3></th>
+			<th><h3><?php echo Site::getTituloCampos("tipo_usuario"); ?></h3></th>
 			
-			<th data-sort-ignore="true" id='col_actions'><h3><?php echo site::getTituloCampos("acoes"); ?></h3></th>		
+			<th data-sort-ignore="true" id='col_actions'><h3><?php echo Site::getTituloCampos("acoes"); ?></h3></th>		
 		</tr>
 	</thead>
 	<tbody>
@@ -30,7 +30,7 @@
 					echo "<td>".@$roles[$key]."</td>";				
 					
 					echo "<td><div class='btn-group btn-group-lg'>";
-						echo html::anchor($link_edit."/".$o->id,"EDITAR", array("class"=>"btn btn-info"));						
+						echo HTML::anchor($link_edit."/".$o->id,"EDITAR", array("class"=>"btn btn-info"));						
 						echo "<button type='button' class='btn btn-danger' id='ask_".$o->id."' onclick='askDelete(\"$o->id\")'>REMOVER</button>";
 
 						echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->id."' onclick='deleteRow(\"$o->id\")'>S</button>";						
@@ -62,4 +62,4 @@
 
 </script>
 
-<?php echo site::generateDelete('User'); ?>
+<?php echo Site::generateDelete('User'); ?>

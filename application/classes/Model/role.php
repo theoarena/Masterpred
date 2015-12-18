@@ -2,8 +2,8 @@
  
 class Model_Role extends ORM {
     protected $_has_many = array(
-    	'users' => array ( 'model' => 'user' , 'through' => 'roles_users' ),
-    	'privileges' => array ( 'model' => 'privilege' , 'through' => 'roles_privileges', 'far_key' => 'privilege_id' )
+    	'users' => array ( 'model' => 'User' , 'through' => 'roles_users' ),
+    	'privileges' => array ( 'model' => 'Privilege' , 'through' => 'roles_privileges', 'far_key' => 'privilege_id' )
     );
  
 	public function unique_key($id = NULL)

@@ -2,12 +2,13 @@
  
 class Model_Tecnologia extends ORM {
 	protected $_has_many = array(
-		 'componentes' => array('model' => 'componente', 'foreign_key' => 'Tecnologia'),
-		 'anomalias' => array('model' => 'anomalia', 'foreign_key' => 'Tecnologia') ,
-		 'recomendacoes' => array('model' =>'recomendacao', 'foreign_key' => 'Tecnologia'),
-		 'equipamentoinspecionados' => array('model' =>'equipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspecionado'),
-		 'analiseequipamentoinspecionados' => array('model' =>'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise'),
-		 'condicoes' => array('model' =>'condicao', 'foreign_key' => 'Tecnologia' , 'far_key' => 'Tecnologia')
+		 'componentes' => array('model' => 'Componente', 'foreign_key' => 'Tecnologia'),
+		 'anomalias' => array('model' => 'Anomalia', 'foreign_key' => 'Tecnologia') ,
+		 'relatorios' => array('model' => 'Relatorio', 'foreign_key' => 'Tecnologia') ,
+		 'recomendacoes' => array('model' =>'Recomendacao', 'foreign_key' => 'Tecnologia'),
+		 'equipamentoinspecionados' => array('model' =>'EquipamentoInspecionado', 'foreign_key' => 'CodEquipamentoInspecionado'),
+		 'analiseequipamentoinspecionados' => array('model' =>'AnaliseEquipamentoInspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise'),
+		 'condicoes' => array('model' =>'Condicao', 'foreign_key' => 'Tecnologia' , 'far_key' => 'Tecnologia')
 	);
 	
 	protected $_table_name = 'tecnologia';

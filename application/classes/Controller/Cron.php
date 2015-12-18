@@ -18,7 +18,7 @@ class Controller_Cron extends Controller {
 
 			if(in_array($condicao,$tipos_condicao)) //se estiver em algum grau de risco
 			{
-				$data = strtotime(site::datahora_EN($equip->Data)); //data da lançamento da os
+				$data = strtotime(Site::datahora_EN($equip->Data)); //data da lançamento da os
 				$hoje = strtotime(date("Y-m-d")); //data atual				
 				$diferenca = date::timespan($data,$hoje);				
 				//fazer o resto

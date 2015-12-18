@@ -4,7 +4,7 @@ return array(
 
 	//general
 	'system_active' => TRUE,
-	'system_version' => '1.1',
+	'system_version' => 'Beta 1.0',
 	'site_domain' => '/masterpred',
 	'site_name' => 'Masterpred',
 	
@@ -14,13 +14,17 @@ return array(
 	'select_default' => '-- Selecione --',
 	'index_page' => 'index.php/',
 	
+	//Dirs
+	'mpdf' => 'application/media/classes/mpdf/mpdf.php',
+	'css' => 'application/media/css/',
+
 	//uploads
 	'upload_directory' => 'application/media/uploads/analises/',
 	'upload_directory_gr' => 'application/media/uploads/gr/',
 	'upload_directory_condicoes' => 'application/media/uploads/condicoes/',
 
 	//condicoes
-	'tipos_condicao' => array("GR-0","GR-1","GR-2","GR-3","GR-4"),
+	'tipos_condicao' => array("GR-0","GR-1","GR-2","GR-3","GR-4","GR-5"), //condiçoes de emergência
 	'cores_condicao' => array(
 		"green"=>"Verde",
 		"bordeaux"=>"Vinho",

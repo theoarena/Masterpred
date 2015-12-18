@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
-class site {
+class Site {
  
 	public static function segment($index,$default=null) //URI FUNCTION
 	{
@@ -23,7 +23,7 @@ class site {
 	public static function segment_array($offset = 0, $associative = FALSE)
 	{
 		$arguments = explode("/",Kohana_Request::detect_uri());
-		return site::build_array($arguments, $offset, $associative);
+		return Site::build_array($arguments, $offset, $associative);
 	}
 
 	public static function build_array($array, $offset = 0, $associative = FALSE)
@@ -51,12 +51,12 @@ class site {
 
 	public static function segment_has($index,$search)
 	{			
-		return ( strpos(site::segment($index,''), $search ) !== false);			
+		return ( strpos(Site::segment($index,''), $search ) !== false);			
 	}
 
 	public static function segment_get($segment,$index)
 	{	
-		$s = explode('_',site::segment($segment));
+		$s = explode('_',Site::segment($segment));
 		return $s[$index];			
 	}
 
@@ -85,7 +85,7 @@ class site {
 	
 	public static function isGrant($privileges_needed) 
 	{
-		if(site::getInfoUsuario('usuario_roles') == 'admin')
+		if(Site::getInfoUsuario('usuario_roles') == 'admin')
 			return true; //se for de sistema pode ver tudo;
 		
 		/*
@@ -109,7 +109,7 @@ class site {
 	public static function active($a,$i,$t,$class='drop') //active do menu
 	{				
 		$return = "";
-		$v = site::segment_array();			
+		$v = Site::segment_array();			
 		//print_r($v);
 		if( (count($v) > 0) )
 			if( isset($v[$i]) && ( $v[$i] == $a) )
@@ -119,13 +119,13 @@ class site {
 
 	public static function getTituloTipo($i)
 	{
-		return ( ( site::segment_has(2,'edit') )?'Cadastro':'Listagem' );	
+		return ( ( Site::segment_has(2,'edit') )?'Cadastro':'Listagem' );	
 	}
 
 	public static function getTituloInterna($i)
 	{
 		$tit = "";
-		switch (site::segment($i)) {			
+		switch (Site::segment($i)) {			
 
 			case 'componentes':	
 			case 'edit_componentes':	$tit = "Componentes"; break;
@@ -168,6 +168,7 @@ class site {
 			case 'edit_roles':$tit = "Grupos de acesso de Usuário"; break;
 			case 'privileges':
 			case 'edit_privileges':$tit = "Privilégios do grupo de acesso"; break;
+			case 'relatorios':$tit = "Relatórios"; break;
 			default: break;
 		}
 
@@ -180,6 +181,7 @@ class site {
 		switch ($i) {
 			case 'unidade': $tit = "Unidade de negócio"; break;
 			case 'nome': $tit = "Nome"; break;
+			case 'analista': $tit = "Analista"; break;
 			case 'fabrica': $tit = "Site"; break;			
 			case 'anomalia': $tit = "Anomalia"; break;			
 			case 'inspecao': $tit = "Tipo de Inspeção"; break;			
@@ -189,6 +191,7 @@ class site {
 			case 'tecnologia': $tit = "Tecnologia"; break;			
 			case 'id': $tit = "Id"; break;			
 			case 'tag': $tit = "Tag"; break;			
+			case 'rota': $tit = "Rota"; break;			
 			case 'setor': $tit = "Setor"; break;			
 			case 'area': $tit = "Área"; break;			
 			case 'equipamento': $tit = "Equipamento"; break;			
@@ -206,6 +209,7 @@ class site {
 			case 'numerogr': $tit = "GR no Cliente"; break;			
 			case 'desc': $tit = "Descrição"; break;			
 			case 'apelido': $tit = "Apelido"; break;			
+			case 'sequencial': $tit = "Sequencial"; break;			
 			default: $tit = "";	break;
 		}
 
@@ -250,10 +254,10 @@ class site {
 		public static function avatar_empresaatual() //pega o nome e o codigo da empresa pra deixar lá em cima
 		{
 			$str = "";
-			if(site::selected_empresaatual())
+			if(Site::selected_empresaatual())
 			{
 				$empresa = 
-				$str = '<h2 class="pull-right">'.site::get_empresaatual(2).' <span class="label label-primary">'.site::get_empresaatual().'</span></h2>';
+				$str = '<h2 class="pull-right">'.Site::get_empresaatual(2).' <span class="label label-primary">'.Site::get_empresaatual().'</span></h2>';
 			}
 			return $str;
 
@@ -287,9 +291,17 @@ class site {
 		return $d[2]."/".$d[1]."/".$d[0];
 	}
 
+	public static function data_EN_relatorio($d)
+	{		
+		$d = explode("-",$d);
+		return $d[0].".".$d[1];
+	}
+
 	public static function data_EN($d=false,$return=false)
 	{
-		if($d=="") return (!$return)?(date('Y/m/d')):($return);
+		if($d=="") 
+			return (!$return)?(date('1900/01/01')):($return);
+
 		$d = explode("/",$d);
 		return $d[2]."-".$d[1]."-".$d[0];
 	}
@@ -298,7 +310,7 @@ class site {
 	{
 		if($d == null) return null;
 		$d = explode(" ", $d);
-		return site::data_BR($d[0]);
+		return Site::data_BR($d[0]);
 	}
 
 	public static function datahora_EN($d)
@@ -323,7 +335,14 @@ class site {
 	}
 
 
-	function formata_moeda_input($v,$p=null,$s=".") {
+	public static function formata_codRelatorio($cod) {
+
+		return str_pad($cod, 4, '0', STR_PAD_LEFT);
+
+	}
+
+
+	public static function formata_moeda_input($v,$p=null,$s=".") {
 
 		if(($v==null) || ($v==0)) return 0;
 		$v = explode(".", (string)$v);
@@ -337,7 +356,7 @@ class site {
 			return $p.$v[0].$s.$v[1];
 		}
 	}
-	public function formata_moeda( $v) {
+	public static function formata_moeda( $v) {
 		$money = (string)$v;
 		$cleanString = preg_replace('/([^0-9\.,])/i', '', $money);
 	    $onlyNumbersString = preg_replace('/([^0-9])/i', '', $money);
@@ -350,13 +369,13 @@ class site {
 	    return (float) str_replace(',', '.', $removedThousendSeparator);
 	}
 	
-	public function random_password( $length = 8 ) {
+	public static function random_password( $length = 8 ) {
 	    $chars = "aNAZrsklIuefgv8hiDESQVwx3FGOTPBCR45UHqcdo6WXyzmnj012Y7btpJKLM9";
 	    $password = substr( str_shuffle( $chars ), 0, $length );
 	    return $password;
 	}
 
-	public function generateValidator($fields,$form_name = 'form_edit',$error_box='box_error') //gera o script de validação dos campos
+	public static function generateValidator($fields,$form_name = 'form_edit',$error_box='box_error') //gera o script de validação dos campos
 	{		
 		$return = '<script>';
 
@@ -399,7 +418,7 @@ class site {
 		return $return;
 	}
 
-	public function generateDelete($class)
+	public static function generateDelete($class)
 	{
 		$return = '<script type="text/javascript">';
 
@@ -407,9 +426,9 @@ class site {
 			function deleteRow(id)
 			{
 				$.ajax({
-					url : '".site::baseUrl()."welcome/delete',
+					url : '".Site::baseUrl()."welcome/delete',
 					type: 'POST',  
-		  			data: { id: id,class:'".$class."',cache:'".site::segment(2)."'},
+		  			data: { id: id,class:'".$class."',cache:'".Site::segment(2)."'},
 					success : function(data) {
 						if(data == 1)	
 						{						    
@@ -425,8 +444,21 @@ class site {
 		return $return;
 	}
 
+	public static function toAscii($str, $replace=array(), $delimiter='_') {
+	if( !empty($replace) ) {
+			$str = str_replace((array)$replace, ' ', $str);
+		}
+
+		$clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+		$clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+		$clean = strtolower(trim($clean, '-'));
+		$clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+
+		return $clean;
+	}
+
 	//ORM add() extension
-	public function addORMRelation($obj,$itens,$post,$relation)
+	public static function addORMRelation($obj,$itens,$post,$relation)
 	{
 		$array_db = array();
 
@@ -443,7 +475,7 @@ class site {
 		
 	}
 
-	public function handleErrors($errors) //junta os erros em uma query string
+	public static function handleErrors($errors) //junta os erros em uma query string
 	{
 		$return = array();
 		foreach ($errors as $key => $value) {			

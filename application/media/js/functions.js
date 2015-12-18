@@ -16,3 +16,38 @@ function askDelete(id)
 	$("#confirm_"+id).toggle();
 	$("#cancel_"+id).toggle();
 }
+/*
+Object.prototype.brToFloat = function(){
+   var ret=0;
+  try{
+    var arr = this.value.split(",");
+    ret = parseFloat(arr.join("."));
+  }catch(err){
+    alert(err.message);
+  }
+    return ret;
+}
+
+Number.prototype.floatToBr = function(){
+   var ret=0;
+  try{
+    if (parseFloat(this)){
+      var value = ""+this;
+      var arr = value.split(".");
+      ret = arr.join(",");
+    }
+  }catch(err){
+    alert(err.message);
+  }
+    return ret;
+}*/
+
+function moeda2float(moeda){
+
+   moeda = moeda.replace(".","");
+
+   moeda = moeda.replace(",",".");
+
+   return parseFloat(moeda);
+
+}

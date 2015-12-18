@@ -3,7 +3,7 @@
 class Model_Privilege extends ORM {
 	
     protected $_has_many = array(
-    	'role' => array ( 'model' => 'role' , 'through' => 'roles_privileges','far_key' => 'role_id'  ),    	
+    	'role' => array ( 'model' => 'Role' , 'through' => 'roles_privileges','far_key' => 'role_id'  ),    	
     );
  
 	public function unique_key($id = NULL)

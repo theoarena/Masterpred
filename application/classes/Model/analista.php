@@ -1,8 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
 class Model_Analista extends ORM {
-	protected $_belongs_to = array('analiseequipamentoinspecionados' => array('model' =>'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise') );	
-	protected $_has_many = array( 'equipamentoinspecionados' => array('model' => 'equipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspecionado') );
+	protected $_belongs_to = array('analiseequipamentoinspecionados' => array('model' =>'AnaliseEquipamentoInspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise') );	
+	protected $_has_many = array( 
+		'equipamentoinspecionados' => array('model' => 'EquipamentoInspecionado', 'foreign_key' => 'CodEquipamentoInspecionado') ,
+		'relatorios' => array('model' => 'Relatorios', 'foreign_key' => 'Analista')
+	);
 
   	protected $_table_name = 'analista';
 	protected $_primary_key = 'CodAnalista';

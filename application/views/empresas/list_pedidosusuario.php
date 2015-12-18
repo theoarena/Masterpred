@@ -6,14 +6,14 @@
 
 <div class="alert alert-warning"><h4>Os usuários abaixo estão aguardando a ativação de seus perfis.</h4></div>
 
-<table class="footable table" data-page-navigation=".pagination">
+<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>
 	<thead>
 		<tr>
-			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo site::getTituloCampos("codigo"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("nome"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("telefone"); ?></h3></th>
-			<th><h3><?php echo site::getTituloCampos("email"); ?></h3></th>			
-			<th data-sort-ignore="true" id='col_actions'><h3><?php echo site::getTituloCampos("acoes"); ?></h3></th>		
+			<th id='col_id' data-type='numeric' data-sort-initial='true'><h3><?php echo Site::getTituloCampos("codigo"); ?></h3></th>
+			<th><h3><?php echo Site::getTituloCampos("nome"); ?></h3></th>
+			<th><h3><?php echo Site::getTituloCampos("telefone"); ?></h3></th>
+			<th><h3><?php echo Site::getTituloCampos("email"); ?></h3></th>			
+			<th data-sort-ignore="true" id='col_actions'><h3><?php echo Site::getTituloCampos("acoes"); ?></h3></th>		
 		</tr>
 	</thead>
 	<tbody>
@@ -25,7 +25,7 @@
 					echo "<td>".$o->telefone."</td>";				
 					echo "<td>".$o->email."</td>";				
 					echo "<td><div class='btn-group btn-group-lg'>";
-						echo html::anchor("empresas/edit_pedidos_usuario/".$o->id,"EDITAR", array("class"=>"btn btn-info"));						
+						echo HTML::anchor("empresas/edit_pedidos_usuario/".$o->id,"EDITAR", array("class"=>"btn btn-info"));						
 						echo "<button type='button' class='btn btn-danger' id='ask_".$o->id."' onclick='askDelete(\"$o->id\")'>REMOVER</button>";
 
 						echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->id."' onclick='deleteRow(\"$o->id\")'>S</button>";						
@@ -57,4 +57,4 @@
 </script>
 
 
-<?php echo site::generateDelete('User'); ?>
+<?php echo Site::generateDelete('User'); ?>

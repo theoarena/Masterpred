@@ -10,15 +10,12 @@
 
 	<!-- Le styles -->
 	
-	<link href='<?php echo site::mediaUrl(); ?>css/print.css' rel='stylesheet' type='text/css' />	
+	<link href='<?php echo Site::mediaUrl(); ?>css/print.css' rel='stylesheet' type='text/css' />	
 	
 </head>
 
-<body id='<?php echo site::segment('relatorios',null); ?>'>
-	<div class="no-print" id="bar_print">		
-		<a href="javascript:history.back(-1)" id="voltar">Voltar</a>
-		<a href="javascript:self.print()" id="imprimir">Imprimir</a>
-	</div>
+<body id='<?php echo Site::segment('relatorios',null); ?>'>
+	
 	<?php echo $content; ?>	
 </body>
 

@@ -25,10 +25,10 @@
   <div class="center">
 	<?php if( !isset($_GET['show']) ) { ?>
 	    <h2 class="inline">		
-				<?php echo html::anchor('avisos/aceitar',"Aceitar", array("class" => "label label-success" )); ?>
+				<?php echo HTML::anchor('avisos/aceitar',"Aceitar", array("class" => "label label-success" )); ?>
 		</h2>
 		<h2 class="inline">		
-				<?php echo html::anchor('avisos/logout',"Recusar", array("class" => "label label-danger" )); ?>
+				<?php echo HTML::anchor('avisos/logout',"Recusar", array("class" => "label label-danger" )); ?>
 		</h2>
 		
 	<?php } else { ?>

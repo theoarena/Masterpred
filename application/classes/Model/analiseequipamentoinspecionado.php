@@ -2,14 +2,14 @@
  
 class Model_AnaliseEquipamentoInspecionado extends ORM {
 	protected $_has_one = array(
-		'condicao' => array('model' => 'condicao', 'foreign_key' => 'Condicao'),
-		'analista'=> array('model' => 'analista', 'foreign_key' => 'Analista'),
-		'componente'=> array('model' => 'componente', 'foreign_key' => 'Componente'),
-		'anomalia' => array('model' => 'anomalia', 'foreign_key' => 'Anomalia')
+		'condicao' => array('model' => 'Condicao', 'foreign_key' => 'Condicao'),
+		'analista'=> array('model' => 'Analista', 'foreign_key' => 'Analista'),
+		'componente'=> array('model' => 'Componente', 'foreign_key' => 'Componente'),
+		'anomalia' => array('model' => 'Anomalia', 'foreign_key' => 'Anomalia')
 	);
 	protected $_belongs_to = array(
-		'equipamento' => array('model' => 'equipamento', 'foreign_key' => 'Equipamento'),
-		'tecnologia' => array('model' => 'tecnologia', 'foreign_key' => 'Tecnologia')
+		'equipamento' => array('model' => 'Equipamento', 'foreign_key' => 'Equipamento'),
+		'tecnologia' => array('model' => 'Tecnologia', 'foreign_key' => 'Tecnologia')
 		);
 	//protected $has_and_belongs_to_many = array('rota');		
 

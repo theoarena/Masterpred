@@ -2,10 +2,10 @@
  
 class Model_Condicao extends ORM {
 	protected $_belongs_to = array(
-		"analiseequipamentoinspecionados" => array('model' => 'analiseequipamentoinspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise'), 
-		"tecnologia" => array('model' => 'tecnologia', 'foreign_key' => 'Tecnologia')
+		"analiseequipamentoinspecionados" => array('model' => 'AnaliseEquipamentoInspecionado', 'foreign_key' => 'CodEquipamentoInspAnalise'), 
+		"tecnologia" => array('model' => 'Tecnologia', 'foreign_key' => 'Tecnologia')
 	);		
-	protected $_has_many = array("equipamentoinspecionado" => array ( 'model' => 'equipamentoinspecionado' , 'foreign_key' => 'Condicao'));
+	protected $_has_many = array("equipamentoinspecionado" => array ( 'model' => 'EquipamentoInspecionado' , 'foreign_key' => 'Condicao'));
 
   	protected $_table_name = 'condicao';
 	protected $_primary_key = "CodCondicao";

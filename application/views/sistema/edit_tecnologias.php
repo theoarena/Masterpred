@@ -1,17 +1,17 @@
 <?php 
 	
-	echo form::open( "sistema/save_tecnologias",array("id" => "form_edit" ) );			
+	echo Form::open( "sistema/save_tecnologias",array("id" => "form_edit" ) );			
 	
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
-	echo form::hidden("CodTecnologia",$obj->CodTecnologia);	
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Tecnologia',$obj->Tecnologia,array('class'=>'form-control', 'maxlength' => '100', 'placeholder' => 'Nome da Tecnologia')) ."</div>";	
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('Id',$obj->Id,array('class'=>'form-control', 'maxlength' => '5', 'placeholder' => 'Id'))."</div>";		
+	echo Form::hidden("CodTecnologia",$obj->CodTecnologia);	
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('Tecnologia',$obj->Tecnologia,array('class'=>'form-control', 'maxlength' => '100', 'placeholder' => 'Nome da Tecnologia')) ."</div>";	
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('Id',$obj->Id,array('class'=>'form-control', 'maxlength' => '5', 'placeholder' => 'Id'))."</div>";		
 
 	
-	echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn'));
+	echo Form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn'));
 	
 	echo "</form>";
-	echo site::generateValidator(array('Tecnologia'=>'Tecnologia','Id'=>'Id'));
+	echo Site::generateValidator(array('Tecnologia'=>'Tecnologia','Id'=>'Id'));
 
 ?>
 

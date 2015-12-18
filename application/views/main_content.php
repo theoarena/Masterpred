@@ -1,5 +1,5 @@
 <h1 class="pull-left ">
-	<?php echo site::getTituloInterna(2); ?> <small><?php echo site::getTituloTipo(1); ?></small>	
+	<?php echo Site::getTituloInterna(2); ?> <small><?php echo Site::getTituloTipo(1); ?></small>	
 </h1>
 
 <section id='list' class='Content'>			
@@ -36,16 +36,27 @@
 		echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
 		echo '</div>';
 
-	if( !site::segment_has(2,'edit') && $show_add_link) { 
-	?>
-		<h1 id="btn_adicionar" class="inline">		
-			<?php echo html::anchor(site::segment(1)."/edit_".site::segment(2)."".$plus_add_link,"+", array('class' => 'label-success btn' )); ?>
-		</h1>
-	<?php
+	if( !Site::segment_has(2,'edit') ) { 
+
+		if($show_add_link)
+		{
+		?>
+			<h1 id="btn_adicionar" class="inline">		
+				<?php echo Html::anchor(Site::segment(1)."/edit_".Site::segment(2)."".$plus_add_link,"+", array('class' => 'label-success btn' )); ?>
+			</h1>
+		<?php
+		}
+		//campo de busca
+		if($show_search)
+		{
+			echo "<div id='search_box' class='inline'>";
+			echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Busca:</span>". Form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+			echo '</div>';
+		}
 	}
 	
-	if(site::segment_has(2,'edit') && $show_back_link)
-		echo html::anchor(site::segment(1)."/".site::segment_get(2,1)."".$plus_back_link,"Voltar", array('class' => 'label-warning btn' ,'id'=>'btn_voltar'));
+	if(Site::segment_has(2,'edit') && $show_back_link)
+		echo Html::anchor(Site::segment(1)."/".Site::segment_get(2,1)."".$plus_back_link,"Voltar", array('class' => 'label-warning btn' ,'id'=>'btn_voltar'));
 	
 	 echo $conteudo; //conteudo da página interna ?> 
 </section>
@@ -57,6 +68,11 @@ $( document ).ready(function() {
 
 	$('button.close').click(function(){
 		$(this).parent().fadeOut('slow');
+	});
+
+	$('#campobusca').change(function(){
+			var footableFilter = $('.footable').data('footable-filter');			  
+		    footableFilter.filter($(this).val());
 	});
 
 	//nao sei pq fiz isso aqui hahaha

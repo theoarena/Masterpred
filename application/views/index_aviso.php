@@ -9,8 +9,8 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
 	<!-- Le styles -->
-	<link rel='stylesheet' type='text/css' href='<?php echo site::mediaUrl(); ?>css/metro-bootstrap.css'>
-	<link href='<?php echo site::mediaUrl(); ?>css/main.css' rel='stylesheet' type='text/css' />		
+	<link rel='stylesheet' type='text/css' href='<?php echo Site::mediaUrl(); ?>css/metro-bootstrap.css'>
+	<link href='<?php echo Site::mediaUrl(); ?>css/main.css' rel='stylesheet' type='text/css' />		
 
 </head>
 

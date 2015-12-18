@@ -1,17 +1,17 @@
 <?php 
 	
-	echo form::open( site::segment(1)."/alterar_perfil",array("id" => "form_edit") );			
+	echo Form::open( Site::segment(1)."/alterar_perfil",array("id" => "form_edit") );			
 	
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
-	echo form::hidden("id",$obj->id);	
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('nome',$obj->nome,array('class' => 'form-control', 'maxlength' => '100' ,'placeholder' => 'Meu nome')) ."</div>";   
-	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". form::input('telefone',$obj->telefone,array('class' => 'form-control', 'maxlength' => '100' ,'placeholder' => 'Meu telefone')) ."</div>";	
+	echo Form::hidden("id",$obj->id);	
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('nome',$obj->nome,array('class' => 'form-control', 'maxlength' => '100' ,'placeholder' => 'Meu nome')) ."</div>";   
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('telefone',$obj->telefone,array('class' => 'form-control', 'maxlength' => '100' ,'placeholder' => 'Meu telefone')) ."</div>";	
 
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Senha</span>". form::password('password',"senhapadrao",array('class' => 'form-control', 'maxlength' => '16' ,'placeholder' => 'Senha')) ."</div>";   
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Confirmação de senha</span>". form::password('password_confirm',"senhapadrao",array('class' => 'form-control', 'maxlength' => '16' ,'placeholder' => 'Confirmação de senha')) ."</div>";   
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Senha</span>". Form::password('password',"senhapadrao",array('class' => 'form-control', 'maxlength' => '16' ,'placeholder' => 'Senha')) ."</div>";   
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Confirmação de senha</span>". Form::password('password_confirm',"senhapadrao",array('class' => 'form-control', 'maxlength' => '16' ,'placeholder' => 'Confirmação de senha')) ."</div>";   
   
-    echo form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn-lg'));       
-	echo form::close();
+    echo Form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn-lg'));       
+	echo Form::close();
   
 ?>
 

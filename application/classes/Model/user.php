@@ -2,8 +2,8 @@
  
 class Model_User extends Model_Auth_User {
 	protected $_has_many = array(
-		'roles' => array ('model' => 'role' , 'through' => 'roles_users'),
-		'empresas' => array ( 'model' => 'empresa' , 'through' => 'empresa_users','far_key' => 'empresa_CodEmpresa')
+		'roles' => array ('model' => 'Role' , 'through' => 'roles_users'),
+		'empresas' => array ( 'model' => 'Empresa' , 'through' => 'empresa_users','far_key' => 'empresa_CodEmpresa')
 	);		
  
 	protected $_table_name = 'users';

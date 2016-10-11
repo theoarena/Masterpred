@@ -1,6 +1,6 @@
 <?php 
 
-	if(Site::selected_empresaatual()) {
+	if(Usuario::selected_empresaatual()) {
 		
 		echo "<div id='select_areas'>";
 		echo "<div class='input-group input-group-lg full_50'> <span class='input-group-addon'>Área</span>". Form::select('area',$objs,$area,array("id"=>"area"))."</div>";
@@ -109,10 +109,10 @@
 				    	colunas += "<td>"+equipamento["Equipamento"]+"</td>";
 				    	colunas += "<td>"+equipamento["TipoEquipamento"]+"</td>";				    	
 				    	colunas += "<td><div class='btn-group btn-group-lg'>";
-				    	<?php if(Site::isGrant(array('edit_equipamentos'))) { ?>			
+				    	<?php if(Usuario::isGrant(array('edit_equipamentos'))) { ?>			
 				    		colunas += "<a href='<?php echo Site::baseUrl() ?>empresas/edit_equipamentos/"+equipamento["CodEquipamento"]+"/"+equipamento["codSetor"]+"/"+area+"' class='btn btn-info'>EDITAR</a>";
 				    	<?php } ?>
-				    	<?php if(Site::isGrant(array('remove_equipamentos'))) { ?>	
+				    	<?php if(Usuario::isGrant(array('remove_equipamentos'))) { ?>	
 							colunas += "<button type='button' class='btn btn-danger' id='ask_"+equipamento["CodEquipamento"]+"' onclick='askDelete(\""+cod+"\")'>REMOVER</button>";
 							colunas += "<button type='button' class='btn btn-success confirm_hidden' id='confirm_"+equipamento['CodEquipamento']+"' onclick='deleteRow(\""+cod+"\")'>S</button>";						
 							colunas += "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_"+equipamento['CodEquipamento']+"' onclick='askDelete(\""+cod+"\")'>N</button>";						
@@ -142,4 +142,4 @@
 </script>
 
 
-<?php if(Site::isGrant(array('remove_empresas'))) echo Site::generateDelete('Equipamento'); ?>
+<?php if(Usuario::isGrant(array('remove_empresas'))) echo Site::generateDelete('Equipamento'); ?>

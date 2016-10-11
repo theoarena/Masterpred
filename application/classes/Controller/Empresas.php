@@ -7,7 +7,7 @@ class Controller_Empresas extends Controller_Welcome {
 	public function after(){
 		parent::after();
 
-		if(!Site::isGrant($this->privileges_needed)) //se pode acessar a url
+		if(!Usuario::isGrant($this->privileges_needed)) //se pode acessar a url
 			HTTP::redirect('avisos/denied');
 	}
 
@@ -82,7 +82,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$objs->where('Data', 'BETWEEN', array($de, $ate));
 		// fazer select pra escolher só as que estao em emergencia
 		$objs->where("equipamentoinspecionado.Tecnologia",'=',$this->request->post('tecnologia'));	
-		$objs->where("equipamentoinspecionado.Empresa",'=',Site::get_empresaatual());	
+		$objs->where("equipamentoinspecionado.Empresa",'=',Usuario::get_empresaatual());	
 		$objs->join('condicao','LEFT')->on('condicao.CodCondicao','=','equipamentoinspecionado.Condicao');
 		$objs->where("condicao.Emergencia",'=',1);
 		//$objs->order_by("equipamentoinspecionado.Equipamento","ASC");
@@ -141,6 +141,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj->Vt = $this->request->post('Vt');
 		$obj->Vn = $this->request->post('Vn');
 		$obj->TemperaturaRef = $this->request->post('TemperaturaRef');
+		$obj->TemperaturaMed = $this->request->post('TemperaturaMed');
 		$obj->confirmado = 1;
 
 		$dir = Kohana::$config->load('config')->get('upload_directory_gr');
@@ -186,11 +187,20 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_analiseinspecao() //página principal das Inspeçoes
 	{	
-		//$rotas = ORM::factory('Rota')->where( 'Empresa','=',Site::get_empresaatual() )->find_all(); //vamos pegar todas as rotas dessa empresa	
-		$areas = ORM::factory('Area')->where( 'Empresa','=',Site::get_empresaatual() )->find_all(); //vamos pegar todas as areas dessa empresa	
+		$tec = ( isset($_GET['tec']) )?($_GET['tec']):1;
+				
+		$tecnologia = ORM::factory('Tecnologia')->find_all()->as_array("CodTecnologia","Tecnologia");
+		$tecnologia["padrao"] = "Selecione uma tecnologia";
 
-		$this->template->content->conteudo = View::factory('empresas/list_analiseinspecao');						
-		$this->template->content->conteudo->objs = $areas;
+		//$rotas = ORM::factory('Rota')->where( 'Empresa','=',Site::get_empresaatual() )->find_all(); //vamos pegar todas as rotas dessa empresa	
+		$equips = ORM::factory('AnaliseEquipamentoInspecionado')
+		->where( 'Empresa','=',Usuario::get_empresaatual() )
+		->where("Tecnologia","=", $tec)
+		->find_all(); 
+
+		$this->template->content->conteudo = View::factory('empresas/list_analiseinspecao');								
+		$this->template->content->conteudo->tecnologias = $tecnologia;
+		$this->template->content->conteudo->objs = $equips;
 		$this->template->content->show_add_link = false;	
 	}
 
@@ -199,23 +209,67 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj = ORM::factory('AnaliseEquipamentoInspecionado', Site::segment('edit_analiseinspecao',null));
 		$this->template->content->conteudo = View::factory('empresas/edit_analiseinspecao_novo');	
 		
-		if(Site::get_empresaatual() != null)
+		if(Usuario::get_empresaatual() != null)
 		{
-			$rotas = ORM::factory('Rota')->where( 'Empresa','=',Site::get_empresaatual() )->find_all()->as_array('CodRota','Rota'); //vamos pegar todas as rotas dessa empresa	
+			$rotas = ORM::factory('Rota')->where( 'Empresa','=',Usuario::get_empresaatual() )->find_all()->as_array('CodRota','Rota'); //vamos pegar todas as rotas dessa empresa	
 			$analistas = ORM::factory('Analista')->find_all()->as_array('CodAnalista','Analista');
+			$instrumentos = ORM::factory('Instrumentacao')->find_all()->as_array('CodInstrumentacao','Nome');
 			$tecnologias = ORM::factory('Tecnologia')->find_all()->as_array('CodTecnologia','Tecnologia');								
 			
 			$this->template->content->conteudo->obj = $obj;					
 			$this->template->content->conteudo->rotas = $rotas;			
+			$this->template->content->conteudo->instrumentos = $instrumentos;			
 			$this->template->content->conteudo->analistas = $analistas;			
 			$this->template->content->conteudo->tecnologias = $tecnologias;			
 		}			
 
 	}
 
+		public function action_save_analiseinspecao_novo() //cria novos registros
+	{		
+		//pega o sequencial mais alto 
+		$db = DB::query(Database::SELECT,"SELECT max(codRelatorio) as 'cod' from relatorios");		
+		
+		$result = $db->execute();		
+		$cod = $result[0]['cod']; 
+
+		//gera uma nova entrada de relatório, referente à essa analise de inspeçao
+		$relatorio = ORM::factory('Relatorios');
+
+		if($this->request->post('relatorio_novo') == 1)
+			$relatorio->CodRelatorio = ($cod+1);
+		else
+			$relatorio->CodRelatorio = $this->request->post('codigo_relatorio');
+		$datahora = Site::data_EN($this->request->post('Data')).' '.date('H:i:s');
+
+		$relatorio->Tecnologia = $this->request->post('Tecnologia');
+		$relatorio->Analista = $this->request->post('Analista');
+		$relatorio->Instrumentacao = $this->request->post('Instrumentacao');
+		$relatorio->Rota = $this->request->post('Rota');
+		$relatorio->Empresa = Usuario::get_empresaatual();		
+		$relatorio->Data = $datahora;
+		$relatorio->save();
+
+		$rota = ORM::factory('Rota',$this->request->post('Rota'));
+
+		foreach ($rota->equipamentos->find_all() as $equipamento) {			
+			$obj = ORM::factory('AnaliseEquipamentoInspecionado');	
+			$obj->Equipamento = $equipamento->CodEquipamento;
+			$obj->Analista = $this->request->post('Analista');
+			$obj->Tecnologia = $this->request->post('Tecnologia');
+			$obj->Data = $datahora;
+			$obj->Empresa = Usuario::get_empresaatual();
+			$obj->Relatorio = $relatorio->ID;
+			$obj->save();
+		}	
+	
+		HTTP::redirect('empresas/analiseinspecao?sucesso=1');	
+	}
+
 	public function action_edit_analiseinspecao() //fazer a análise
 	{			
 		$obj = ORM::factory('AnaliseEquipamentoInspecionado', Site::segment('edit_analiseinspecao',null));
+
 
 		$tecnologia = $obj->tecnologia; //pega a tecnologia que esta vinculada a esta analise
 		$componentes = $tecnologia->componentes->find_all()->as_array('CodComponente','Componente');		
@@ -231,11 +285,16 @@ class Controller_Empresas extends Controller_Welcome {
 		$this->template->content->conteudo->anomalias = $anomalias;			
 		$this->template->content->conteudo->componentes = $componentes;			
 		$this->template->content->conteudo->tecnologia = $tecnologia;			
+
+		$this->template->content->plus_back_link = '?tec='.( ( isset($_GET['tec']) )?($_GET['tec']):"" );	
 	}
+
 
 	public function action_save_analiseinspecao() //salva a análise
 	{
 		
+		$tec = "&tec=".( ( isset($_POST['tec']) )?($_POST['tec']):"" );
+
 		$obj = ORM::factory('AnaliseEquipamentoInspecionado',$this->request->post('CodEquipamentoInspAnalise'));
 			
 		$obj->TipoComponente = $this->request->post('TipoComponente');
@@ -258,50 +317,10 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj->TemperaturaMed = $this->request->post('TemperaturaMed');
 
 		if($obj->save())	
-			HTTP::redirect('empresas/analiseinspecao?sucesso=1');	
+			HTTP::redirect('empresas/analiseinspecao?sucesso=1'.$tec);	
 		else
-			HTTP::redirect('empresas/analiseinspecao?erro=1');
+			HTTP::redirect('empresas/analiseinspecao?erro=1'.$tec);
 
-	}
-
-	public function action_save_analiseinspecao_novo() //cria novos registros
-	{		
-		$rota = ORM::factory('Rota',$this->request->post('Rota'));
-
-		foreach ($rota->equipamentos->find_all() as $equipamento) {			
-			$obj = ORM::factory('AnaliseEquipamentoInspecionado');	
-			$obj->Equipamento = $equipamento->CodEquipamento;
-			$obj->Analista = $this->request->post('Analista');
-			$obj->Tecnologia = $this->request->post('Tecnologia');
-			$obj->Data = Site::data_EN($this->request->post('Data')).' '.date('H:i:s');
-			$obj->Empresa = Site::get_empresaatual();
-			$obj->save();
-		}	
-	
-		//pega o sequencial mais alto tendo a empresa e a tecnologia
-		$db = DB::query(Database::SELECT,"SELECT max(codRelatorio) as 'cod' from relatorios where Empresa = :empresa and Tecnologia = :tecnologia")
-		->bind(':empresa', Site::get_empresaatual())
-		->bind(':tecnologia',$this->request->post('Tecnologia'));
-		
-		$result = $db->execute();		
-		$cod = $result[0]['cod']; 
-
-		//gera uma nova entrada de relatório, referente à essa analise de inspeçao
-		$relatorio = ORM::factory('Relatorios');
-
-		if($this->request->post('relatorio_novo') == 1)
-			$relatorio->CodRelatorio = ($cod+1);
-		else
-			$relatorio->CodRelatorio = $this->request->post('codigo_relatorio');
-
-		$relatorio->Tecnologia = $this->request->post('Tecnologia');
-		$relatorio->Analista = $this->request->post('Analista');
-		$relatorio->Rota = $this->request->post('Rota');
-		$relatorio->Empresa = Site::get_empresaatual();		
-		$relatorio->Data = Site::data_EN($this->request->post('Data'));	
-		$relatorio->save();
-
-		HTTP::redirect('empresas/analiseinspecao?sucesso=1');	
 	}
 
 	//teste
@@ -338,9 +357,14 @@ class Controller_Empresas extends Controller_Welcome {
 
 	public function action_transferir_analiseinspecao() //transfere tudo pra cada tabela
 	{		
+		$tec = $_POST['tec'];
+
 		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		$empresa = ORM::factory('Empresa',Site::get_empresaatual()); //pega a empresa
-		$analises = ORM::factory('AnaliseEquipamentoInspecionado')->where('Empresa','=',Site::get_empresaatual())->find_all(); //pega todas as análises
+		//$empresa = ORM::factory('Empresa',Site::get_empresaatual()); //pega a empresa
+		$analises = ORM::factory('AnaliseEquipamentoInspecionado')
+		->where('Empresa','=',Usuario::get_empresaatual())
+		->where('Tecnologia','=',$tec)
+		->find_all(); //pega todas as análises
 
 		foreach ($analises as $item) { // para cada item, vamos passar pra tabela correspondente
 
@@ -352,16 +376,18 @@ class Controller_Empresas extends Controller_Welcome {
 			$equipamento->Analista = $item->Analista;
 			$equipamento->Tecnologia = $tec;
 			$equipamento->Data = $item->Data;
-			$equipamento->Empresa = Site::get_empresaatual(); // FICA MUITO MAIS FACIL E RAPIDO TENDO ESSE CAMPO...
+			$equipamento->Relatorio = $item->Relatorio;
+			$equipamento->Empresa = Usuario::get_empresaatual(); // FICA MUITO MAIS FACIL E RAPIDO TENDO ESSE CAMPO...
 			$equipamento->save();
 
-			$cond = ORM::factory('condicao',$item->Condicao);		
+			$cond = ORM::factory('Condicao',$item->Condicao);		
 			
 			if($cond->Emergencia == 1) //só manda pra GR caso seja emergencia
 			{
+				$emp = Usuario::get_empresaatual();
 				//pega a gr mais alta daquela tecnologia, daquela empresa
 				$db = DB::query(Database::SELECT,"SELECT max(gr.NumeroGR) as 'numerogr' from gr, equipamentoinspecionado where equipamentoinspecionado.Empresa = :empresa and equipamentoinspecionado.CodEquipamentoInspecionado = gr.EquipamentoInspecionado and equipamentoinspecionado.Tecnologia = :tecnologia")
-				->bind(':empresa', Site::get_empresaatual())
+				->bind(':empresa', $emp)
 				->bind(':tecnologia',$tec);
 				
 				$result = $db->execute();		
@@ -398,7 +424,7 @@ class Controller_Empresas extends Controller_Welcome {
 		
 		//======= vamos avisar os usuários
 /*
-			$empresa = ORM::factory('Empresa',Site::get_empresaatual());
+			$empresa = ORM::factory('Empresa',Usuario::get_empresaatual());
 			foreach ($empresa->users->find_all() as $usuario)
 				enviaEmail::aviso_inspecao($usuario);			
 */
@@ -415,7 +441,7 @@ class Controller_Empresas extends Controller_Welcome {
 
 		if( Arr::get($_GET, 'todos') )
 		{
-			$db = DB::query(Database::DELETE,"DELETE from analiseequipamentoinspecionado where Empresa = '".Site::get_empresaatual()."'");
+			$db = DB::query(Database::DELETE,"DELETE from analiseequipamentoinspecionado where Empresa = '".Usuario::get_empresaatual()."'");
 			$db->execute();
 			//ORM::factory('AnaliseEquipamentoInspecionado')->delete_all();	
 			print 1;
@@ -442,7 +468,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$novo->Data = $obj->Data;
 		$novo->Analista = $obj->Analista;			
 		$novo->Tecnologia = $obj->Tecnologia;		
-		$novo->Empresa = Site::get_empresaatual();
+		$novo->Empresa = Usuario::get_empresaatual();
 
 		if($novo->save())
 			print 1;
@@ -477,16 +503,15 @@ class Controller_Empresas extends Controller_Welcome {
 	public function action_empresas() //página principal dos empresas
 	{	
 		$this->privileges_needed[] = 'access_list_empresas';
-		if(!$this->cached)// se não há cache
-		{
-			$objs =ORM::factory('Empresa')->find_all();
-			$this->template->content->conteudo = View::factory('empresas/list_empresas');					
-			$this->template->content->conteudo->objs = $objs;	
+		
+		$objs =ORM::factory('Empresa')->find_all();
+		$this->template->content->conteudo = View::factory('empresas/list_empresas');					
+		$this->template->content->conteudo->objs = $objs;	
 
-			Cache::instance()->set(Site::segment(2),$this->template->content->conteudo->render());
-		}			
+		//Cache::instance()->set(Site::segment(2),$this->template->content->conteudo->render());
+					
 
-		if(!Site::isGrant(array('add_empresas')))
+		if(!Usuario::isGrant(array('add_empresas')))
 			$this->template->content->show_add_link = false;	
 	}
 
@@ -512,8 +537,20 @@ class Controller_Empresas extends Controller_Welcome {
 		$obj->cep = $this->request->post('cep');				
 		$obj->endereco = $this->request->post('endereco');				
 		$obj->departamento = $this->request->post('departamento');	
-					
-		Cache::instance()->delete('empresas');
+		
+		$dir = Kohana::$config->load('config')->get('upload_directory_empresas');
+		if(isset($_FILES['imagem']) and $_FILES['imagem']["name"] != "")
+		{			
+			$file = $_FILES['imagem'];
+			$filename = Upload::save($file,null,$dir);
+			$rdn = Site::random_password(4);	
+			$foto = $dir."/empresa_".$rdn."_".basename($filename);
+			Image::factory($filename)->save($foto);	
+	    	unlink($filename);
+		    $obj->Logo ="empresa_".$rdn."_".basename($filename);	
+		}			
+
+		//Cache::instance()->delete('empresas');
 		
 		if ($obj->save()) 
 			HTTP::redirect('empresas/empresas?sucesso=1');
@@ -525,7 +562,7 @@ class Controller_Empresas extends Controller_Welcome {
 	public function action_toggle_empresas() //ativar/desativar a empresa que está se trabalhando
 	{
 		$this->template = ""; //tira o AUTO RENDER, devolve só o request pedido ao inves da pagina toda
-		Site::set_empresaatual($this->request->post('id'),$this->request->post('nome'));
+		Usuario::set_empresaatual($this->request->post('id'),$this->request->post('nome'));
 		
 		print 1;
 	}
@@ -540,12 +577,12 @@ class Controller_Empresas extends Controller_Welcome {
 	public function action_rotas() //página principal dos rotas
 	{			
 		$this->privileges_needed[] = 'access_rotas';
-		$objs = ORM::factory('Rota')->where('Empresa','=',Site::get_empresaatual())->find_all();
+		$objs = ORM::factory('Rota')->where('Empresa','=',Usuario::get_empresaatual())->find_all();
 		
 		$this->template->content->conteudo = View::factory('empresas/list_rotas');					
 		$this->template->content->conteudo->objs = $objs;			
 
-		if(!Site::isGrant(array('add_rotas')))
+		if(!Usuario::isGrant(array('add_rotas')))
 			$this->template->content->show_add_link = false;	
 	}
 
@@ -557,7 +594,7 @@ class Controller_Empresas extends Controller_Welcome {
 		//print_r($equipamentos_selecionados);exit;
 		$this->template->content->conteudo = View::factory('empresas/edit_rotas');					
 		$this->template->content->conteudo->obj = $obj;				
-		$this->template->content->conteudo->empresa = Site::get_empresaatual(0);				
+		$this->template->content->conteudo->empresa = Usuario::get_empresaatual(0);				
 		$this->template->content->conteudo->equipamentos_selecionados = $equipamentos_selecionados;				
 	}
 	
@@ -591,10 +628,10 @@ class Controller_Empresas extends Controller_Welcome {
 	{					
 		$this->privileges_needed[] = 'access_equipamentos';
 		$this->template->content->conteudo = View::factory('empresas/list_equipamentos');					
-		$this->template->content->conteudo->objs = ORM::factory('Area')->where('Empresa','=',Site::get_empresaatual())->find_all()->as_array('CodArea', 'Area');	//pega as areas		
+		$this->template->content->conteudo->objs = ORM::factory('Area')->where('Empresa','=',Usuario::get_empresaatual())->find_all()->as_array('CodArea', 'Area');	//pega as areas		
 		$this->template->content->conteudo->area =  Site::segment(3,null);	
 		$this->template->content->conteudo->setor =  Site::segment(4,null);	
-		if(!Site::isGrant(array('add_equipamentos')))
+		if(!Usuario::isGrant(array('add_equipamentos')))
 			$this->template->content->show_add_link = false;	
 
 	}
@@ -661,11 +698,11 @@ class Controller_Empresas extends Controller_Welcome {
 	public function action_areas_setores() //página principal dos rotas
 	{			
 		$this->privileges_needed[] = 'access_areassetores';
-		$objs = ORM::factory('Area')->where('Empresa','=',Site::get_empresaatual())->find_all();
+		$objs = ORM::factory('Area')->where('Empresa','=',Usuario::get_empresaatual())->find_all();
 		
 		$this->template->content->conteudo = View::factory('empresas/list_areas_setores');					
 		$this->template->content->conteudo->objs = $objs;		
-		$this->template->content->conteudo->empresa = Site::get_empresaatual(); //id da empresa atual	
+		$this->template->content->conteudo->empresa = Usuario::get_empresaatual(); //id da empresa atual	
 		$this->template->content->show_add_link = false;
 		$this->template->content->show_search = false;
 	}
@@ -744,7 +781,7 @@ class Controller_Empresas extends Controller_Welcome {
 	public function action_usuarios() //página principal dos usuarios
 	{			
 		$this->privileges_needed[] = 'access_usuarios_empresa';
-		$empresa = ORM::factory('Empresa',Site::get_empresaatual());		
+		$empresa = ORM::factory('Empresa',Usuario::get_empresaatual());		
 		$this->template->content->conteudo = View::factory('usuario/list_usuarios');					
 		$this->template->content->conteudo->tipo = 'empresa';					
 		$this->template->content->conteudo->link_edit = 'empresas/edit_usuarios';									
@@ -761,7 +798,7 @@ class Controller_Empresas extends Controller_Welcome {
 			$array[] = $emp->CodEmpresa;
 
 		if(sizeof($array) == 0) //se nao tiver nenhuma, deixa a empresa atual como já selecionada
-			$array[] = Site::get_empresaatual();
+			$array[] = Usuario::get_empresaatual();
 
 		$roles = ORM::factory('Role')->find_all()->as_array('id','nickname');		
 		unset($roles[1]);//tira a role LOGIN, já que ela é padrão

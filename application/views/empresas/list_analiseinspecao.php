@@ -15,6 +15,16 @@
 			?>
 		</h1>
 		
+	<?php
+
+		echo "<div id='select_data'>";
+			echo "<div class='input-group input-group-lg drop'> <span class='input-group-addon'>Tecnologia</span>". 
+				Form::select('tecnologia',$tecnologias, Arr::get($_GET, 'tec', 'padrao') , array('class' => 'form-control'));
+			echo "</div>";							
+			echo "<div class='input-group input-group-lg div_filtrar'><h1 id='btn_filtrar'>". HTML::anchor('#','Filtrar', array('class' => 'btn btn-primary' )) ."</h1></div>";	
+		echo '</div>';	
+
+	?>
 		
 	<div class="alert alert-danger alert-dismissable naotemrisco">	 	
 		Não é possível analisar este item, <strong>ele não está definido como risco.</strong>  
@@ -25,7 +35,9 @@
 
 <?php 
 
-	if(count($objs) > 0) 
+	if(!Site::selected_empresaatual())		
+		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 	
+	else
 	{ //se há rotas cadastradas nessa empresa
 		echo '<table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>';
 			echo '<thead>';
@@ -43,48 +55,41 @@
 			echo "</thead>";
 
 			echo "<tbody>";
-			foreach ($objs as $area) //para cada area
-			{
-				foreach ($area->setores->find_all() as $setor) //para cada setor
-				{
-					foreach ($setor->equipamentos->find_all() as $equip)
-					{	
-						foreach ($equip->analiseequipamentoinspecionados->find_all() as $o)
-						{	
-							//echo "rota: ".$areas->CodRota." - equipamento: ".$equipamento->CodEquipamento." - equipinsp: ".$o->CodEquipamentoInspAnalise."<br>";
+			
+			foreach ($objs as $o)
+			{	
+				//echo "rota: ".$areas->CodRota." - equipamento: ".$equipamento->CodEquipamento." - equipinsp: ".$o->CodEquipamentoInspAnalise."<br>";
+				$equip = $o->equipamento;
+				$condicoes = $o->tecnologia->condicoes->find_all()->as_array("CodCondicao","Condicao"); //condicoes da tecnlogia deste equipamento
+				
+				$condicoes[0] = "";
+				
+				//$grHabilitada = (Site::inspecaoGraudeRisco($o->Condicao,$condicoes))?(""):("hide");
 
-							$condicoes = $o->tecnologia->condicoes->find_all()->as_array("CodCondicao","Condicao"); //condicoes da tecnlogia deste equipamento
-							
-							$condicoes[0] = "";
-							
-							//$grHabilitada = (Site::inspecaoGraudeRisco($o->Condicao,$condicoes))?(""):("hide");
-
-							echo "<tr class='item_insp' id='inspecao_".$o->CodEquipamentoInspAnalise."'>";
-								echo "<td>".$o->CodEquipamentoInspAnalise."</td>";
-								echo "<td>".$equip->setor->area->Area."</td>";					
-								echo "<td>".$equip->setor->Setor."</td>";
-								echo "<td>".$equip->Tag."</td>";
-								echo "<td>".$equip->Equipamento."</td>";
-								echo "<td>".$equip->tipoequipamento->TipoEquipamento."</td>";
-								echo "<td>".Site::datahora_BR($o->Data)."</td>";
-								echo "<td>";										
-									echo "<div class='input-group input-group-lg drop_condicao'>". Form::select('Condicao'.$o->CodEquipamentoInspAnalise,$condicoes,($o->Condicao)?($o->Condicao):(0), array('class'=> 'form-control select_condicao', 'onchange' => "mudacondicao('".$o->CodEquipamentoInspAnalise."')" )) ."</div>"; 
-								echo "</td>";
-								echo "<td><div class='btn-group btn-group-lg'>";
-									echo Form::hidden("inspecao_".$o->CodEquipamentoInspAnalise,$condicoes[ ($o->Condicao!=null)?($o->Condicao):0 ]);
-									echo '<div id="first_edit_row">';
-										echo "<button type='button' id='analise_".$o->CodEquipamentoInspAnalise."' class='btn btn-info btn_plusa' onclick=\"linkinspecao('".$o->CodEquipamentoInspAnalise."')\" >+A</button>";								
-										echo "<button type='button' id='duplicar_".$o->CodEquipamentoInspAnalise."' class='btn btn-primary btn_plusl' onclick=\"duplicarinspecao('".$o->CodEquipamentoInspAnalise."')\" >+L</button>";								
-									echo '</div>';
-									echo "<button type='button' class='btn btn-danger btn_removeanalise' id='ask_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>REMOVER</button>";								
-									echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEquipamentoInspAnalise."' onclick='deleteRow(\"$o->CodEquipamentoInspAnalise\")'>S</button>";														
-									echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>N</button>";						
-								echo "</div></td>";
-							echo "</tr>";	
-						}
-					}
-				}
-			}			
+				echo "<tr class='item_insp' id='inspecao_".$o->CodEquipamentoInspAnalise."'>";
+					echo "<td>".$o->CodEquipamentoInspAnalise."</td>";
+					echo "<td>".$equip->setor->area->Area."</td>";					
+					echo "<td>".$equip->setor->Setor."</td>";
+					echo "<td>".$equip->Tag."</td>";
+					echo "<td>".$equip->Equipamento."</td>";
+					echo "<td>".$equip->tipoequipamento->TipoEquipamento."</td>";
+					echo "<td>".Site::datahora_BR($o->Data)."</td>";
+					echo "<td>";										
+						echo "<div class='input-group input-group-lg drop_condicao'>". Form::select('Condicao'.$o->CodEquipamentoInspAnalise,$condicoes,($o->Condicao)?($o->Condicao):(0), array('class'=> 'form-control select_condicao', 'onchange' => "mudacondicao('".$o->CodEquipamentoInspAnalise."')" )) ."</div>"; 
+					echo "</td>";
+					echo "<td><div class='btn-group btn-group-lg'>";
+						echo Form::hidden("inspecao_".$o->CodEquipamentoInspAnalise,$condicoes[ ($o->Condicao!=null)?($o->Condicao):0 ]);
+						echo '<div id="first_edit_row">';
+							echo "<button type='button' id='analise_".$o->CodEquipamentoInspAnalise."' class='btn btn-info btn_plusa' onclick=\"linkinspecao('".$o->CodEquipamentoInspAnalise."')\" >+A</button>";								
+							echo "<button type='button' id='duplicar_".$o->CodEquipamentoInspAnalise."' class='btn btn-primary btn_plusl' onclick=\"duplicarinspecao('".$o->CodEquipamentoInspAnalise."')\" >+L</button>";								
+						echo '</div>';
+						echo "<button type='button' class='btn btn-danger btn_removeanalise' id='ask_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>REMOVER</button>";								
+						echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEquipamentoInspAnalise."' onclick='deleteRow(\"$o->CodEquipamentoInspAnalise\")'>S</button>";														
+						echo "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_".$o->CodEquipamentoInspAnalise."' onclick='askDelete(\"$o->CodEquipamentoInspAnalise\")'>N</button>";						
+					echo "</div></td>";
+				echo "</tr>";	
+			}
+				
 			echo "</tbody>";
 
 		?>
@@ -98,11 +103,8 @@
 		<?php
 		
 		echo '</table>';
-	} 
-	elseif(!Site::selected_empresaatual())		
-		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 
-	else
-		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'nenhuma_rota')."</div>"; 
+	} 	
+		
 ?>
 
 <script type="text/javascript">
@@ -194,8 +196,9 @@
 	{	
 		
 		var value = $("input:hidden[name='inspecao_"+id+"']").val(); //tipo da condicao
+		var tec = $( "select[name='tecnologia'] option:selected" ).val(); //pega a tec seleciona
 		if(jQuery.inArray(value,condicoes) >= 0)
-			window.location.href = '<?php echo Site::baseUrl() ?>empresas/edit_analiseinspecao/'+id;
+			window.location.href = '<?php echo Site::baseUrl() ?>empresas/edit_analiseinspecao/'+id+'?tec='+tec;
 		else
 		{
 			$('.naotemrisco').show().delay(4000).fadeOut('slow');  //tira quaisquer alertas depois de 4 segundos
@@ -217,7 +220,9 @@
 		{
 			$(".footable tbody").html("<tr><td colspan='9'><span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span></td></tr>");
 			$.ajax({
-				url : "<?php echo Site::baseUrl() ?>empresas/transferir_analiseinspecao",			
+				url : "<?php echo Site::baseUrl() ?>empresas/transferir_analiseinspecao",
+				type: "POST",  
+  				data: { tec: <?php echo ( isset($_GET['tec']) )?( $_GET['tec'] ):(1) ?>},			
 				success : function(data) {
 					if(data == 1)	
 					{			
@@ -253,6 +258,14 @@
 			}
 		});
 	}
+
+	$( "#btn_filtrar" ).click(function () {		
+
+		var tec = $( "select[name='tecnologia'] option:selected" ).val(); //pega a tec seleciona
+		var link = "<?php echo Site::baseUrl() ?>empresas/analiseinspecao/?tec="+tec;
+        window.open(link,"_self");    
+
+	});
 
 	function deleteRow(id)
 	{

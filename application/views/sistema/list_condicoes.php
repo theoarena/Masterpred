@@ -22,10 +22,10 @@
 					echo "<td>". @$config[ strtolower($o->Cor) ]."</td>";
 					echo "<td>".$o->tecnologia->Tecnologia."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_condicoes')))
+						if(Usuario::isGrant(array('edit_condicoes')))
 							echo HTML::anchor("sistema/edit_condicoes/".$o->CodCondicao,"EDITAR", array("class"=>"btn btn-info"));						
 
-						if(Site::isGrant(array('remove_condicoes')))
+						if(Usuario::isGrant(array('remove_condicoes')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodCondicao."' onclick='askDelete(\"$o->CodCondicao\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodCondicao."' onclick='deleteRow(\"$o->CodCondicao\")'>S</button>";						
@@ -54,4 +54,4 @@
 	});
 </script>
 
-<?php if(Site::isGrant(array('remove_condicoes'))) echo Site::generateDelete('Condicao'); ?>
+<?php if(Usuario::isGrant(array('remove_condicoes'))) echo Site::generateDelete('Condicao'); ?>

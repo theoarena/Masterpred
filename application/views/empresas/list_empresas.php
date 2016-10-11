@@ -13,17 +13,17 @@
 	<tbody>
 		<?php 
 			foreach ($objs as $o) {	
-				$ativada = (Site::get_empresaatual() == $o->CodEmpresa)?("ativada"):("");
+				$ativada = (Usuario::get_empresaatual() == $o->CodEmpresa)?("ativada"):("");
 				echo "<tr>";
 					echo "<td>".$o->CodEmpresa."</td>";
 					echo "<td>".$o->Empresa."</td>";
 					echo "<td>".$o->Unidade."</td>";
 					echo "<td>".$o->Fabrica."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_empresas')))
+						if(Usuario::isGrant(array('edit_empresas')))
 							echo HTML::anchor("empresas/edit_empresas/".$o->CodEmpresa,"EDITAR", array("class"=>"btn btn-info"));						
 
-						if(Site::isGrant(array('remove_empresas')))
+						if(Usuario::isGrant(array('remove_empresas')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodEmpresa."' onclick='askDelete(\"$o->CodEmpresa\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodEmpresa."' onclick='deleteRow(\"$o->CodEmpresa\")'>S</button>";						
@@ -71,4 +71,4 @@
 </script>
 
 
-<?php if(Site::isGrant(array('remove_empresas'))) echo Site::generateDelete('Empresa'); ?>
+<?php if(Usuario::isGrant(array('remove_empresas'))) echo Site::generateDelete('Empresa'); ?>

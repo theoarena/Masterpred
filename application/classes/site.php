@@ -70,42 +70,6 @@ class Site {
 		return URL::base()."application/media/";
 	}
 
-	public static function logado()
-	{
-		return (Auth::instance()->logged_in());
-	}		
-	
-	public static function getInfoUsuario($t=null)
-	{		
-		/*if($t!=null)
-			return (Session::instance()->get("tipo_usuario") == $t);
-		return Session::instance()->get("tipo_usuario","naologado"); */
-		return Session::instance()->get($t,false);
-	}	
-	
-	public static function isGrant($privileges_needed) 
-	{
-		if(Site::getInfoUsuario('usuario_roles') == 'admin')
-			return true; //se for de sistema pode ver tudo;
-		
-		/*
-		$pass = 0;
-		$user = Auth::instance()->get_user();
-		$privileges = explode(',', $user->get_privileges() );
-		
-		foreach ($privileges as $key => $value) 
-			if(array_search($value,$privileges_needed) !== false )			
-				$pass++;				
-				
-		return ($pass == count($privileges_needed));
-		*/
-
-		$qtd = count($privileges_needed);		
-		$user = Auth::instance()->get_user();
-		$privileges = explode(',', $user->get_privileges() );
-		return ( count(array_intersect($privileges_needed,$privileges)) == $qtd );
-	}
-
 	public static function active($a,$i,$t,$class='drop') //active do menu
 	{				
 		$return = "";
@@ -133,6 +97,10 @@ class Site {
 			case 'edit_anomalias':	$tit = "Anomalias"; break;
 			case 'tecnologias':	
 			case 'edit_tecnologias':	$tit = "Tecnologias"; break;
+			case 'instrumentacao':	
+			case 'edit_instrumentacao':	$tit = "Instrumentação"; break;
+			case 'normas':	
+			case 'edit_normas':	$tit = "Normas"; break;
 			case 'empresas':	
 			case 'edit_empresas':	$tit = "Empresas"; break;
 			case 'recomendacoes':	
@@ -169,6 +137,9 @@ class Site {
 			case 'privileges':
 			case 'edit_privileges':$tit = "Privilégios do grupo de acesso"; break;
 			case 'relatorios':$tit = "Relatórios"; break;
+			case 'uploads':$tit = "Upload de Relatórios"; break;
+			case 'edit_uploads':$tit = "Upload de arquivo"; break;
+			case 'downloads':$tit = "Downloads de Relatórios"; break;
 			default: break;
 		}
 
@@ -210,60 +181,14 @@ class Site {
 			case 'desc': $tit = "Descrição"; break;			
 			case 'apelido': $tit = "Apelido"; break;			
 			case 'sequencial': $tit = "Sequencial"; break;			
+			case 'obs': $tit = "Observação"; break;			
 			default: $tit = "";	break;
 		}
 
 		return $tit;
 	}
 
-	//===============empresa que está ativada no ADMIN
-	//================================================
-		public static function check_empresaatual()
-		{
-			if(!isset($_SESSION["empresa_atual"])) //se a empresa atual nao foi seleciona, inicializa			
-				Session::instance()->set('empresa_atual',0);	
-		}
-
-		public static function set_empresaatual($v,$nome)
-		{
-			Session::instance()->set('empresa_atual', $v);// atribui a empresa selecionada		
-			Session::instance()->set('nome_empresa_atual', $nome);// atribui a empresa selecionada		
-		}
-
-		public static function remove_empresaatual()
-		{
-			Session::instance()->delete('empresa_atual');
-			Session::instance()->delete('nome_empresa_atual');
-		}
-
-		public static function get_empresaatual($i=1)
-		{
-			if($i==0)
-				return ORM::factory('Empresa', Session::instance()->get('empresa_atual',null) );
-			elseif($i==1)
-				return Session::instance()->get('empresa_atual',null);// pega a empresa selecionada	
-			else	
-				return Session::instance()->get('nome_empresa_atual',null);// pega a empresa selecionada	
-		}
-
-		public static function selected_empresaatual()//retorna se alguma empresa foi selecionada
-		{
-			return ( Session::instance()->get('empresa_atual') != 0);
-		}
-
-		public static function avatar_empresaatual() //pega o nome e o codigo da empresa pra deixar lá em cima
-		{
-			$str = "";
-			if(Site::selected_empresaatual())
-			{
-				$empresa = 
-				$str = '<h2 class="pull-right">'.Site::get_empresaatual(2).' <span class="label label-primary">'.Site::get_empresaatual().'</span></h2>';
-			}
-			return $str;
-
-		}
-	//================================================
-	//=============================================
+	
 
 	public static function qtd_pedidosusuario() //quantidade de usuarios que fizeram pedidos
 	{
@@ -293,14 +218,15 @@ class Site {
 
 	public static function data_EN_relatorio($d)
 	{		
-		$d = explode("-",$d);
+		$d = explode(" ",$d);
+		$d = explode("-",$d[0]);
 		return $d[0].".".$d[1];
 	}
 
 	public static function data_EN($d=false,$return=false)
 	{
 		if($d=="") 
-			return (!$return)?(date('1900/01/01')):($return);
+			return (!$return)?(date('0000/00/00')):($return);
 
 		$d = explode("/",$d);
 		return $d[2]."-".$d[1]."-".$d[0];
@@ -334,6 +260,10 @@ class Site {
 		
 	}
 
+
+	public static function formata_numerodecimal($n,$q = 2) {
+		return number_format((float)$n, $q, '.', '');
+	}
 
 	public static function formata_codRelatorio($cod) {
 
@@ -418,7 +348,7 @@ class Site {
 		return $return;
 	}
 
-	public static function generateDelete($class)
+	public static function generateDelete($class,$uri='welcome/delete')
 	{
 		$return = '<script type="text/javascript">';
 
@@ -426,7 +356,7 @@ class Site {
 			function deleteRow(id)
 			{
 				$.ajax({
-					url : '".Site::baseUrl()."welcome/delete',
+					url : '".Site::baseUrl()."".$uri."',
 					type: 'POST',  
 		  			data: { id: id,class:'".$class."',cache:'".Site::segment(2)."'},
 					success : function(data) {
@@ -484,6 +414,17 @@ class Site {
 		}
 		return implode(',', $return);
 	}
+
+	public static function requireKey($needle, array $array)
+    {
+        foreach ($array as $key => $value) {
+            if ($key === $needle) return $value;
+            if (is_array($value)) {
+                if ($x = Site::requireKey($key, $value)) return $x;
+            }
+        }
+        return false;
+    }
 
 }
 ?>

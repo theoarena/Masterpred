@@ -51,3 +51,17 @@ function moeda2float(moeda){
    return parseFloat(moeda);
 
 }
+
+function limitarTamanho(tamanho,Campo) {
+  
+    var ta = document.getElementById(Campo);
+    if(ta.value.length > tamanho)
+        ta.value = ta.value.substring(0, tamanho);
+    timer = setTimeout("limitarTamanho(" + tamanho + ",'"+Campo+"')", 100);
+    return;
+}
+
+function contar(Campo,size,id){
+var qtd = size-Campo.value.length;
+document.getElementById(id).innerHTML = "<b>"+qtd+" Caracteres Restantes</b>";
+}

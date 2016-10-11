@@ -12,7 +12,7 @@
     echo Form::hidden("menu",Site::segment(1));  
 
     if($tipo!='sistema')
-	   echo Form::hidden("empresa",Site::get_empresaatual());	
+	   echo Form::hidden("empresa",Usuario::get_empresaatual());	
 
     echo "<label class='control checkbox' id='usuario_ativado'>".Form::checkbox('ativar',1, ($obj->ativo == 1)?(true):(false) )." <span class='checkbox-label'>Perfil ativado</span></label>";   
     
@@ -68,8 +68,7 @@
 
 <script>
 
- $(document).ready(function () {
-        //$('.footable').footable();
+ $(document).ready(function () {        
         $('input[name="nascimento"]').datepicker({format:'dd/mm/yyyy'});  
         $("select#empresas").chosen({width: "100%"});     
 });

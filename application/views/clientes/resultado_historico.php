@@ -15,7 +15,7 @@
     echo Form::hidden("CodResultado",$obj->CodResultado); 
     
   
-    if(Site::isGrant(array('planejar_os')))
+    if(Usuario::isGrant(array('planejar_os')))
     {   
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('CodCliente',$obj->CodCliente, array('class' => 'form-control', 'placeholder' => 'Código da ordem gerada internamente')) ."</div>";         
         echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data de Planejamento</span>". Form::input('DataPlanejamento',Site::datahora_BR($obj->DataPlanejamento), array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')" ,'placeholder' => 'Data')) ."</div>";   
@@ -23,7 +23,7 @@
         echo "<br>";
     }
 
-    if(Site::isGrant(array('executar_os')))
+    if(Usuario::isGrant(array('executar_os')))
     {
         echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data da Corretiva</span>". Form::input('DataCorretiva',Site::datahora_BR($obj->DataCorretiva), array('class' => 'form-control', 'maxlength' => '10', 'onkeypress' => "return mask(event,this,'##/##/####')", 'placeholder' => 'Data')) ."</div>";   
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('RespCorretiva',$obj->RespCorretiva, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 
@@ -31,7 +31,7 @@
         echo "<br>";
     }
 
-    if(Site::isGrant(array('contabilizar_os')))
+    if(Usuario::isGrant(array('contabilizar_os')))
     {
 
         echo "<div id='block_historico'>";     
@@ -73,7 +73,7 @@
 
     }
 
-    if(Site::isGrant(array('finalizar_os')))
+    if(Usuario::isGrant(array('finalizar_os')))
     {
         echo "<div class='input-group input-group-lg first'> <span class='input-group-addon'>Data de Finalização</span>". Form::input('DataFinalizacao',Site::datahora_BR($obj->DataFinalizacao), array('class' => 'form-control' , 'onkeypress' => "return mask(event,this,'##/##/####')"  ,'placeholder' => 'Data')) ."</div>";   
         echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('RespFinalizacao',$obj->RespFinalizacao, array('class' => 'form-control', 'placeholder' => 'Responsável')) ."</div>"; 

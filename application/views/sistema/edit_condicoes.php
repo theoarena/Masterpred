@@ -20,7 +20,7 @@
 
     $base = url::base().Kohana::$config->load('config')->get('upload_directory_condicoes');
     if($obj->Imagem!=null)
-        echo '<img src="'.$base.$obj->Imagem.'" width="30%" />';
+        echo '<img src="'.$base.$obj->Imagem.'" height="30%" />';
 
 	echo "</div>";
 

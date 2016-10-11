@@ -3,7 +3,7 @@
 
 <?php 
 
-    if(Site::selected_empresaatual())
+    if(Usuario::selected_empresaatual())
     {
 
         $amanha = date('d/m/Y', strtotime("+1 days"));  
@@ -66,7 +66,7 @@
         $('input[name="ate"]').datepicker({format:'dd/mm/yyyy'});
       
     });
-
+    
 
     $( "#btn_filtrar" ).click(function () {
         $(".footable tbody").html("<span id='loading'><img src='<?php echo Site::mediaUrl() ?>images/loading.gif'></span>");
@@ -75,7 +75,7 @@
         var ate = $( "input[name='ate']" ).val();
         var tec = $( "select[name='tecnologia'] option:selected" ).val();
        
-        //var empresa = '<?php echo Site::get_empresaatual(); ?>'; 
+        //var empresa = '<?php //echo Site::get_empresaatual(); ?>'; 
 
 
         $.ajax({
@@ -95,14 +95,15 @@
                         var gr = dados[i];                  
                         var colunas = "<tr>";
                         var cod = gr["ID"];
-                        var param = "cod="+cod+"&de="+de+"&ate="+ate+"&tec="+tec;
+                        var param = "cod="+cod+"&data="+gr["DataCod"]+"&tec="+tec+"&analista="+gr["CodAnalista"]+"&rota="+gr["CodRota"];
+                        //var param = "relatorio="+cod;
                         colunas += "<td>"+gr["Sequencial"]+"</td>";                                                                      
                         colunas += "<td>"+gr["Data"]+"</td>";                       
                         colunas += "<td>"+gr["Tecnologia"]+"</td>";                                            
                         colunas += "<td>"+gr["Analista"]+"</td>";                                     
                         colunas += "<td>"+gr["Rota"]+"</td>";                                     
-                        colunas += "<td><div class='btn-group btn-group-lg'>";
-                        colunas += "<a onclick='geraRelatorio(\""+param+"\")' href='javascript:void(0)' class='btn btn-info'>GERAR</a>";                      
+                        colunas += "<td><div class='btn-group btn-group-lg'>";                        
+                        colunas += "<a onclick='geraRelatorio(\""+param+"\")' href='javascript:void(0)' class='btn btn-info auto-width'>DOWNLOAD</a>";                      
                       
                         colunas += "</div></td></tr>";
                         $(".footable tbody").append(colunas);                       
@@ -121,6 +122,14 @@
         });
         
     });
+    
+    /*
+     $("select[name='tipo']" ).change(function() {        
+        $(".footable thead").hide();
+        $(".footable tbody").html("<tr><td colspan='6'><div class='alert alert-sucess tabela_vazia'></div></td></tr>");
+        $(".footable tfoot").hide();
+     }); 
+    */
 
     function geraRelatorio(param)
     {       

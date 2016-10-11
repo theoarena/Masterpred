@@ -5,7 +5,8 @@
 	echo Form::open( Site::segment(1)."/save_analiseinspecao",array("id" => "form_edit") );			
 	
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
-	echo Form::hidden("CodEquipamentoInspAnalise",$obj->CodEquipamentoInspAnalise);	
+    echo Form::hidden("CodEquipamentoInspAnalise",$obj->CodEquipamentoInspAnalise); 
+	echo Form::hidden("tec", ( isset($_GET['tec']) )?($_GET['tec']):("") );	
 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tipo do Componente</span>". Form::select('TipoComponente',$componentes,($obj->TipoComponente!=null)?($obj->TipoComponente):0, array('class' => 'form-control') ) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('Componente',$obj->Componente, array('class' => 'form-control', 'maxlength' => '255', 'placeholder' => 'Componente')) ."</div>"; 

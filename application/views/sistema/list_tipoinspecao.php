@@ -16,9 +16,9 @@
 					echo "<td>".$o->CodTipoInspecao."</td>";
 					echo "<td>".$o->TipoInspecao."</td>";								
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_tipos_inspecao')))
+						if(Usuario::isGrant(array('edit_tipos_inspecao')))
 							echo HTML::anchor("sistema/edit_tipoinspecao/".$o->CodTipoInspecao,"EDITAR", array("class"=>"btn btn-info"));						
-						if(Site::isGrant(array('remove_tipos_inspecao')))
+						if(Usuario::isGrant(array('remove_tipos_inspecao')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodTipoInspecao."' onclick='askDelete(\"$o->CodTipoInspecao\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodTipoInspecao."' onclick='deleteRow(\"$o->CodTipoInspecao\")'>S</button>";						
@@ -48,4 +48,4 @@
 </script>
 
 
-<?php if(Site::isGrant(array('remove_tipos_inspecao'))) echo Site::generateDelete('TipoInspecao'); ?>
+<?php if(Usuario::isGrant(array('remove_tipos_inspecao'))) echo Site::generateDelete('TipoInspecao'); ?>

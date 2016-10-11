@@ -15,10 +15,10 @@
 					echo "<td data-sort-initial='true'>".$o->CodTipoEquipamento."</td>";
 					echo "<td>".$o->TipoEquipamento."</td>";					
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_tipos_equipamento')))
+						if(Usuario::isGrant(array('edit_tipos_equipamento')))
 							echo HTML::anchor("sistema/edit_tipoequipamento/".$o->CodTipoEquipamento,"EDITAR", array("class"=>"btn btn-info"));						
 
-						if(Site::isGrant(array('remove_tipos_equipamento')))
+						if(Usuario::isGrant(array('remove_tipos_equipamento')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodTipoEquipamento."' onclick='askDelete(\"$o->CodTipoEquipamento\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodTipoEquipamento."' onclick='deleteRow(\"$o->CodTipoEquipamento\")'>S</button>";						
@@ -50,4 +50,4 @@
 </script>
 
 
-<?php if(Site::isGrant(array('remove_tipos_equipamento'))) echo Site::generateDelete('TipoEquipamento'); ?>
+<?php if(Usuario::isGrant(array('remove_tipos_equipamento'))) echo Site::generateDelete('TipoEquipamento'); ?>

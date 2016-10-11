@@ -17,9 +17,9 @@
 					echo "<td>".$o->Recomendacao."</td>";
 					echo "<td>".$o->tecnologia->Tecnologia."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_recomendacoes')))
+						if(Usuario::isGrant(array('edit_recomendacoes')))
 							echo HTML::anchor("sistema/edit_recomendacoes/".$o->CodRecomendacao,"EDITAR", array("class"=>"btn btn-info"));						
-						if(Site::isGrant(array('remove_recomendacoes')))
+						if(Usuario::isGrant(array('remove_recomendacoes')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodRecomendacao."' onclick='askDelete(\"$o->CodRecomendacao\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodRecomendacao."' onclick='deleteRow(\"$o->CodRecomendacao\")'>S</button>";						
@@ -49,4 +49,4 @@
 </script>
 
 
-<?php if(Site::isGrant(array('remove_recomendacoes'))) echo Site::generateDelete('Recomendacao'); ?>
+<?php if(Usuario::isGrant(array('remove_recomendacoes'))) echo Site::generateDelete('Recomendacao'); ?>

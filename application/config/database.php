@@ -18,10 +18,21 @@ return array
 			 *
 			 * Ports and sockets may be appended to the hostname.
 			 */
+
+
+/*
+			'hostname'   => '179.190.55.146',
+			'database'   => 'maste817_sistema',
+			'username'   => 'maste817_sistema',
+			'password'   => '7[]HqB]Q(BFg',
+			'persistent' => FALSE,
+
+			*/
+
 			'hostname'   => 'localhost',
 			'database'   => 'masterpred2',
 			'username'   => 'root',
-			'password'   => FALSE,
+			'password'   => null,
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',

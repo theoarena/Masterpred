@@ -6,6 +6,9 @@ class Model_Privilege extends ORM {
     	'role' => array ( 'model' => 'Role' , 'through' => 'roles_privileges','far_key' => 'role_id'  ),    	
     );
  
+    protected $_table_name = 'privileges';
+	protected $_primary_key = 'id';
+
 	public function unique_key($id = NULL)
 	{
 		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id) )

@@ -15,7 +15,7 @@
 	<script src='<?php echo Site::mediaUrl(); ?>js/jquery.js'></script>
 	<script src='<?php echo Site::mediaUrl(); ?>js/fancybox.js'></script>		
 	
-	<?php if(Site::getInfoUsuario('usuario_system') == 1) { ?>
+	<?php if(Session::instance()->get('usuario_system',false) == 1) { ?>
 		<link href='<?php echo Site::mediaUrl(); ?>css/footable.core.css' rel='stylesheet' type='text/css' />
 		<script src='<?php echo Site::mediaUrl(); ?>js/footable.js'></script>	
 		<script src='<?php echo Site::mediaUrl(); ?>js/footable.sort.js'></script>
@@ -23,7 +23,7 @@
 		<script src='<?php echo Site::mediaUrl(); ?>js/footable.paginate.js'></script>		
 	<?php } ?>
 
-	<?php if(Site::getInfoUsuario('usuario_system') == 0) { ?>
+	<?php if(Session::instance()->get('usuario_system',false) == 0) { ?>
 		<link href='<?php echo Site::mediaUrl(); ?>css/historico.css' rel='stylesheet' type='text/css' />	
 		<script src='<?php echo Site::mediaUrl(); ?>js/amcharts.js'></script>	
 		<script src='<?php echo Site::mediaUrl(); ?>js/gauge.js'></script>	
@@ -39,7 +39,12 @@
 
 	<div id='wrapper'>	  
 	  	<div class='navbar navbar-side navbar-inverse navbar-fixed-top' role='navigation'>
-	  		<?php if(Site::logado()) echo $menu_lateral; //se está logado,mostra o menu lateral 
+	  		<?php
+  			 if(Kohana::$config->load('config')->get('aviso_manutencao'))
+  			 	echo '<div id="aviso_manutencao"><p>'.Kohana::message('admin', 'aviso_manutencao').'</p></div>';
+
+
+	  		 if(Usuario::logado()) echo $menu_lateral; //se está logado,mostra o menu lateral 
 	  			else echo '<div class="navbar-header"><h1 class="navbar-brand">MasterPred</h1></div>';		?>		            
 	    </div>
 		<div id='wrapper-container'>
@@ -47,8 +52,8 @@
 		    	<?php // if(Site::logado()) echo $menu_topo; //se está logado,mostra o menu lateral ?>		
 		      <div class='starter-template'>
 		      	<?php 
-		      		if(Site::getInfoUsuario('usuario_system') == 1) //se o tipo de usuario for de sistema
-		      			echo Site::avatar_empresaatual(); //mostra se alguma empresa está ativa
+		      		if(Session::instance()->get('usuario_system',false) == 1) //se o tipo de usuario for de sistema
+		      			echo Usuario::avatar_empresaatual(); //mostra se alguma empresa está ativa
 		      		echo $content;
 		      	 ?>	
 		      </div>

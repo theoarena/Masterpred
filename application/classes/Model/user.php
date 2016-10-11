@@ -71,8 +71,7 @@ class Model_User extends Model_Auth_User {
 			$role = $this->roles->find_all();
 			$role = $role[1]; //pega só a role que nao é LOGIN
 			$privileges =  $role->privileges->find_all()->as_array('id','name');
-			$privileges_str = implode(',',$privileges);	
-			Session::instance()->set('usuario_privileges',$privileges_str);
+			$privileges_str = implode(',',$privileges);				
 			if($return)
 				return $privileges_str;
 		}

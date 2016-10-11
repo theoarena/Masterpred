@@ -1,6 +1,6 @@
 <?php
 
- if(Site::selected_empresaatual()) {
+ if(Usuario::selected_empresaatual()) {
 
 ?>
 
@@ -8,7 +8,7 @@
   <div class="panel-heading"><h3>Áreas</h3></div>
   <div class="panel-body">
    <?php 
-        if(Site::isGrant(array('add_areas') ) )  
+        if(Usuario::isGrant(array('add_areas') ) )  
         {
             echo Form::open("empresas/save_areas",array('id' => "form_save_area"));
                 echo Form::hidden("Empresa",$empresa);  
@@ -28,7 +28,7 @@
         }
    ?>
    <?php
-        if(Site::isGrant(array('edit_areas') ) )  
+        if(Usuario::isGrant(array('edit_areas') ) )  
         {
             echo Form::open("empresas/save_areas",array('id' => "form_altera_area"));    
                 echo Form::hidden("Empresa",$empresa);       
@@ -39,7 +39,7 @@
                             echo Form::input("Area",null, array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
                             echo '<span class="input-group-btn">';
                             echo Form::submit('submit', "Alterar", array('class' => 'btn btn-info input-lg btn_alterar_areassetores' ));
-                            if(Site::isGrant(array('remove_areas'))){
+                            if(Usuario::isGrant(array('remove_areas'))){
                                 echo "<button type='button' class='btn btn-danger input-lg ask_btn_area' id='ask_area' onclick='askDelete()'>REMOVER</button>";                                        
                                 echo "<button type='button' class='btn btn-success input-lg confirm_hidden confirm_area' id='confirm_area'>S</button>";                     
                                 echo "<button type='button' class='btn btn-danger input-lg confirm_hidden cancel_area' id='cancel_area'>N</button>";                       
@@ -72,7 +72,7 @@
   <div class="panel-heading"><h3>Setores</h3></div>
   <div class="panel-body">
     <?php
-        if(Site::isGrant(array('add_setores') ) )  
+        if(Usuario::isGrant(array('add_setores') ) )  
         {
             echo Form::open("empresas/save_setores",array('id' => "form_save_setor"));
                 echo Form::hidden("Area",null); 
@@ -91,7 +91,7 @@
         }
    ?>
    <?php
-        if(Site::isGrant(array('edit_setores') ) )  
+        if(Usuario::isGrant(array('edit_setores') ) )  
         {
             echo Form::open("empresas/save_setores",array('id' => "form_altera_setor"));
                 echo Form::hidden("Area",null); 
@@ -102,7 +102,7 @@
                             echo Form::input("Setor",null,array('class' => 'form-control input-lg', 'placeholder' => 'Nome'));
                             echo '<span class="input-group-btn">';
                             echo Form::submit('submit', "Alterar",array('class' => 'btn btn-info input-lg btn_alterar_areassetores') );
-                             if(Site::isGrant(array('remove_setores'))){
+                             if(Usuario::isGrant(array('remove_setores'))){
                                 echo "<button type='button' class='btn btn-danger input-lg ask_btn_setor' id='ask_setor' onclick='askDelete()'>REMOVER</button>";                                        
                                 echo "<button type='button' class='btn btn-success input-lg confirm_hidden confirm_setor' id='confirm_setor'>S</button>";                     
                                 echo "<button type='button' class='btn btn-danger input-lg confirm_hidden cancel_setor' id='cancel_setor'>N</button>";                       

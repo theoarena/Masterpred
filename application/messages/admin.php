@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 return array(
-	
+	'aviso_manutencao' => 'No momento o sistema encontra-se em manutenção em tempo real e pode apresentar instabilidades. Agradecemos a compreensão.',
 	'nenhum_item' => 'Nenhum item encontrado.',
 	'nenhuma_area_selecionada' => 'Nenhuma área selecionada.',
 	'nenhuma_rota' => 'Nenhuma rota encontrada.',

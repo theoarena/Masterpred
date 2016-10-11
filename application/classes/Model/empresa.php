@@ -38,7 +38,7 @@ class Model_Empresa extends ORM {
 		  $entry->delete();	 
 		}
 
-		site::remove_empresaatual();
+		Usuario::remove_empresaatual();
 
 		return parent::delete();
 	}

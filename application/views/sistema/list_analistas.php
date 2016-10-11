@@ -17,10 +17,10 @@
 					echo "<td>".$o->Analista."</td>";					
 					echo "<td>".$o->Funcao."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_analistas')))
+						if(Usuario::isGrant(array('edit_analistas')))
 							echo HTML::anchor("sistema/edit_analistas/".$o->CodAnalista,"EDITAR", array("class"=>"btn btn-info"));						
 
-						if(Site::isGrant(array('remove_analistas')))
+						if(Usuario::isGrant(array('remove_analistas')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodAnalista."' onclick='askDelete(\"$o->CodAnalista\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodAnalista."' onclick='deleteRow(\"$o->CodAnalista\")'>S</button>";						
@@ -50,4 +50,4 @@
 
 </script>
 
-<?php if(Site::isGrant(array('remove_analistas'))) echo Site::generateDelete('Analista'); ?>
+<?php if(Usuario::isGrant(array('remove_analistas'))) echo Site::generateDelete('Analista'); ?>

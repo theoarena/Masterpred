@@ -88,19 +88,13 @@ class Controller_Usuario extends Controller_Welcome {
 
 		if($this->request->post('gerar_senha')==1) //se é pra alterar a senha	
 		{	
+			$password_email = Site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 		
+
 			if($this->request->post('senha_aleatoria')==0)	
-				$password_email = $this->request->post('password');								
-			else			
-				$password_email = Site::random_password( 8,$this->request->post('email') ); //gera uma senha aleatória 				
+				$password_email = $this->request->post('password');														
 				
 			$obj->password = $password_email; 
-		}		
-				
-		/*
-			Atualmente, se o usuario desmarcar a caixa de seleção de senha aleatória
-			ou se nao marcar pra atribuir nova senha (desmarcar), vai dar problema
-			uma vez que espera-se que sempre venha a senha para ser salva no BD.
-		*/
+		}						
 
 		try{
 

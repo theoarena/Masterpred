@@ -1,6 +1,6 @@
 <?php 
 
-	if(Site::selected_empresaatual()) {
+	if(Usuario::selected_empresaatual()) {
 	
 		if(count($objs) > 0) { 
 	
@@ -22,10 +22,10 @@
 					echo "<td>".$o->CodRota."</td>";
 					echo "<td>".$o->Rota."</td>";				
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_rotas')))
+						if(Usuario::isGrant(array('edit_rotas')))
 							echo HTML::anchor("empresas/edit_rotas/".$o->CodRota,"EDITAR", array("class"=>"btn btn-info"));						
 
-						if(Site::isGrant(array('remove_rotas')))
+						if(Usuario::isGrant(array('remove_rotas')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodRota."' onclick='askDelete(\"$o->CodRota\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodRota."' onclick='deleteRow(\"$o->CodRota\")'>S</button>";						
@@ -60,4 +60,4 @@
 
 </script>
 
-<?php if(Site::isGrant(array('remove_rotas'))) echo Site::generateDelete('Rota'); ?>
+<?php if(Usuario::isGrant(array('remove_rotas'))) echo Site::generateDelete('Rota'); ?>

@@ -5,8 +5,8 @@ return array(
 	'relatorios' => array(
 		
 		'key' => ")R'IgRyCB3jrGSUgj87bgc}_Lpq-KNW@=/15BWlw{gno#XcYiCs).W#CA?z!",
-		'cipher' => MCRYPT_RIJNDAEL_128,
-		'mode'   => MCRYPT_MODE_NOFB,
+		'cipher' => MCRYPT_3DES,
+        'mode'   => MCRYPT_MODE_CBC,
 	),
 
 );

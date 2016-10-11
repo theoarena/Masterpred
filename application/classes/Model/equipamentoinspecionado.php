@@ -5,7 +5,8 @@ class Model_EquipamentoInspecionado extends ORM {
 		'equipamento' => array('model' => 'Equipamento', 'foreign_key' => 'Equipamento'),
 		'condicao' => array('model' => 'Condicao', 'foreign_key' => 'Condicao'),
 		'analista' => array('model' => 'Analista', 'foreign_key' => 'Analista'),
-		'tecnologia' => array('model' => 'Tecnologia', 'foreign_key' => 'Tecnologia')
+		'tecnologia' => array('model' => 'Tecnologia', 'foreign_key' => 'Tecnologia'),
+		'relatorio' => array('model' => 'Relatorios', 'foreign_key' => 'Relatorio'),
 	);
 	
 	protected $_has_one = array(

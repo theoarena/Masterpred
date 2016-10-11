@@ -19,7 +19,8 @@ class Controller_Clientes extends Controller_Welcome {
 		$this->template->content->conteudo = View::factory('clientes/list_historico');					
 	    //$this->template->content->conteudo->objs = $user->empresas->find_all();	//todas as empresas do usuario	
 	    //$this->template->content->conteudo->user = $user;	//todas as empresas do usuario	
-
+		$encrypt = Encrypt::instance('relatorios');
+		
 	    $de = Arr::get($_GET, 'de',"01/".date('m')."/".date('Y')) ;
 	    $ate = Arr::get($_GET, 'ate',date('d/m/Y', strtotime("+1 days")) ) ;
 	    $sp =  Arr::get($_GET, 'sem_planejamento',0);
@@ -87,7 +88,19 @@ class Controller_Clientes extends Controller_Welcome {
 			$estado = 'vermelho'; 	
 			
 			$gr = $r->equipamentoinspecionado->condicao->Cor;
+			$codgr = $r->CodGR;
 
+			if( $r->resultado->DataPlanejamento != NULL)
+				$estado = 'laranja'; 		
+
+			if( $r->resultado->DataCorretiva != NULL )			
+				$estado = 'verde_pendente'; 
+
+			if( ($r->resultado->Total != null) && ($r->resultado->Total != 0) && ($r->resultado->DataFinalizacao != NULL) )
+					$estado = 'verde';	
+			
+
+			/*
 			if( !in_array( Site::datahora_BR($r->resultado->DataCorretiva), array(null,'00/00/0000') ) )
 			{	
 				$estado = 'verde_pendente'; 
@@ -97,11 +110,13 @@ class Controller_Clientes extends Controller_Welcome {
 			}
 			elseif( !in_array( Site::datahora_BR($r->resultado->DataPlanejamento), array(null,'00/00/0000')) )
 				$estado = 'laranja'; 								
-			
+			*/
 			$list[] = "<span class='caminho'>".$r->equipamentoinspecionado->equipamento->setor->area->Area." - ".$r->equipamentoinspecionado->equipamento->setor->Setor."</span><span class='estado estado_".$estado."'></span>".
-				"<a class='gr cor_".$gr."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->CodGR."'>".				
+				"<a class='gr cor_".$gr."'  name='gr_".$r->CodGR."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->CodGR."'>".				
 				Site::datahora_BR($r->equipamentoinspecionado->Data)." | ".$r->equipamentoinspecionado->tecnologia->Tecnologia." | OSP #".$r->NumeroGR."/".$r->CodGR." | ".$r->equipamentoinspecionado->condicao->Condicao." | ".$r->equipamentoinspecionado->equipamento->Equipamento." | ".$r->componente->Componente.": ".$r->Componente.
-			"</a>";
+		"</a>".( HTML::anchor("relatorios/gera_relatorio/?tipo=ordem_servico&direct=D&gr=".$codgr,"PDF", array("class" => "label label-default imprimir" , 'target'=>'blank' )) );
+
+
 					
 		}	
 
@@ -221,7 +236,7 @@ class Controller_Clientes extends Controller_Welcome {
 
 						
 						$children[] =  array('key' => 'equipamentoinspecionado_'.$r->CodEquipamentoInspecionado , 
-										'title' => "<a class='".$estado."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->gr->CodGR."'>".Site::datahora_BR($r->Data)." | TE | OSP #".$r->gr->NumeroGR."/".$r->gr->CodGR." | ".$r->condicao->Condicao." | ".$r->gr->componente->Componente.": ".$r->gr->Componente."</a>"									
+										'title' => "<a class='".$estado."' name='gr_".$r->gr->CodGR."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->gr->CodGR."'>".Site::datahora_BR($r->Data)." | TE | OSP #".$r->gr->NumeroGR."/".$r->gr->CodGR." | ".$r->condicao->Condicao." | ".$r->gr->componente->Componente.": ".$r->gr->Componente."</a>"									
 										);
 					}
 
@@ -251,8 +266,8 @@ class Controller_Clientes extends Controller_Welcome {
 		if(!in_array($obj->equipamentoinspecionado->Empresa, $user->getListEmpresas(false) ) ) //caso não seja o historico da sua empresa
 			HTTP::redirect('avisos/denied');
 
-		$encrypt = Encrypt::instance('relatorios');
-		$codgr = $encrypt->encode($obj->CodGR);
+		//$encrypt = Encrypt::instance('relatorios');
+		$codgr =$obj->CodGR;//$encrypt->encode($obj->CodGR);
 
 		$this->template->content->conteudo = View::factory('clientes/edit_historico');						
 		$this->template->content->conteudo->obj = $obj;								
@@ -287,6 +302,36 @@ class Controller_Clientes extends Controller_Welcome {
 		$this->template->content->conteudo->obj = $obj;	
 	}
 	
+	public function action_downloads() 
+	{	
+		$this->template->content->graficos = "";	
+
+		if(isset($_GET['id']))
+		{
+			$encrypt = Encrypt::instance('relatorios');
+			$id = $encrypt->decode($_GET['id']);
+			$file = ORM::factory('ArquivoRelatorio',$id);
+
+			$file_url = Kohana::$config->load('config')->get('upload_directory_relatorios').''.$file->Arquivo;
+			header('Content-Type: application/octet-stream');
+			header("Content-Transfer-Encoding: Binary"); 
+			header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\""); 
+			readfile($file_url);
+			exit;
+		}
+		else
+		{
+			
+			$auth = Auth::instance();
+			$user = $auth->get_user();
+
+			$objs = ORM::factory('ArquivoRelatorio')->where('Empresa','IN', $user->getListEmpresas(false) )->find_all();
+
+			$this->template->content->conteudo = View::factory('clientes/list_downloads');						
+			$this->template->content->conteudo->objs = $objs;										
+		}
+	}
+
 	public function action_save_historico() //salvar novo e editar
 	{	
 		$obj = ORM::factory('Rota',$this->request->post('CodRota' ));		
@@ -329,9 +374,12 @@ class Controller_Clientes extends Controller_Welcome {
 				  Site::formata_moeda($this->request->post('ConvProdPreco'))+Site::formata_moeda($this->request->post('ConvTercPreco'))+
 				  Site::formata_moeda($this->request->post('ConvMatPreco'))+Site::formata_moeda($this->request->post('ConvOutrPreco'))
 				   	);		
-		$obj->DataPlanejamento = Site::data_EN( $this->request->post('DataPlanejamento') ,null );					
-		$obj->DataCorretiva = Site::data_EN( $this->request->post('DataCorretiva'), null );					
-		$obj->DataFinalizacao = Site::data_EN( $this->request->post('DataFinalizacao'), null );		
+		if($this->request->post('DataPlanejamento') != "")
+			$obj->DataPlanejamento = Site::data_EN( $this->request->post('DataPlanejamento') );					
+		if($this->request->post('DataCorretiva') != "")
+			$obj->DataCorretiva = Site::data_EN( $this->request->post('DataCorretiva') );					
+		if($this->request->post('DataFinalizacao') != "")
+			$obj->DataFinalizacao = Site::data_EN( $this->request->post('DataFinalizacao') );		
 
 		if( ( $this->request->post('DataFinalizacao') != null) && $obj->Total != 0) //significa que a OS foi finalizada
 			enviaEmail::aviso_ospFinalizada($this->request->post('GR'));			

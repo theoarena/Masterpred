@@ -1,12 +1,26 @@
+<link href="<?php echo Site::mediaUrl(); ?>css/chosen.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo Site::mediaUrl(); ?>js/chosen.js"></script>
 <?php 
 	
-	echo Form::open( "sistema/save_tecnologias",array("id" => "form_edit" ) );			
+	echo Form::open( "sistema/save_tecnologias",array("id" => "form_edit", 'enctype' => 'multipart/form-data' ) );			
 	
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
 	echo Form::hidden("CodTecnologia",$obj->CodTecnologia);	
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('Tecnologia',$obj->Tecnologia,array('class'=>'form-control', 'maxlength' => '100', 'placeholder' => 'Nome da Tecnologia')) ."</div>";	
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::input('Id',$obj->Id,array('class'=>'form-control', 'maxlength' => '5', 'placeholder' => 'Id'))."</div>";		
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>></span>". Form::textarea('Software',$obj->Software,array('class'=>'form-control', 'placeholder' => 'Softwares utilizados'))."</div>";		
 
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Normas</span>". Form::select( 'lista_normas[]', $normas,$normas_selecionadas, array('class' => 'form-control', 'data-placeholder' => 'Selecione as normas', 'id' =>'normas','multiple' => 'multiple')) ."</div>"; 
+
+	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Imagem (350x990)</span>";
+  
+    echo Form::file('imagem',array('class' => 'form-control upload'));
+
+    $base = url::base().Kohana::$config->load('config')->get('upload_directory_tecnologias');
+    if($obj->Imagem!=null)
+        echo '<img src="'.$base.$obj->Imagem.'" height="400px" />';
+
+	echo "</div>";
 	
 	echo Form::submit('submit', "Salvar",array('class' => 'btn btn-primary btn'));
 	
@@ -67,3 +81,11 @@
 	</div>
   </div>
 </div>
+
+<script>
+
+ $(document).ready(function () {        
+        $("select#normas").chosen({width: "100%"});     
+});
+
+</script>

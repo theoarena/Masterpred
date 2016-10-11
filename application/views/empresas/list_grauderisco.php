@@ -1,7 +1,7 @@
 <link href="<?php echo Site::mediaUrl(); ?>css/datepicker.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo Site::mediaUrl(); ?>js/datepicker.js"></script>
 <?php 
-	if(Site::selected_empresaatual()) {
+	if(Usuario::selected_empresaatual()) {
 
 	
 	
@@ -99,7 +99,7 @@
 				    	colunas += "<td><div class='btn-group btn-group-lg'>";
 				    	colunas += "<a href='<?php echo Site::baseUrl() ?>empresas/edit_grauderisco/"+cod+"?de="+de+"&ate="+ate+"&tec="+tec+"&tipo="+tipo+"' class='btn btn-info'>EDITAR</a>";						
 
-				    	<?php if(Site::isGrant(array('remove_grauderisco'))) { ?>				    	
+				    	<?php if(Usuario::isGrant(array('remove_grauderisco'))) { ?>				    	
 				    		colunas += "<button type='button' class='btn btn-danger' id='ask_"+cod+"' onclick='askDelete(\""+cod+"\")'>REMOVER</button>";
 							colunas += "<button type='button' class='btn btn-success confirm_hidden' id='confirm_"+cod+"' onclick='deleteRow(\""+cod+"\")'>S</button>";						
 							colunas += "<button type='button' class='btn btn-danger confirm_hidden' id='cancel_"+cod+"' onclick='askDelete(\""+cod+"\")'>N</button>";	
@@ -125,4 +125,4 @@
 
 </script>
 
-<?php if(Site::isGrant(array('remove_grauderisco'))) echo Site::generateDelete('gr'); ?>
+<?php if(Usuario::isGrant(array('remove_grauderisco'))) echo Site::generateDelete('Gr'); ?>

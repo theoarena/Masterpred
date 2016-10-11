@@ -1,6 +1,6 @@
 <?php 
 	
-	if($tipo != 'empresa' || Site::selected_empresaatual()) {
+	if($tipo != 'empresa' || Usuario::selected_empresaatual()) {
 	
 		if(count($objs) > 0) { 
 		

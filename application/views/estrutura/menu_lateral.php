@@ -33,7 +33,7 @@
 	<?php
 		echo "<li id='home'>".HTML::anchor('', 'Home')."</li>";	
 		echo $tipo_menu;
-		if(site::isGrant(array('edit_self_account')))	
+		if(Usuario::isGrant(array('edit_self_account')))	
 			echo "<li>".HTML::anchor('usuario/perfil', 'Minha conta' , array("class" => Site::active("perfil",3,false,''), 'id' => 'perfil'  ) );
 		echo "<li id='logout'>".HTML::anchor('usuario/logout', 'Sair')."</li>";	
 	?>

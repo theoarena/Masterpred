@@ -1,57 +1,96 @@
 
+*,#Info,#Resultados,#Avaliacao,#Final{font-family: 'segoe'}
+
 #hr_topo{border-bottom:3 solid #ddd;width: 68%;float: left;height: 42px;background-color: transparent;}
 #logo_topo{float: right;margin-left: 10px;}
 
 #cabecalho_internas{position: relative;width: 100%;border-bottom: 3px solid #ddd}
-#logo_topo_interna{width: 224px;float: left;margin: 0;padding: 0}
+#logo_topo_interna{width: 224px;float: left;margin: 0 0 5px;padding: 0}
 #logo_topo_interna img{margin: 0;padding: 0}
 #secao_interna{color: #ff0000;float: right;text-align: right;}
-#secao_interna p{font-weight: bold;vertical-align: bottom; padding-top: 35px;padding-bottom: 0px;margin-bottom: 0;}
+#secao_interna p{font-weight: bold;vertical-align: bottom; padding-top: 35px;padding-bottom: 0px;margin-bottom: 0; font-size: 16px}
 
 
 #footer{border-top:3px solid #ddd;margin: 0; padding: 5px 0 0 0;height: 10px}
-#footer p{text-align: center;padding: 0;margin: 0;font-size: 12px;line-height: 0px}
+#footer p{text-align: center;padding: 0;margin: 0;font-size: 12px;line-height: 0px;font-weight: bold;color: #676767}
 
 #numero_relatorio{position: absolute;right: 70px;top: 120px;font-size: 20px;font-weight: bold;text-align: center;}
 #info_empresa {position: absolute;right: 70px;bottom: 120px;font-size: 15px;font-weight: bold;text-align: left;}
 
-/* RELATORIO DO RESULTADO DA EMPRESA */
+/* CAPA OSP */
+#Capa {position: relative;width: 100%;}
+#col_right{float: right;width: 250px;}
+#col_left{float: left;width: 350px;height: 990px}
+#sequencial{font-size: 20px;color: black;font-weight: bold;width: 100%;text-align: center; margin: 0;position: relative;padding-top: 40px}
+#info_empresa{width: 100%;margin-top: 280px}
+#info_empresa td{padding: 0;line-height: 0;margin: 0;vertical-align: top;}
+.colspan{height: 10px}
+#info_empresa .col_tit{width: 30%;text-align: right;padding-right: 5px}
+#logo {width: 250px;height: 250px;margin-top: 200px;display: block;}
 
-#empresa_resultado header h3 { bottom: 10px; color: #CC0000;  font-size: 20px; position: absolute; right: 30px;}
-#empresa_resultado #Info p+p{margin-bottom: 5px}
-#empresa_resultado #Info #tipo_gr{position: absolute; right: 40px; top: 90px;}
-#empresa_resultado #Info #tipo_gr h1{ font-size: 90px;  font-weight: bold;text-align: center;}
-/* cores definidas em config.php */
-  #empresa_resultado #Info #tipo_gr h1.green{color: #008703}
-  #empresa_resultado #Info #tipo_gr h1.bordeaux{color: #860000}
-  #empresa_resultado #Info #tipo_gr h1.orange{color: #fe640a}
-  #empresa_resultado #Info #tipo_gr h1.yellow{color: #ffff00}
-  #empresa_resultado #Info #tipo_gr h1.dark_orange{color: #993100}
-  #empresa_resultado #Info #tipo_gr h1.grey{color: #323232}
-  #empresa_resultado #Info #tipo_gr h1.black{color: #000000}
-  #empresa_resultado #Info #tipo_gr h1.light_green{color: #01ff02}
-  #empresa_resultado #Info #tipo_gr h1.light_blue{color: #0064ff}    
-/* ========= */
-#empresa_resultado #Info #tipo_gr p{ font-size: 20px;   text-align: center;}
-#empresa_resultado #Info #tipo_gr p#numero_gr{ color: #7070BF; margin-bottom: 30px; margin-top: -70px;}
-#empresa_resultado #tabela_resultados{ display: table;  width: 100%;margin-top: 20px}
-#empresa_resultado #tabela_resultados tr{}
-#empresa_resultado #tabela_resultados td.coluna_esquerda{width: 35%; text-align: left;}
-#empresa_resultado #tabela_resultados td.coluna_centro{width: 30%; text-align: center; border-left: 1px solid #D3D3D3; border-right: 1px solid #D3D3D3;}
-#empresa_resultado #tabela_resultados td.coluna_direita{width:35%;padding-left: 60px;}
-#empresa_resultado #tabela_resultados td{width: 40%;padding-bottom: 10px;}
+/* RELATORIO OSP */
 
-#empresa_resultado #Avaliacao{ margin-top: 20px; padding: 0;}
-#empresa_resultado #Avaliacao > h2{ margin: 0;background: none repeat scroll 0 0 #84CB34;  color: #333333;  font-size: 16px;  padding: 10px;  text-align: center; text-transform: none;}
-#empresa_resultado #Avaliacao table{width: 100%;}
-#empresa_resultado #Avaliacao table tr{}
-#empresa_resultado #Avaliacao table td{border: 1px solid #D3D3D3; padding: 7px 15px;}
-#empresa_resultado #Avaliacao table td.primeira{width: 15%;}
-#empresa_resultado #Avaliacao thead td.title{text-align: center;}
-#empresa_resultado #Final table{margin-top:15px }
-#empresa_resultado #Final table td{margin:5px 0 }
-#empresa_resultado #Final .col_data{padding: 7px 60px;text-align: center;}
-#empresa_resultado #Final .col_resp{text-align: center;}
+#Info {position: relative;margin: 0;padding: 0}	
+#Info p{line-height: 19px;margin: 0;font-size: 12px;font-family: 'Segoe UI'}
+#dados_osp{float: left;width: 65%;}
+#tipo_gr{float: right;width: 34%;border-left: 1px solid;}
+#tipo_gr h1{ font-size: 90px;  font-weight: bold;text-align: center;margin: 0}
+#tipo_gr p{ font-size: 17px;  text-align: center;margin: 0}
+#tipo_gr p#numero_gr{ color: #7070BF; margin-bottom: 10px; margin-top: 0px;}
 
-#empresa_resultado #Fotos table{width: 100%}
-#empresa_resultado #Fotos td{text-align: center;width: 50%;}
+	/* cores definidas em config.php */	
+	h1.red{color: #ff0000}
+	h1.green{color: #008703}
+	h1.bordeaux{color: #860000}
+	h1.orange{color: #fe640a}
+	h1.yellow{color: #ffff00}
+	h1.dark_orange{color: #993100}
+	h1.grey{color: #323232}
+	h1.black{color: #000000}
+	h1.light_green{color: #01ff02}
+	h1.light_blue{color: #0064ff} 
+	/* ========= */
+
+#Fotos { margin: 8px 0;padding: 0}
+#Fotos table{width: 100%}
+#Fotos td{text-align: center;width: 50%;}
+
+#recomendacoes {font-size: 12px;margin: 5px 0 0 0}
+#tabela_resultados{ display: table;  width: 100%;margin-top: 10px;font-size: 11px}
+#tabela_resultados tr{}
+#tabela_resultados td.coluna_esquerda{width: 35%; text-align: left;padding: 2px 0}
+#tabela_resultados td.coluna_centro{width: 30%; text-align: center; border-left: 1px solid #D3D3D3; border-right: 1px solid #D3D3D3;padding:2px 0}
+#tabela_resultados td.coluna_direita{width:33%;padding: 2px 0 2px 60px}
+#tabela_resultados td{width: 40%;padding-bottom: 10px;}
+#tabela_resultados td p {margin: 0}
+
+#Avaliacao{ margin-top: 10px; padding: 0;}
+#Avaliacao h2{ margin: 0;background-color:#84CB34;  color: #000000;  font-size: 12px;  padding:3px 0;  text-align: center; text-transform: none;}
+#Avaliacao table{width: 100%;}
+#Avaliacao table tr{}
+#Avaliacao table td{border: 1px solid #D3D3D3; padding: 2px 5px; text-align: center;font-size: 12px}
+#Avaliacao table td.primeira{width: 17%;font-weight: bold;font-size: 11px}
+#Avaliacao thead td.title{text-align: center;}
+#tit_acoes{font-weight: bold;font-size: 12px;margin: 5px 0 10px}
+#Final{margin: 0;padding: 0;}
+#Final table{width: 100%;margin: 0}
+#Final p{line-height: 19px;margin: 0 0 10px 0;font-size: 12px;font-family: 'Segoe UI'}
+#col_final1 {width: 20%}
+#col_data,#col_resp{width: 40%;text-align: center;}
+.col_data,.col_resp{border-bottom:0.5px solid;}
+#Final table td{ font-size: 12px;padding: 8px 0 0 0;text-align: center;}
+hr {margin: 10px 0}
+#empresa_lista_equipamentos {width: 100%;}
+#empresa_lista_equipamentos p{font-size: 12px;}
+#ista_equipamentos_nome_empresa{float: left;width: 49%;text-align: left;font-weight: bold;}
+#ista_equipamentos_total_equips{float: right;width: 49%;text-align: right;font-weight: bold;}
+
+#lista_equipamentos table{width: 100%;margin: 10px 0}
+#lista_equipamentos table td{padding: 1px 5px;font-size: 12px}
+#lista_equipamentos .cor{background-color: #d7d7d7}
+#lista_equipamentos .linha{border-bottom: 1px solid #000000;font-weight: bold;}
+.col_tag{width: 20%;text-align: left;}
+.col_equip{width: 75%;text-align: left;}
+.col_condicao{width: 5%;text-align: right;}
+
+ /* ============================== */

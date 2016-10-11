@@ -38,8 +38,10 @@
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Anomalia</span>". Form::textarea('Anomalia',$obj->Anomalia, array('class' => 'form-control', 'placeholder' => 'Detalhes da Anomalia')) ."</div>"; 	
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tecnologia</span>". Form::input('x',$equip->tecnologia->Tecnologia, array ('class' => 'form-control', 'maxlength' => '100', 'placeholder' =>'Nome da rota', 'disabled' => 'disabled')) ."</div>";    
 
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Recomendação</span>". Form::textarea('Recomendacao',$obj->Recomendacao, array('class' => 'form-control', 'placeholder' => 'Recomendação')) ."</div>";     
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Observação</span>". Form::textarea('Obs',$obj->Obs, array('class' => 'form-control', 'placeholder' =>'Observações')) ."</div>";  
+    echo "<div id='qtd1' class='limite_caracteres'><b>".(250-( strlen($obj->Recomendacao) ) )." Caracteres Restantes</b></div>";
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Recomendação</span>". Form::textarea('Recomendacao',$obj->Recomendacao, array('class' => 'form-control', 'placeholder' => 'Recomendação','id' => 'recomendacao', 'onfocus' => 'limitarTamanho(250,this.id)' , 'onkeyup' => 'contar(this,250,\'qtd1\')') ) ."</div>";     
+    echo "<div id='qtd2' class='limite_caracteres'><b>".(250-( strlen($obj->Obs) ) )." Caracteres Restantes</b></div>";
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Observação</span>". Form::textarea('Obs',$obj->Obs, array('class' => 'form-control', 'placeholder' =>'Observações', 'id' => 'obs','onfocus' => 'limitarTamanho(250,this.id)' , 'onkeyup' => 'contar(this,250,\'qtd2\')') ) ."</div>";  
     
     echo Form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn'));       
     echo "</div>";

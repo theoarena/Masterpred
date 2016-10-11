@@ -3,7 +3,7 @@
     <?php echo HTML::anchor(Site::segment(1)."/historico","< Voltar", array("class" => "label label-warning" )); ?>
      <?php echo HTML::anchor(Site::segment(1)."/resultado_historico/".$obj->resultado->CodResultado."?gr=".$obj->CodGR,"Resultados", array("class" => "label label-primary" )); ?>
      <?php 
-        if(Site::isGrant(array('access_print_osp')))
+        if(Usuario::isGrant(array('access_print_osp')))
             echo HTML::anchor("relatorios/gera_relatorio/?tipo=ordem_servico&gr=".$codgr,"Imprimir", array("class" => "label label-info" , 'target'=>'blank' )); 
       ?>            
      

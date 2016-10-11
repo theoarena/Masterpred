@@ -17,9 +17,9 @@
 					echo "<td>".$o->Componente."</td>";
 					echo "<td>".$o->tecnologia->Tecnologia."</td>";
 					echo "<td><div class='btn-group btn-group-lg'>";
-						if(Site::isGrant(array('edit_componentes')))
+						if(Usuario::isGrant(array('edit_componentes')))
 							echo HTML::anchor("sistema/edit_componentes/".$o->CodComponente,"EDITAR", array("class"=>"btn btn-info"));						
-						if(Site::isGrant(array('remove_componentes')))
+						if(Usuario::isGrant(array('remove_componentes')))
 						{
 							echo "<button type='button' class='btn btn-danger' id='ask_".$o->CodComponente."' onclick='askDelete(\"$o->CodComponente\")'>REMOVER</button>";
 							echo "<button type='button' class='btn btn-success confirm_hidden' id='confirm_".$o->CodComponente."' onclick='deleteRow(\"$o->CodComponente\")'>S</button>";						
@@ -50,4 +50,4 @@
 </script>
 
 
-<?php if(Site::isGrant(array('remove_componentes'))) echo Site::generateDelete('Componente'); ?>
+<?php if(Usuario::isGrant(array('remove_componentes'))) echo Site::generateDelete('Componente'); ?>

@@ -13,7 +13,7 @@ class Controller_Welcome extends Controller {
 		$this->template = View::factory('index'); //padrao
 		$auth = Auth::instance(); //carrega o AUTH system
 
-		if(!Site::logado()) //verifica se está logado		
+		if(!Usuario::logado()) //verifica se está logado		
 			HTTP::redirect('front/login'); //redireciona pra pagina de login
 
 		//echo "<pre>";
@@ -21,30 +21,29 @@ class Controller_Welcome extends Controller {
 
 		$user = $auth->get_user();
 
+		//termos de uso
 		if($user->termos == 0)
 			HTTP::redirect('avisos/termos');
-			
+		
 		//===============menu lateral				
 
 		$this->template->menu_lateral = View::factory('estrutura/menu_lateral');
 		$this->template->menu_lateral->nome_usuario = $user->username;
 		//$this->template->content = View::factory('home_clientes');	
 
-		//melhorar isso aqui talvez, para nao ficar sempre buscando do BD
-		$roles = $auth->get_user()->roles->find_all();
-		$this->template->menu_lateral->tipo_usuario = $roles[1]->nickname;
+		$this->template->menu_lateral->tipo_usuario = Session::instance()->get('usuario_roles_nickname',false);
 		
 		//================================
-
 		//==========verificação de usuários
-		if( Site::getInfoUsuario('usuario_system') == 1) //verifica se é usuario de sistema
+		if( Session::instance()->get('usuario_system',false) == 1) //verifica se é usuario de sistema
 		{			
-			Site::check_empresaatual();
+			Usuario::check_empresaatual();
 			$this->template->menu_lateral->tipo_menu = View::factory('estrutura/menu_admin');
 			$this->template->menu_lateral->tipo_menu->qtd_usuarios = Site::qtd_pedidosusuario();			
 		}
 		else
 		{
+
 			$this->template->menu_lateral->tipo_menu = View::factory('estrutura/menu_cliente');
 			$this->template->menu_lateral->empresas = true;						
 		}
@@ -57,7 +56,7 @@ class Controller_Welcome extends Controller {
 		$this->template->content->show_search = true;			
 
 		/*
-		if($view = Cache::instance()->get(Site::segment(2), FALSE) )		
+		if($view = Cache::instance()->get(Usuario::segment(2), FALSE) )		
 		{
 			$this->template->content->conteudo = $view;	
 			//die();
@@ -69,13 +68,13 @@ class Controller_Welcome extends Controller {
 	{			
 		$this->response->body($this->template);	
 
-		//if(!Cache::instance()->get(Site::segment(2), FALSE) )		
-		//	Cache::instance()->set(Site::segment(2),$this->template->content->conteudo->render());				
+		//if(!Cache::instance()->get(Usuario::segment(2), FALSE) )		
+		//	Cache::instance()->set(Usuario::segment(2),$this->template->content->conteudo->render());				
 	}	
 
 	public function action_index()
 	{	
-		if( Site::getInfoUsuario('usuario_system') == 1) //verifica se é usuario de sistema
+		if( Session::instance()->get('usuario_system',false) == 1) //verifica se é usuario de sistema
 			$this->template->content = View::factory('home_admin');		
 		else
 			$this->template->content = View::factory('home_clientes');					

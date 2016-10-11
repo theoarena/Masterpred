@@ -7,6 +7,8 @@
 	//if($erro!="") echo "<span id='erro-home'>".$erro."</span>";	
 	//echo Form::hidden("CodRota",$obj->CodRota);	
 
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tecnologia</span>". Form::select('Tecnologia',$tecnologias,$obj->Tecnologia,array('class' => 'form-control') ) ."</div>"; 
+    echo '<br>';
 	echo '<div class="well well-sm">';
 	echo '<h4>Por favor, escolha qual será o sequencial do relatório:</h4>';
 	echo "<div class='input-group input-group-lg'>";
@@ -19,10 +21,10 @@
 
 	echo "</div>";
    
+    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Instrumentação</span>". Form::select('Instrumentacao',$instrumentos,null,array('class' => 'form-control') ) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Rota</span>". Form::select('Rota',$rotas,null,array('class' => 'form-control') ) ."</div>"; 
     echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Analista</span>". Form::select('Analista',$analistas,$obj->Analista,array('class' => 'form-control') ) ."</div>"; 
 	echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Data</span>". Form::input('Data', ($obj->Data != null)?( Site::data_BR($obj->Data) ):( date("d/m/Y") ) ,array('class' => 'form-control', 'id' => 'datepicker',  'maxlength' => '10', 'placeholder' => 'Data', 'onkeypress' => 'return mask(event,this,"##/##/####")' )) ."</div>";	
-    echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Tecnologia</span>". Form::select('Tecnologia',$tecnologias,$obj->Tecnologia,array('class' => 'form-control') ) ."</div>"; 
 	echo Form::submit('submit', "Salvar", array('class' => 'btn btn-primary btn'));       
 	echo Form::close();
 

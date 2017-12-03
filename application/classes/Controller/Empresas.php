@@ -250,6 +250,8 @@ class Controller_Empresas extends Controller_Welcome {
 		$relatorio->Data = $datahora;
 		$relatorio->save();
 
+		$relatorio_id = $relatorio->ID;
+
 		$rota = ORM::factory('Rota',$this->request->post('Rota'));
 
 		foreach ($rota->equipamentos->find_all() as $equipamento) {			
@@ -259,7 +261,7 @@ class Controller_Empresas extends Controller_Welcome {
 			$obj->Tecnologia = $this->request->post('Tecnologia');
 			$obj->Data = $datahora;
 			$obj->Empresa = Usuario::get_empresaatual();
-			$obj->Relatorio = $relatorio->ID;
+			$obj->Relatorio = $relatorio_id;
 			$obj->save();
 		}	
 	
@@ -469,6 +471,7 @@ class Controller_Empresas extends Controller_Welcome {
 		$novo->Analista = $obj->Analista;			
 		$novo->Tecnologia = $obj->Tecnologia;		
 		$novo->Empresa = Usuario::get_empresaatual();
+		$novo->Relatorio = $obj->Relatorio;	
 
 		if($novo->save())
 			print 1;

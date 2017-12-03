@@ -105,7 +105,7 @@
         $('#btn_gr_referencia').click(function(e){
             $.fancybox.open(
             {
-                href: '<?php echo Site::baseUrl() ?>requests/grReferencia/?equipamento=<?php echo $equip->equipamento->CodEquipamento; ?>&componente=<?php echo $obj->TipoComponente; ?>&data=<?php echo Site::datahora_EN($equip->Data); ?>&empresa=<?php echo Site::get_empresaatual(); ?>',
+                href: '<?php echo Site::baseUrl() ?>requests/grReferencia/?equipamento=<?php echo $equip->equipamento->CodEquipamento; ?>&componente=<?php echo $obj->TipoComponente; ?>&data=<?php echo Site::datahora_EN($equip->Data); ?>&empresa=<?php echo Usuario::get_empresaatual(); ?>',
                 type: 'ajax',
                 title: 'Selecione a GR',
                 padding:20

@@ -395,6 +395,21 @@ textarea.form-control {height: 100px !important;}
 #usuario_ativado{ position: absolute;  right: 0;  top: -55px;}
 .check_list > *{background: #f1f1f1 none repeat scroll 0 0;  display: block;  padding: 15px 35px 15px 15px;text-align: left;}
 
+/*================= OTHERS ==============================*/
+
+.ui-tabs-hide {display: none;}
+.ui-state-active{background: #e7e7e7}
+.ui-state-hover{background: #f2f2f2}
+
+.tabs_info h3 span{ font-size: 17px;font-weight: normal; }
+.tabs_info h3{font-weight: bold;margin:0 0 10px;font-size: 18px}
+
+.tab_item{padding: 20px; background: #f7f7f7;}
+.col_tab{display: inline-block; vertical-align: top;}
+.col_tab+.col_tab{margin-left: 2%}
+.imagens_tab{display: inline-block; width: 40%;}
+
+
 /*================= MEDIA QUERIES ==============================*/
 @media only screen and (max-width: 1280px) {
   #temperaturas > div{display: inline-block;}

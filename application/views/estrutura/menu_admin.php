@@ -50,28 +50,41 @@
 	{	
 		echo "<li>".HTML::anchor('#', 'Sistema' , array("class" => 'menu_dropdown', 'onclick' => 'openMenu("menu_sistema")' , 'id' => 'menu_sistema'  ) );
 			echo "<ul>";
-				if(Usuario::isGrant(array('access_usuarios_sistema')))
-					echo "<li>".HTML::anchor('sistema/usuarios_sistema', 'Usuários de sistema' , array("class" => Site::active("usuarios_sistema",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_tecnologias')))
-					echo "<li>".HTML::anchor('sistema/tecnologias', 'Tecnologias' , array("class" => Site::active("tecnologias",3,false) ) ). "</li>";
-					echo "<li>".HTML::anchor('sistema/instrumentacao', 'Instrumentação' , array("class" => Site::active("instrumentacao",3,false) ) ). "</li>";
-					echo "<li>".HTML::anchor('sistema/normas', 'Normas' , array("class" => Site::active("normas",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_componentes')))
-					echo "<li>".HTML::anchor('sistema/componentes', 'Componentes' , array("class" => Site::active("componentes",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_anomalias')))
-					echo "<li>".HTML::anchor('sistema/anomalias', 'Anomalias' , array("class" => Site::active("anomalias",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_recomendacoes')))
-					echo "<li>".HTML::anchor('sistema/recomendacoes', 'Recomendações' , array("class" => Site::active("recomendacoes",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_tipos_equipamento')))
-					echo "<li>".HTML::anchor('sistema/tipoequipamento', 'Tipos de Equipamento' , array("class" => Site::active("tipoequipamento",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_condicoes')))
-					echo "<li>".HTML::anchor('sistema/condicoes', 'Condições' , array("class" => Site::active("condicoes",3,false) ) ). "</li>";
-				if(Usuario::isGrant(array('access_tipos_inspecao')))
-					echo "<li>".HTML::anchor('sistema/tipoinspecao', 'Tipos de Inspeção' , array("class" => Site::active("tipoinspecao",3,false) ) ). "</li>";
 				if(Usuario::isGrant(array('access_analistas')))
 					echo "<li>".HTML::anchor('sistema/analistas', 'Analistas' , array("class" => Site::active("analistas",3,false) ) ). "</li>";	
+
+				if(Usuario::isGrant(array('access_anomalias')))
+					echo "<li>".HTML::anchor('sistema/anomalias', 'Anomalias' , array("class" => Site::active("anomalias",3,false) ) ). "</li>";
+
+				if(Usuario::isGrant(array('access_componentes')))
+					echo "<li>".HTML::anchor('sistema/componentes', 'Componentes' , array("class" => Site::active("componentes",3,false) ) ). "</li>";
+
+				if(Usuario::isGrant(array('access_condicoes')))
+					echo "<li>".HTML::anchor('sistema/condicoes', 'Condições' , array("class" => Site::active("condicoes",3,false) ) ). "</li>";
+
 				if(Usuario::isGrant(array('access_roles')))
 					echo "<li>".HTML::anchor('sistema/roles', 'Grupos de Acesso' , array("class" => Site::active("roles",3,false) ) ). "</li>";	
+
+				echo "<li>".HTML::anchor('sistema/instrumentacao', 'Instrumentação' , array("class" => Site::active("instrumentacao",3,false) ) ). "</li>";
+
+				echo "<li>".HTML::anchor('sistema/normas', 'Normas' , array("class" => Site::active("normas",3,false) ) ). "</li>";
+
+				if(Usuario::isGrant(array('access_recomendacoes')))
+					echo "<li>".HTML::anchor('sistema/recomendacoes', 'Recomendações' , array("class" => Site::active("recomendacoes",3,false) ) ). "</li>";				
+				
+				if(Usuario::isGrant(array('access_tecnologias')))
+					echo "<li>".HTML::anchor('sistema/tecnologias', 'Tecnologias' , array("class" => Site::active("tecnologias",3,false) ) ). "</li>";				
+				
+				if(Usuario::isGrant(array('access_tipos_equipamento')))
+					echo "<li>".HTML::anchor('sistema/tipoequipamento', 'Tipos de Equipamento' , array("class" => Site::active("tipoequipamento",3,false) ) ). "</li>";
+				
+				if(Usuario::isGrant(array('access_tipos_inspecao')))
+					echo "<li>".HTML::anchor('sistema/tipoinspecao', 'Tipos de Inspeção' , array("class" => Site::active("tipoinspecao",3,false) ) ). "</li>";
+
+				if(Usuario::isGrant(array('access_usuarios_sistema')))
+					echo "<li>".HTML::anchor('sistema/usuarios_sistema', 'Usuários de sistema' , array("class" => Site::active("usuarios_sistema",3,false) ) ). "</li>";
+				
+				
 				//echo "<li>".HTML::anchor('sistema/privileges', 'Privilégios' , array("class" => Site::active("privileges",3,false) ) ). "</li>";	
 			echo "</ul>";	
 		echo "</li>";	

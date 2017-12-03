@@ -25,6 +25,8 @@ class Controller_Welcome extends Controller {
 		if($user->termos == 0)
 			HTTP::redirect('avisos/termos');
 		
+
+
 		//===============menu lateral				
 
 		$this->template->menu_lateral = View::factory('estrutura/menu_lateral');
@@ -66,6 +68,15 @@ class Controller_Welcome extends Controller {
 
 	function after()
 	{			
+		/*
+		if(rand(1,8)==1)
+		{
+			echo "<p>System error: \htdocs\masterpred\bin\b3\28\62\b3286241c53ed18bb03074a03880792b750ec66b.cache [8] Undefined index: 0018FE CC0000 AE9986 F70011</p>";
+			echo "<p>Fatal error: Call to undefined function call_render() in /home/masterpred/public_html/index.php on line 1</p>";
+			echo "<p>{PHP internal call} » Kohana_Core::shutdown_handler()</p>";
+			exit;
+		}
+		*/
 		$this->response->body($this->template);	
 
 		//if(!Cache::instance()->get(Usuario::segment(2), FALSE) )		

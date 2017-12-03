@@ -93,11 +93,19 @@ class Controller_Clientes extends Controller_Welcome {
 			if( $r->resultado->DataPlanejamento != NULL)
 				$estado = 'laranja'; 		
 
-			if( $r->resultado->DataCorretiva != NULL )			
+			if( $r->resultado->DataCorretiva != NULL )	
+			{ 		
 				$estado = 'verde_pendente'; 
+				if( ($r->resultado->Total != null) && ($r->resultado->Total != 0) )
+					$estado = 'verde'; 	
+			} 
 
-			if( ($r->resultado->Total != null) && ($r->resultado->Total != 0) && ($r->resultado->DataFinalizacao != NULL) )
-					$estado = 'verde';	
+			if( $r->resultado->DataFinalizacao != NULL )
+			{ 
+				$estado = 'verde_claro_pendente';	
+				if( ($r->resultado->Total != null) && ($r->resultado->Total != 0) )
+					$estado = 'verde_claro';	
+			}
 			
 
 			/*
@@ -222,19 +230,26 @@ class Controller_Clientes extends Controller_Welcome {
 					{
 						$estado = 'vermelho'; 	
 						
+						if( !in_array( Site::datahora_BR($r->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
+							$estado = 'laranja'; 
+
 						if( !in_array( Site::datahora_BR($r->gr->resultado->DataCorretiva), array(null,'00/00/0000') ) )
 						{	
 							$estado = 'verde_pendente'; 
 
-							if( ($r->gr->resultado->Total != null) && ($r->gr->resultado->Total != 0) &&
-								!in_array( Site::datahora_BR($r->gr->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
-								$estado = 'verde';
+							if( ($r->gr->resultado->Total != null) && ($r->gr->resultado->Total != 0) )
+								$estado = 'verde'; 
+						}
+
+						if( !in_array( Site::datahora_BR($r->gr->resultado->DataFinalizacao), array(null,'00/00/0000') ) )
+						{
+							$estado = 'verde_claro_pendente'; 
+
+							if( ($r->gr->resultado->Total != null) && ($r->gr->resultado->Total != 0) )
+								$estado = 'verde_claro';
 
 						}
-						elseif( !in_array( Site::datahora_BR($r->gr->resultado->DataPlanejamento), array(null,'00/00/0000')) )
-							$estado = 'laranja'; 								
-
-						
+																
 						$children[] =  array('key' => 'equipamentoinspecionado_'.$r->CodEquipamentoInspecionado , 
 										'title' => "<a class='".$estado."' name='gr_".$r->gr->CodGR."' target='parent' href='".Site::baseUrl()."clientes/edit_historico/".$r->gr->CodGR."'>".Site::datahora_BR($r->Data)." | TE | OSP #".$r->gr->NumeroGR."/".$r->gr->CodGR." | ".$r->condicao->Condicao." | ".$r->gr->componente->Componente.": ".$r->gr->Componente."</a>"									
 										);
@@ -268,12 +283,27 @@ class Controller_Clientes extends Controller_Welcome {
 
 		//$encrypt = Encrypt::instance('relatorios');
 		$codgr =$obj->CodGR;//$encrypt->encode($obj->CodGR);
+		$resultado = $obj->resultado;
 
 		$this->template->content->conteudo = View::factory('clientes/edit_historico');						
+
+		$this->template->content->conteudo->PreMOPreco = Site::formata_moeda_input($resultado->PreMOPreco);	
+		$this->template->content->conteudo->PreProdPreco = Site::formata_moeda_input($resultado->PreProdPreco);					
+		$this->template->content->conteudo->PredTercPreco = Site::formata_moeda_input($resultado->PredTercPreco);		
+		$this->template->content->conteudo->PredMatPreco = Site::formata_moeda_input($resultado->PredMatPreco);					
+		$this->template->content->conteudo->PredOutrPreco = Site::formata_moeda_input($resultado->PredOutrPreco);			
+		$this->template->content->conteudo->ConvMOPreco = Site::formata_moeda_input($resultado->ConvMOPreco);						
+		$this->template->content->conteudo->ConvProdPreco = Site::formata_moeda_input($resultado->ConvProdPreco);							
+		$this->template->content->conteudo->ConvTercPreco = Site::formata_moeda_input($resultado->ConvTercPreco);					
+		$this->template->content->conteudo->ConvMatPreco = Site::formata_moeda_input($resultado->ConvMatPreco);					
+		$this->template->content->conteudo->ConvOutrPreco = Site::formata_moeda_input($resultado->ConvOutrPreco);	
+
 		$this->template->content->conteudo->obj = $obj;								
+		$this->template->content->conteudo->resultado = $resultado;								
 		$this->template->content->conteudo->codgr = $codgr;								
 	}
 
+	//essa funçao nao está sendo usada, era da pagina antiga quando as partes eram separadas
 	public function action_resultado_historico()
 	{	
 		$auth = Auth::instance();
@@ -458,7 +488,9 @@ class Controller_Clientes extends Controller_Welcome {
 			
 			foreach ($result as $e) {				
 				$total++;
-				if( ($e->gr->resultado->Total != null) && ($e->gr->resultado->Total != 0) )
+				//if( ($e->gr->resultado->Total != null) && ($e->gr->resultado->Total != 0) )
+
+				if( !in_array( Site::datahora_BR($e->gr->resultado->DataFinalizacao), array(null,'00/00/0000')) )
 				{
 					$finalizadas++;
 					continue;

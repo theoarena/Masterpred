@@ -44,7 +44,7 @@ $(function () {
 	      
             $.fancybox.open(
             {
-                href: '<?php echo Site::baseUrl() ?>requests/codRelatorio/?empresa=<?php echo Site::get_empresaatual(); ?>&data='+data+'&tecnologia='+tec,
+                href: '<?php echo Site::baseUrl() ?>requests/codRelatorio/?empresa=<?php echo Usuario::get_empresaatual(); ?>&data='+data+'&tecnologia='+tec,
                 type: 'ajax',
                 title: 'Selecione o Relatório desejado',
                 padding:20

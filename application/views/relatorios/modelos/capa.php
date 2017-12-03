@@ -10,15 +10,16 @@
 		<?php
 			if($tecnologia->Imagem != null)
 				echo "<img src='".$base_tec.$tecnologia->Imagem."' width='350px' height='990px' />"
+			//echo "<div id='tit_tecnologia'><p>".$tecnologia->Tecnologia."</p></div>";
 		?>
 	</div>
 
 	<div id="col_right">
-		<p id='sequencial'>Relatório Técnico Nº.<br> <?php echo Site::data_EN_relatorio($relatorio->Data).".".Site::formata_codRelatorio($relatorio->CodRelatorio) ?></p>	
+		<p id='sequencial' style="font-family: segoe">Relatório Técnico Nº.<br> <?php echo Site::data_EN_relatorio($relatorio->Data).".".Site::formata_codRelatorio($relatorio->CodRelatorio) ?></p>	
 		<div id='logo'>
 		<?php
 			if($empresa->Logo != null)
-				echo "<img src='".$base_emp.$empresa->Logo."' width='250px' height='250px' />"
+				echo "<img src='".$base_emp.$empresa->Logo."'/>"
 		?>
 		</div>
 
@@ -27,18 +28,18 @@
 				<td class="col_tit">Cliente:</td>
 				<td><?php echo $empresa->Empresa; ?></td>
 			</tr>
+			<tr>
+				<td class="col_tit">Dep.:</td>
+				<td><?php echo $empresa->departamento; ?></td>
+			</tr>
 			<tr><td colspan="2" class="colspan"></td></tr>
 			<tr>
 				<td class="col_tit">Endereço:</td>
 				<td><?php echo $empresa->endereco; ?></td>
-			</tr>
-			<tr>
-				<td class="col_tit">Bairro:</td>
-				<td><?php echo $empresa->departamento; ?></td>
-			</tr>
+			</tr>			
 			<tr>
 				<td class="col_tit">Cidade:</td>
-				<td><?php echo $empresa->Unidade; ?></td>
+				<td><?php echo $empresa->Fabrica; ?></td>
 			</tr>
 			<tr>
 				<td class="col_tit">C.E.P:</td>

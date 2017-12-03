@@ -14,21 +14,10 @@
 		 		echo '</a>';
 		 		$cont--;
 		 	}
-
-		 	//if($cont>0)
-		 	//echo '<p class="list-group-item-text">Nenhuma nova notificação.</p>';
-
+		 
 	 	?>	
 	</div>
 	<?php } 
-
-
- 	echo '<p>As <a href="'.URL::site("sistema/normas").'" class="inline_bold">normas</a> já podem ser inseridas. É necessário, também, vinculá-las com suas respectivas
- 	<a href="'.URL::site("sistema/tecnologias").'" class="inline_bold">tecnologias</a>.';
-
- 	echo '<p>O menu <a href="'.URL::site("sistema/tecnologias").'" class="inline_bold">instrumentação</a> também está disponível, bem como
-
- 	os <span class="inline_bold">Softwares</span>, que também podem ser inseridos em cada tecnologia.';
 
 	?>
 

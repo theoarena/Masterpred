@@ -35,9 +35,9 @@
 				foreach ($equipamentos as $equipamento) {
 
 					if($row%2==0)						
-						echo '<tr class="cor">';
-					else
 						echo '<tr>';
+					else
+						echo '<tr class="cor">';
 						echo '<td class="col_tag">'.$equipamento['Tag'].'</td>';
 						echo '<td class="col_equip">'.$equipamento['Equipamento'].'</td>';
 						echo '<td class="col_condicao">'.$equipamento['Condicao'].'</td>';

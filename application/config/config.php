@@ -19,6 +19,7 @@ return array(
 	//Dirs
 	'mpdf' => 'application/media/classes/mpdf/mpdf.php',
 	'css' => 'application/media/css/',
+	'composer' => 'vendor/autoload.php',
 
 	//uploads
 	'upload_directory' => 'application/media/uploads/analises/',

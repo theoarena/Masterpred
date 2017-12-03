@@ -13,11 +13,11 @@
 
 	<div id='dados_osp'>	
 		<p><strong>Empresa:</strong> <?php echo $empresa->Empresa; ?> </p>
-		<p><strong>Área:</strong> <?php echo $equipamento->setor->Setor; ?> </p>
-		<p><strong>Setor:</strong> <?php echo $equipamento->setor->area->Area; ?> </p>
-		<p><strong>Data:</strong> <?php echo site::datahora_BR($equipamentoinspecionado->Data); ?> </p>
-		<p><strong>Tag:</strong> <?php echo $equipamentoinspecionado->equipamento->Tag ;?></p>
+		<p><strong>Data:</strong> <?php echo Site::datahora_BR($equipamentoinspecionado->Data); ?> </p>
 		<p><strong>Analista:</strong> <?php echo $equipamentoinspecionado->analista->Analista; ?> </p>
+		<p><strong>Área:</strong> <?php echo $equipamento->setor->area->Area; ?> </p>
+		<p><strong>Setor:</strong> <?php echo $equipamento->setor->Setor; ?> </p>
+		<p><strong>Tag:</strong> <?php echo $equipamentoinspecionado->equipamento->Tag ;?></p>
 		<p><strong>Equipamento:</strong> <?php echo $equipamentoinspecionado->equipamento->Equipamento; ?> </p>
 		<p><strong>Componente:</strong> <?php echo $gr->componente->Componente." ".$gr->Componente; ?> </p>
 		<p><strong>Detalhe:</strong> <?php echo $gr->Detalhe; ?> </p>

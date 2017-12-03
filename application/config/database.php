@@ -20,20 +20,20 @@ return array
 			 */
 
 
-/*
 			'hostname'   => '179.190.55.146',
 			'database'   => 'maste817_sistema',
 			'username'   => 'maste817_sistema',
 			'password'   => '7[]HqB]Q(BFg',
 			'persistent' => FALSE,
 
-			*/
+/*
 
 			'hostname'   => 'localhost',
-			'database'   => 'masterpred2',
+			'database'   => 'masterpred',
 			'username'   => 'root',
 			'password'   => null,
 			'persistent' => FALSE,
+			*/
 		),
 		'table_prefix' => '',
 		'charset'      => 'utf8',

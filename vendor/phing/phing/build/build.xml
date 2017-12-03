@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<!--
+    This build file builds the Phing release as a phar package.
+-->
+<project name="phing" basedir="." default="main">
+
+    <dirname property="buildfile.dir" file="${phing.file}"/>
+
+    <php function="realpath" returnProperty="phingpkg.home">
+        <param value="${buildfile.dir}/.."/>
+    </php>
+
+    <property name="build.full.dir" value="${buildfile.dir}/full"/>
+
+    <fileset dir="${phingpkg.home}" id="all">
+    	<include name="bin/phing"/>
+    	<include name="bin/phing.bat"/>
+    	<include name="bin/phing.php"/>
+        <include name="classes/**"/>
+        <include name="docs/api/**"/>
+        <include name="docs/example/**"/>
+        <include name="docs/docbook5/en/output/hlhtml/**"/>
+        <include name="etc/**"/>
+        <include name="CHANGELOG.md"/>
+        <include name="CREDITS.md"/>
+        <include name="LICENSE"/>
+        <include name="README.md"/>
+        <include name="composer.*"/>
+    </fileset>
+
+    <fileset dir="${phingpkg.home}/classes/phing" id="classes">
+        <include name="**"/>
+    </fileset>
+
+    <fileset dir="${phingpkg.home}/docs" id="docs">
+        <include name="api/docs/**"/>
+        <include name="example/**"/>
+        <include name="docbook5/en/output/hlhtml/**"/>
+    </fileset>
+
+    <fileset dir="${phingpkg.home}" id="etc">
+        <include name="etc/**"/>
+    </fileset>
+
+    <fileset dir="${phingpkg.home}" id="scripts">
+        <include name="bin/phing.php"/>
+    </fileset>
+
+    <fileset dir="${phingpkg.home}" id="misc">
+        <include name="CHANGELOG.md"/>
+        <include name="CREDITS.md"/>
+        <include name="LICENSE"/>
+        <include name="README.md"/>
+        <exclude name="INSTALL*"/>
+    </fileset>
+
+    <!--
+        ==============================================
+        Main entry point
+        ==============================================
+    -->
+    <target name="main"
+        depends="clean,clean-external,create-api-docs,copy-files,composer,package.phar"
+    />
+
+    <!--
+        ==============================================
+        Sets some default properties
+        ==============================================
+    -->
+    <target name="setproperties">
+
+        <loadfile property="version" file="${phingpkg.home}/etc/VERSION.TXT"/>
+
+        <property name="pkgname" value="phing-${version}"/>
+        <property name="pkgname-docs" value="phingdocs-${version}" override="true"/>
+        <property name="build.full.dir" value="${buildfile.dir}/full/${pkgname}" override="true"/>
+
+        <if>
+            <contains string="${version}" substring="RC"/>
+            <then>
+                <property name="notes" value="This is the latest beta release of Phing." />
+                <property name="state" value="beta" />
+            </then>
+
+            <elseif>
+                <contains string="${version}" substring="snapshot"/>
+                <then>
+                    <property name="notes" value="This is a snapshot release that might not be functional." />
+                    <property name="state" value="alpha"/>
+                </then>
+            </elseif>
+
+            <else>
+                <property name="notes" value="This is the latest stable release of Phing." />
+                <property name="state" value="stable"/>
+            </else>
+        </if>
+
+        <echo>Building Phing version ${version} (${state})</echo>
+        <echo>${notes}</echo>
+
+    </target>
+
+    <!--
+        ==============================================
+        Copy the desired files into the build/ dir
+        ==============================================
+    -->
+    <target name="copy-files"
+        depends="setproperties">
+
+        <echo>-----------------------------</echo>
+        <echo>| Creating directory layout |</echo>
+        <echo>-----------------------------</echo>
+
+        <mkdir dir="${build.full.dir}" />
+
+        <copy todir="${build.full.dir}">
+            <fileset refid="all"/>
+        </copy>
+
+        <copy file="${buildfile.dir}/manifest.xml" tofile="${build.full.dir}/manifest.xml">
+            <filterchain>
+                <expandproperties />
+            </filterchain>
+        </copy>
+
+        <chmod file="${build.full.dir}/bin/phing" mode="755"/>
+
+    </target>
+
+    <!--
+        ==============================================
+        Create the API documentation
+        with phpDocumentor 2 and Responsive template
+        ==============================================
+    -->
+    <target name="create-api-docs"
+        depends="setproperties">
+
+        <phing phingfile="build.xml" dir="${phingpkg.home}/docs/api"
+            target="build"
+        />
+
+        <delete>
+            <fileset dir=".">
+                <include name="*.log"/>
+            </fileset>
+        </delete>
+
+    </target>
+
+    <!--
+        ==============================================
+        Run composer
+        ==============================================
+    -->
+    <target name="composer"
+        depends="setproperties">
+        <exec dir="${build.full.dir}" passthru="true" command="composer install -o --no-dev --prefer-dist"/>
+    </target>
+
+    <!--
+        ==============================================
+        Create a phar package of the files.
+        ==============================================
+    -->
+    <target name="package.phar"
+        if="version"
+        depends="setproperties">
+
+        <php expression="date('Ymd')" returnProperty="builddate" />
+        <pharpackage
+            compression="none"
+            destfile="${build.full.dir}.phar"
+            stub="${buildfile.dir}/phing-stub.php"
+            alias="phing.phar"
+            basedir="${build.full.dir}">
+            <fileset dir="${build.full.dir}">
+                <include name="bin/**" />
+                <include name="classes/**" />
+                <include name="etc/**" />
+                <include name="vendor/**" />
+                <include name="manifest.xml" />
+            </fileset>
+            <metadata>
+                <element name="version" value="${version}" />
+                <element name="state" value="${state}" />
+                <element name="builddate" value="${builddate}" />
+                <element name="authors">
+                    <element name="Michiel Rook">
+                        <element name="e-mail" value="mrook@php.net" />
+                    </element>
+                </element>
+            </metadata>
+        </pharpackage>
+        <copy file="${build.full.dir}.phar" tofile="${buildfile.dir}/full/phing-latest.phar"/>
+        <phingcall target="generate-hash">
+            <param name="filename" value="${build.full.dir}.phar"/>
+        </phingcall>
+        <phingcall target="generate-hash">
+            <param name="filename" value="${buildfile.dir}/full/phing-latest.phar"/>
+        </phingcall>
+
+    </target>
+
+    <!--
+        ==============================================
+        Clean up build files.
+        ==============================================
+    -->
+    <target name="clean-external"
+        depends="setproperties">
+
+        <phing phingfile="build.xml" dir="${phingpkg.home}/docs/example"
+            target="clean"
+        />
+
+        <phing phingfile="build.xml" dir="${phingpkg.home}/docs/api"
+            target="clean"
+        />
+
+    </target>
+
+    <!--
+        ==============================================
+        Clean up build files.
+        ==============================================
+    -->
+     <target name="clean"
+        depends="setproperties">
+
+        <echo>-----------------------------</echo>
+        <echo>| Deleting build directory  |</echo>
+        <echo>-----------------------------</echo>
+
+        <delete dir="${buildfile.dir}/full" failonerror="false"/>
+
+    </target>
+
+    <!--
+        ==============================================
+        Generate SHA512 file hashes
+        ==============================================
+    -->
+    <target name="generate-hash">
+        <filehash file="${filename}" algorithm="sha512" propertyname="phar.hash"/>
+        <basename property="basefilename" file="${filename}"/>
+        <echo file="${filename}.sha512">${phar.hash} ${basefilename}</echo>
+
+        <filehash file="${filename}" algorithm="sha384" propertyname="phar.hash"/>
+        <echo file="${filename}.sha384">${phar.hash} ${basefilename}</echo>
+
+        <filehash file="${filename}" algorithm="sha256" propertyname="phar.hash"/>
+        <echo file="${filename}.sha256">${phar.hash} ${basefilename}</echo>
+
+        <filehash file="${filename}" algorithm="sha1" propertyname="phar.hash"/>
+        <echo file="${filename}.sha1">${phar.hash} ${basefilename}</echo>
+
+        <exec command="gpg -u mrook@php.net --detach-sign --output ${filename}.asc ${filename}" checkreturn="true" logoutput="true"/>
+    </target>
+
+</project>

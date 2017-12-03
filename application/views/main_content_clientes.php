@@ -27,8 +27,20 @@
 
 <script type="text/javascript">
 
+var $rows = $('#historico_list li');
+
 $( document ).ready(function() {
 	$('.alert-dismissable').delay(4000).fadeOut('slow');  //tira quaisquer alertas depois de 4 segundos
 });
+
+$('#campobusca').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
 
 </script>

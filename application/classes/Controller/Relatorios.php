@@ -2,14 +2,14 @@
 
 class Controller_Relatorios extends Controller_Welcome {
 	
-	public $privileges_needed = array('access_print_osp');
+	public $privileges_needed = array('access_relatorios');
 
 	public function before(){
 		parent::before();		
 
 	//	$this->template = View::factory("index_relatorios");								
 
-		include_once(Kohana::$config->load('config')->get('mpdf'));
+		include_once(Kohana::$config->load('config')->get('composer'));
 		$this->stylesheet = file_get_contents(Kohana::$config->load('config')->get('css').'print.css');
 
 		$this->template->content->show_add_link = false;													
@@ -86,10 +86,11 @@ class Controller_Relatorios extends Controller_Welcome {
 
 		//ini_set("memory_limit","-1");
 
-		$mpdf = new mPDF('c','', 0, '', 10, 10, 24, 9, 5, 2, 'A4-P');
+		$mpdf = new mPDF('','A4', 0, '', 10, 10, 24, 9, 5, 2, 'P');
+		
 		$mpdf->ignore_invalid_utf8 = true;
 		$mpdf->simpleTables = true;
-		$this->packTableData = true;
+		$mpdf->packTableData = true;
 
 		$tipo = $_GET['tipo'];
 		$direct = ( isset($_GET['direct']) )?( $_GET['direct'] ):("I");
@@ -177,6 +178,56 @@ class Controller_Relatorios extends Controller_Welcome {
 			
 		}
 
+		elseif($tipo == 'graficos_gerenciais')
+		{	
+
+			//===================================compatibilidade
+			$relatorio = DB::query(Database::SELECT,"SELECT count(CodEquipamentoInspecionado) as cod from equipamentoinspecionado where Relatorio = :cod ");
+			$relatorio->parameters(array(   ':cod' => $_GET['cod'] ));
+			$relatorio = $relatorio->execute();	
+
+			$relatorio = $relatorio[0];
+			//=================================================
+
+			//isso garante compatibilidade com dados antigos que não possuem o campo RELATORIO preenchido			
+			if($relatorio["cod"] != 0)
+			{
+				$condicoes = DB::query(Database::SELECT,"SELECT equipamentoinspecionado.condicao AS condicao, count(condicao) AS qtd from
+				 equipamentoinspecionado AS equipamentoinspecionado INNER JOIN equipamento as e ON e.CodEquipamento = equipamentoinspecionado.equipamento
+				 where empresa = :empresa and Relatorio = :cod and Tecnologia = :tecnologia group by condicao");
+
+				$condicoes->parameters(array(
+				    ':empresa' => Usuario::get_empresaatual(),
+				    ':cod' => $_GET['cod'],
+				  	':tecnologia' => $_GET['tec']	    
+				));
+			}
+			else
+			{	//os dados antigos são tratados aqui atraves da DATA
+				$condicoes = DB::query(Database::SELECT,"SELECT equipamentoinspecionado.condicao AS condicao, count(condicao) AS qtd from
+				 equipamentoinspecionado AS equipamentoinspecionado INNER JOIN equipamento as e ON e.CodEquipamento = equipamentoinspecionado.equipamento
+				 where DATE_FORMAT(Data, '%Y-%m-%d') = :data and empresa = :empresa and Tecnologia = :tecnologia group by condicao");
+
+				$condicoes->parameters(array(
+				    ':empresa' => Usuario::get_empresaatual(),
+				    ':data' => Site::datahora_EN($_GET['data']),
+				  	':tecnologia' => $_GET['tec']	    
+				));
+			}
+
+			$condicoes = $condicoes->execute();	
+
+			$str = "";
+
+			foreach ($condicoes as $c) {
+				$cond = ORM::factory("Condicao", $c["condicao"]);	
+				$str .= $cond->Condicao.": ".$c["qtd"]."<br>";
+			}
+
+			$this->relatorio_graficos_gerencias($mpdf,$str);	
+
+		}
+
 		elseif($tipo == 'lista_equipamentos')
 		{	
 			$cod = $_GET['cod'];
@@ -190,8 +241,19 @@ class Controller_Relatorios extends Controller_Welcome {
 			//	$timer = new Timer(1);
 			//echo  "start  : " . $timer->get() . "<br \> " ;
 			//echo memory_get_usage() . "<br \> " 
-;	
-			$equips = DB::query(Database::SELECT,
+
+			//===================================compatibilidade
+			$relatorio = DB::query(Database::SELECT,"SELECT count(CodEquipamentoInspecionado) as cod from equipamentoinspecionado where Relatorio = :cod ");
+			$relatorio->parameters(array(   ':cod' => $_GET['cod'] ));
+			$relatorio = $relatorio->execute();	
+
+			$relatorio = $relatorio[0];
+			//=================================================
+
+			//isso garante compatibilidade com dados antigos que não possuem o campo RELATORIO preenchido		
+			if($relatorio["cod"] != 0)
+			{
+				$equips = DB::query(Database::SELECT,
 				"SELECT 
 					equipamentoinspecionado.Equipamento AS Equipamento,
 					equipamentoinspecionado.Condicao AS Condicao,
@@ -199,18 +261,39 @@ class Controller_Relatorios extends Controller_Welcome {
 					equipamentoinspecionado.Empresa AS Empresa				
 					FROM equipamentoinspecionado AS equipamentoinspecionado
 					INNER JOIN equipamento as e ON e.CodEquipamento = equipamentoinspecionado.equipamento
-					WHERE Empresa = :empresa AND Tecnologia = :tecnologia AND Analista = :analista AND DATE_FORMAT(Data, '%Y-%m-%d') = :data ORDER BY e.Equipamento ASC"
-			);
-			//WHERE Empresa = :empresa AND Tecnologia = :tecnologia AND Analista = :analista AND Data BETWEEN :start AND :end ORDER BY Data Desc"
-			 
-			$equips->parameters(array(
-			    ':empresa' => Usuario::get_empresaatual(),
-			    ':tecnologia' => $_GET['tec'],
-			    ':analista' => $_GET['analista'],
-			    //':data' => Site::datahora_EN($_GET['data']),		    
-			    ':data' => Site::datahora_EN($_GET['data']),		    
-			));
+					WHERE Empresa = :empresa AND Tecnologia = :tecnologia AND Analista = :analista AND Relatorio = :relatorio ORDER BY e.Equipamento ASC"
+				);
 
+				$equips->parameters(array(
+				    ':empresa' => Usuario::get_empresaatual(),
+				    ':tecnologia' => $_GET['tec'],
+				    ':analista' => $_GET['analista'],				   
+				    ':relatorio' => $_GET['cod'],		    
+				));
+			}
+			else
+			{
+				$equips = DB::query(Database::SELECT,
+					"SELECT 
+					equipamentoinspecionado.Equipamento AS Equipamento,
+					equipamentoinspecionado.Condicao AS Condicao,
+					equipamentoinspecionado.Data AS Data,														
+					equipamentoinspecionado.Empresa AS Empresa				
+					FROM equipamentoinspecionado AS equipamentoinspecionado
+					INNER JOIN equipamento as e ON e.CodEquipamento = equipamentoinspecionado.equipamento
+					WHERE Empresa = :empresa AND Tecnologia = :tecnologia AND Analista = :analista AND DATE_FORMAT(Data, '%Y-%m-%d') = :data ORDER BY e.Equipamento ASC"
+				);
+
+				$equips->parameters(array(
+				    ':empresa' => Usuario::get_empresaatual(),
+				    ':tecnologia' => $_GET['tec'],
+				    ':analista' => $_GET['analista'],				    
+				    ':data' => Site::datahora_EN($_GET['data']),		    
+				));
+			}
+
+			
+			//WHERE Empresa = :empresa AND Tecnologia = :tecnologia AND Analista = :analista AND Data BETWEEN :start AND :end ORDER BY Data Desc"
 			//echo $equips;exit;
 
 			$equips = $equips->execute();	
@@ -256,6 +339,17 @@ class Controller_Relatorios extends Controller_Welcome {
 		$mpdf->Output($filename,$direct);	
 		exit;
 
+	}
+
+	public function relatorio_graficos_gerencias($mpdf,$str)
+	{
+		$dados = View::factory("relatorios/modelos/count_condicoes");	
+		$dados->str = $str;	
+		
+		$mpdf->WriteHTML($this->stylesheet,1);
+		$mpdf->WriteHTML($dados);		
+
+		return $mpdf;
 	}
 
 	public function relatorio_capa($mpdf,$empresa,$tecnologia,$relatorio)

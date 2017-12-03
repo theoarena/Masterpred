@@ -1,4 +1,4 @@
-<?php if(count($objs) > 0) { ?>
+<?php if(count($obj) > 0) { ?>
 <div class="alert alert-danger"><p><?php echo Kohana::message('admin', 'privileges_aviso'); ?></p></div>
 <table class="footable table" data-page-navigation=".pagination" data-filter=#campobusca>
 	<thead>

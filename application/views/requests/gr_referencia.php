@@ -3,6 +3,8 @@
 	<td class='tdsm'>Código</td> 
 	<td class='tdmd'>Tipo de Anomalia</td> 
 	<td class='tdmd'>Anomalia</td> 
+	<td class='tdmd'>Componente</td> 
+	<td class='tdmd'>Analista</td> 
 	<td class='tdmd'>Data</td>
 	<td class='tdmd'>Ações</td> 
 </tr>
@@ -14,6 +16,8 @@
 			echo "<tr> <td>".$obj->CodGR."</td>";
 			echo "<td>".$obj->anomalia->Anomalia."</td>";
 			echo "<td>".$obj->Anomalia."</td>";
+			echo "<td>".$obj->Componente."</td>";
+			echo "<td>".$obj->equipamentoinspecionado->analista->Analista."</td>";
 			echo "<td>".site::data_BR($obj->equipamentoinspecionado->Data)."</td>";
 			echo "<td><button class='btn_selecionar' value='".$obj->NumeroGR."/".$obj->CodGR."'>selecionar</button></td></tr>";
 		}

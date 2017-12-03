@@ -11,6 +11,10 @@
 
 	echo '</div>';	 
 
+	echo "<div id='search_box' class='inline'>";
+			echo "<div class='input-group input-group-lg'> <span class='input-group-addon'>Filtrar:</span>". Form::input('nome', null , array('class' => 'form-control', 'maxlength' => '30', 'id' => 'campobusca')) ."</div>";		
+	echo '</div>';
+
 	echo "<div id='historico_check'>";
 		echo "<label class='control checkbox chk_equip'> ".Form::checkbox('sem_planejamento',1,($sp==1)?true:false)." <span class='checkbox-label'>Sem Planejamento</span></label>";   
 		echo "<label class='control checkbox chk_equip'> ".Form::checkbox('pendentes',1,($pe==1)?true:false)." <span class='checkbox-label'>Pendentes</span></label>";   
@@ -19,6 +23,9 @@
 	echo '</div>';	 	
 
 	echo "</form>";
+
+	
+
 	if(count($objs) > 0) //se há pelo menos um resultado
 	{
 		echo "<div id='historico_list'>";

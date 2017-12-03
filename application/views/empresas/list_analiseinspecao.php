@@ -1,6 +1,6 @@
 <h1 id="btn_adicionar" class="inline">		
 			<?php 
-				if(Site::selected_empresaatual())
+				if(Usuario::selected_empresaatual())
 				{
 					echo HTML::anchor(Site::segment(1)."/edit_".Site::segment("empresas")."_novo"," +", array("class" => "label-success btn" ));
 					
@@ -35,7 +35,7 @@
 
 <?php 
 
-	if(!Site::selected_empresaatual())		
+	if(!Usuario::selected_empresaatual())		
 		echo "<div class='alert alert-warning tabela_vazia'>".Kohana::message('admin', 'ative_empresa')."</div>"; 	
 	else
 	{ //se há rotas cadastradas nessa empresa

@@ -1,5 +1,4 @@
-
-*,#Info,#Resultados,#Avaliacao,#Final{font-family: 'segoe'}
+body,html,#Info,#Resultados,#Avaliacao,#Final{font-family: "segoe";font-weight: normal;}
 
 #hr_topo{border-bottom:3 solid #ddd;width: 68%;float: left;height: 42px;background-color: transparent;}
 #logo_topo{float: right;margin-left: 10px;}
@@ -15,23 +14,23 @@
 #footer p{text-align: center;padding: 0;margin: 0;font-size: 12px;line-height: 0px;font-weight: bold;color: #676767}
 
 #numero_relatorio{position: absolute;right: 70px;top: 120px;font-size: 20px;font-weight: bold;text-align: center;}
-#info_empresa {position: absolute;right: 70px;bottom: 120px;font-size: 15px;font-weight: bold;text-align: left;}
+#info_empresa {position: absolute;right: 70px;bottom: 120px;font-size: 15px;font-weight: normal;text-align: left;}
 
 /* CAPA OSP */
 #Capa {position: relative;width: 100%;}
-#col_right{float: right;width: 250px;}
-#col_left{float: left;width: 350px;height: 990px}
-#sequencial{font-size: 20px;color: black;font-weight: bold;width: 100%;text-align: center; margin: 0;position: relative;padding-top: 40px}
-#info_empresa{width: 100%;margin-top: 280px}
-#info_empresa td{padding: 0;line-height: 0;margin: 0;vertical-align: top;}
+#col_right{float: right;width: 50%;}
+#col_left{float: left;width: 50%;height: 990px}
+#sequencial{font-size: 20px;color: black;font-weight: bold;width: 100%;text-align: center; margin: 0;position: relative;padding-top: 40px;padding-left: 100px}
+#info_empresa{width: 100%;margin-top: 240px}
+#info_empresa td{padding: 0;line-height: 0;margin: 0;vertical-align: top;font-size: 12px}
 .colspan{height: 10px}
 #info_empresa .col_tit{width: 30%;text-align: right;padding-right: 5px}
 #logo {width: 250px;height: 250px;margin-top: 200px;display: block;}
-
+#tit_tecnologia{}
 /* RELATORIO OSP */
 
 #Info {position: relative;margin: 0;padding: 0}	
-#Info p{line-height: 19px;margin: 0;font-size: 12px;font-family: 'Segoe UI'}
+#Info p{line-height: 19px;margin: 0;font-size: 12px;}
 #dados_osp{float: left;width: 65%;}
 #tipo_gr{float: right;width: 34%;border-left: 1px solid;}
 #tipo_gr h1{ font-size: 90px;  font-weight: bold;text-align: center;margin: 0}
@@ -74,7 +73,7 @@
 #tit_acoes{font-weight: bold;font-size: 12px;margin: 5px 0 10px}
 #Final{margin: 0;padding: 0;}
 #Final table{width: 100%;margin: 0}
-#Final p{line-height: 19px;margin: 0 0 10px 0;font-size: 12px;font-family: 'Segoe UI'}
+#Final p{line-height: 17px;margin: 0 0 5px 0;font-size: 11px;}
 #col_final1 {width: 20%}
 #col_data,#col_resp{width: 40%;text-align: center;}
 .col_data,.col_resp{border-bottom:0.5px solid;}
@@ -92,5 +91,8 @@ hr {margin: 10px 0}
 .col_tag{width: 20%;text-align: left;}
 .col_equip{width: 75%;text-align: left;}
 .col_condicao{width: 5%;text-align: right;}
+
+#div_codcliente{width: 100%;position: relative;display: block; margin-top: 20px}
+#div_codcliente p{text-align: right; font-weight: bold;}
 
  /* ============================== */

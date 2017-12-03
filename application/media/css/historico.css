@@ -8,9 +8,11 @@ body.historico section#ContentClientes {border-top: 1px solid #f1f1f1; display: 
 #historico_list li .imprimir {  padding: 9.9px 5px; display: inline-block; vertical-align: top; margin-left: 4px;}
 .estado{height: 30px; width: 15px; margin-right: 6px; vertical-align: top;margin-left: 5px}
 .estado_verde_pendente{color: #f7f7f7;background: url("../images/verde_pendente.png") no-repeat scroll 0 center;width: 30px}
+.estado_verde_claro_pendente{color: #f7f7f7;background: url("../images/verde_claro_pendente.png") no-repeat scroll 0 center;width: 30px}
 .estado_vermelho{  background: url("../images/vermelho.png") no-repeat scroll 0 center; color: #f7f7f7;}
 .estado_laranja{ background: url("../images/laranja.png") no-repeat scroll 0 center;color: #333333;}
 .estado_verde{  background: url("../images/verde.png") no-repeat scroll 0 center;color: #333333;}
+.estado_verde_claro{  background: url("../images/verde_claro.png") no-repeat scroll 0 center;color: #333333;}
 .caminho {display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; padding-left: 5px;}
 	
 .estado_verde_pendente + a.gr{width: 91% !important}

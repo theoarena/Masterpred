@@ -1,9 +1,14 @@
 application/cache/*
 application/media/uploads/*
 application/logs/*
+application/media/webfonts/*
+application/classes/bkp/*
 modules/*
 system/*
 material/*
+application/masterpred.sql
+application/phpinfo.php
+application/example.htace
 
 # =========================
 # Operating System Files
